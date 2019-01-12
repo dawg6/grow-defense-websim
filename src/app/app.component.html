@@ -1,9 +1,14 @@
 <table>
   <tr>
-    <td class="label">Level</td>
-    <td>
-      <input type="number" min="1" [(ngModel)]="data.level">
+    <td colspan="9">
+      <button class="btn" (click)="save()">Save</button>
+      <div class="divider"></div>
+      <button class="btn" (click)="load()">Load</button>
     </td>
+  </tr>
+  <tr>
+    <td class="label">Level</td>
+    <td class="value">{{ data.level }}</td>
   </tr>
   <tr>
     <td class="heading">Skills</td>
@@ -34,7 +39,8 @@
   <tr>
     <td class="label">Arrow Damage</td>
     <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.talents.arrow" (ngModelChange)="updateData($event)"></td>
-    <td class="value">{{ data.stats.arrowPct * 100 }} %<span *ngIf="data.stats.arrowMastery > 0"> / {{ data.stats.arrowMasteryPct * 100 }} %</span></td>
+    <td class="value">{{ data.stats.arrowPct * 100 }} %<span *ngIf="data.stats.arrowMastery > 0"> / {{
+        data.stats.arrowMasteryPct * 100 }} %</span></td>
     <td class="label">Normal Arrow Damage</td>
     <td class="value">{{ Math.round(data.stats.arrow) }}</td>
     <td class="label">Average Arrow Damage</td>
@@ -45,7 +51,8 @@
   <tr>
     <td class="label">Laser Damage</td>
     <td><input type="number" min="0" [(ngModel)]="data.talents.laser" (ngModelChange)="updateData($event)"></td>
-    <td class="value">{{ data.stats.laserPct * 100 }} %<span *ngIf="data.stats.laserMastery > 0"> / {{ data.stats.laserMasteryPct * 100 }} %</span></td>
+    <td class="value">{{ data.stats.laserPct * 100 }} %<span *ngIf="data.stats.laserMastery > 0"> / {{
+        data.stats.laserMasteryPct * 100 }} %</span></td>
     <td class="label">Normal Laser Damage</td>
     <td class="value">{{ Math.round(data.stats.laser) }}</td>
     <td class="label">Average Laser Damage</td>
@@ -75,15 +82,16 @@
   </tr>
   <tr>
     <td class="label">Arrow DPS</td>
-    <td class="value">{{ Math.round(data.stats.arrowDps * 10.0) / 10.0 | number }}/sec ({{ Math.round(data.stats.arrowDpsPct * 10000.0) / 100.0 | number }} %)</td>
+    <td class="value">{{ Math.round(data.stats.arrowDps * 10.0) / 10.0 | number }}/sec ({{
+      Math.round(data.stats.arrowDpsPct * 10000.0) / 100.0 | number }} %)</td>
   </tr>
   <tr>
     <td class="label">Laser DPS</td>
-    <td class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec ({{ Math.round(data.stats.laserDpsPct * 10000.0) / 100.0 | number }} %)</td>
+    <td class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec ({{
+      Math.round(data.stats.laserDpsPct * 10000.0) / 100.0 | number }} %)</td>
   </tr>
   <tr>
     <td class="label">Total DPS</td>
     <td class="value">{{ Math.round(data.stats.totalDps * 10.0) / 10.0 | number }}/sec</td>
   </tr>
 </table>
-

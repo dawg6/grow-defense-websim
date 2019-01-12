@@ -11,3 +11,13 @@
 .heading {
     color: cyan;
 }
+
+.btn {
+    padding-left: 5px;
+}
+
+.divider{
+    width:15px;
+    height:auto;
+    display:inline-block;
+}
