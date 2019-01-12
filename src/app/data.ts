@@ -4,8 +4,8 @@ export class Skills {
     laser: number;
 
     constructor() {
-        this.arrow = 175;
-        this.laser = 248;
+        this.arrow = 0;
+        this.laser = 0;
     }
 }
 
@@ -16,10 +16,10 @@ export class Talents {
     critDamage: number;
 
     constructor() {
-        this.arrow = 3;
-        this.laser = 130;
-        this.critChance = 4;
-        this.critDamage = 1;
+        this.arrow = 0;
+        this.laser = 0;
+        this.critChance = 0;
+        this.critDamage = 0;
     }
 
     getLevel() : number {
@@ -135,5 +135,17 @@ export class Data {
         this.talents.update();
         this.level = this.talents.getLevel();
         this.stats.update(this);
+    }
+}
+
+export class Log {
+    start: Data;
+    levels: number;
+    skills: number;
+    data: Data[];
+    best: Data;
+
+    constructor() {
+        this.data = [];
     }
 }
