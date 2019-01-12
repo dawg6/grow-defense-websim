@@ -2,10 +2,11 @@ import { Component, Inject } from '@angular/core';
 import { Data, Talents, Skills, Log } from './data';
 import { FormsModule } from '@angular/forms';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
-const SAVE_PREFIX : string = "GrowDefense.";
-const TALENTS_PREFIX : string = SAVE_PREFIX + "talents.";
-const SKILLS_PREFIX : string = SAVE_PREFIX + "skills.";
+const SAVE_PREFIX: string = "GrowDefense.";
+const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
+const SKILLS_PREFIX: string = SAVE_PREFIX + "skills.";
 
 @Component({
   selector: 'app-root',
@@ -13,11 +14,11 @@ const SKILLS_PREFIX : string = SAVE_PREFIX + "skills.";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  data : Data;
+  data: Data;
   Math = Math;
-  log : Log;
+  log: Log;
 
-  constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService) {
+  constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private spinnerService: Ng4LoadingSpinnerService) {
     this.data = new Data();
   }
 
@@ -27,13 +28,13 @@ export class AppComponent {
     return value ? value : defaultValue;
   }
 
-  private saveObject(prefix: string, object:any) {
+  private saveObject(prefix: string, object: any) {
     for (var field of Object.keys(object)) {
       this.storage.set(prefix + field, object[field]);
     }
   }
 
-  private loadObject(prefix: string, object:any): any {
+  private loadObject(prefix: string, object: any): any {
     for (var field of Object.keys(object)) {
       var value = this.getLocalStorage(prefix + field, '' + object[field]);
       object[field] = Number(value);
@@ -65,7 +66,9 @@ export class AppComponent {
   }
 
   optimize() {
-    var l : Log = new Log();
+    this.spinnerService.show();
+
+    var l: Log = new Log();
     l.start = new Data();
     l.start.skills = this.data.skills;
     l.skills = 0;
@@ -74,15 +77,15 @@ export class AppComponent {
     this.simulate(l);
 
     this.log = l;
+
+    this.spinnerService.hide();
   }
 
   simulate(l: Log) {
 
     var points = l.levels - 1;
 
-    console.log("points=", points);
-
-    var max : Data = new Data();
+    var max: Data = new Data();
     max.skills = l.start.skills;
     max.update();
 
@@ -97,7 +100,7 @@ export class AppComponent {
 
           var cd = points - (arrow + laser + cc);
 
-          var r : Data = new Data();
+          var r: Data = new Data();
 
           r.skills = l.start.skills;
           r.talents.arrow = arrow;
@@ -109,13 +112,10 @@ export class AppComponent {
           if (r.stats.totalDps > max.stats.totalDps) {
             max = r;
           }
-
-          l.data.push(r);
         }
       }
     }
 
-    console.log("max =", max, "rows=", l.data.length);
     this.data.talents = max.talents;
     this.data.update();
   }

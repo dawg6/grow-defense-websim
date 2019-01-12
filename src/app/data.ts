@@ -103,11 +103,11 @@ export class Stats {
         this.avgLaser = this.laser * this.critMult * this.superCritMult;
 
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
-        this.arrowRoF = 7 * ((this.arrowMastery >= 3) ? 11 : 10);
-        this.laserRoF = 15 * (2 + this.laserArchers);
+        this.arrowRoF = ((this.arrowMastery >= 3) ? 11 : 10);
+        this.laserRoF = 15;
 
-        this.arrowDps = this.avgArrow * this.arrowRoF;
-        this.laserDps = this.avgLaser * this.laserRoF;
+        this.arrowDps = 7 * this.avgArrow * this.arrowRoF;
+        this.laserDps = (this.avgLaser * this.laserRoF) + (this.avgLaser * 3 * this.laserArchers * this.laserRoF);
 
         this.totalDps = this.arrowDps + this.laserDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
@@ -142,10 +142,6 @@ export class Log {
     start: Data;
     levels: number;
     skills: number;
-    data: Data[];
     best: Data;
 
-    constructor() {
-        this.data = [];
-    }
 }

@@ -47,7 +47,9 @@
     <td class="label">Average Arrow Damage</td>
     <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 }}</td>
     <td class="label">Arrow Rate of Fire</td>
-    <td class="value">{{ data.stats.arrowRoF }}/sec</td>
+    <td class="value">{{ data.stats.arrowRoF }}/sec (per archer)</td>
+    <td class="label"># Archers</td>
+    <td class="value">7</td>
   </tr>
   <tr>
     <td class="label">Laser Damage</td>
@@ -59,7 +61,9 @@
     <td class="label">Average Laser Damage</td>
     <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
     <td class="label">Laser Rate of Fire</td>
-    <td class="value">{{ data.stats.laserRoF }}/sec</td>
+    <td class="value">{{ data.stats.laserRoF }}/sec (per laser)</td>
+    <td class="label"># Lasers</td>
+    <td class="value">{{ 1 + data.stats.laserArchers }}</td>
   </tr>
   <tr>
     <td class="label">Crit Chance</td>
@@ -79,6 +83,8 @@
     <td class="value">{{ data.stats.superCritChance * 100 }} %</td>
     <td class="label">Super Crit Multiplier</td>
     <td class="value">{{ Math.round(data.stats.superCritMult * 1000.0) / 1000.0 }}</td>
+    <td class="label">Laser Archer Multiplier</td>
+    <td class="value">{{ (data.stats.laserArchers > 0) ? 3 : 0 }}</td>
   </tr>
   <tr>
     <td class="heading">Damage Per Second</td>
@@ -98,3 +104,4 @@
     <td class="value">{{ Math.round(data.stats.totalDps * 10.0) / 10.0 | number }}/sec</td>
   </tr>
 </table>
+<ng4-loading-spinner [timeout]="60000" [loadingText]="'Please wait...'"> </ng4-loading-spinner>

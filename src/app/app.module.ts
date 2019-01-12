@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { StorageServiceModule} from 'angular-webstorage-service';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 @NgModule({
   declarations: [
@@ -11,6 +12,7 @@ import { StorageServiceModule} from 'angular-webstorage-service';
   imports: [
     BrowserModule,
     FormsModule,
+    Ng4LoadingSpinnerModule.forRoot(),
     StorageServiceModule
   ],
   providers: [],
