@@ -1,0 +1,13 @@
+.label {
+    color: white;
+}
+
+.value {
+    color: yellow;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.heading {
+    color: cyan;
+}

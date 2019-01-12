@@ -1,20 +1,89 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<table>
+  <tr>
+    <td class="label">Level</td>
+    <td>
+      <input type="number" min="1" [(ngModel)]="data.level">
+    </td>
+  </tr>
+  <tr>
+    <td class="heading">Skills</td>
+  </tr>
+  <tr>
+    <td class="label">Arrow Damage</td>
+    <td colspan="2"><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.arrow" (ngModelChange)="updateData($event)"></td>
+    <td class="label">Base Arrow Damage</td>
+    <td class="value">{{ data.stats.arrowBase }}</td>
+    <td class="label">Arrow Crit Damage</td>
+    <td class="value">{{ Math.round(data.stats.arrowCrit) }}</td>
+    <td class="label">Arrow Super Crit Damage</td>
+    <td class="value">{{ Math.round(data.stats.arrowSuperCrit) }}</td>
+  </tr>
+  <tr>
+    <td class="label">Laser Damage</td>
+    <td colspan="2"><input type="number" min="0" [(ngModel)]="data.skills.laser" (ngModelChange)="updateData($event)"></td>
+    <td class="label">Base Laser Damage</td>
+    <td class="value">{{ data.stats.laserBase }}</td>
+    <td class="label">Laser Crit Damage</td>
+    <td class="value">{{ Math.round(data.stats.laserCrit) }}</td>
+    <td class="label">Laser Super Crit Damage</td>
+    <td class="value">{{ Math.round(data.stats.laserSuperCrit) }}</td>
+  </tr>
+  <tr>
+    <td class="heading">Talents</td>
+  </tr>
+  <tr>
+    <td class="label">Arrow Damage</td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.talents.arrow" (ngModelChange)="updateData($event)"></td>
+    <td class="value">{{ data.stats.arrowPct * 100 }} %<span *ngIf="data.stats.arrowMastery > 0"> / {{ data.stats.arrowMasteryPct * 100 }} %</span></td>
+    <td class="label">Normal Arrow Damage</td>
+    <td class="value">{{ Math.round(data.stats.arrow) }}</td>
+    <td class="label">Average Arrow Damage</td>
+    <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 }}</td>
+    <td class="label">Arrow Rate of Fire</td>
+    <td class="value">{{ data.stats.arrowRoF }}/sec</td>
+  </tr>
+  <tr>
+    <td class="label">Laser Damage</td>
+    <td><input type="number" min="0" [(ngModel)]="data.talents.laser" (ngModelChange)="updateData($event)"></td>
+    <td class="value">{{ data.stats.laserPct * 100 }} %<span *ngIf="data.stats.laserMastery > 0"> / {{ data.stats.laserMasteryPct * 100 }} %</span></td>
+    <td class="label">Normal Laser Damage</td>
+    <td class="value">{{ Math.round(data.stats.laser) }}</td>
+    <td class="label">Average Laser Damage</td>
+    <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
+    <td class="label">Laser Rate of Fire</td>
+    <td class="value">{{ data.stats.laserRoF }}/sec</td>
+  </tr>
+  <tr>
+    <td class="label">Crit Chance</td>
+    <td><input type="number" min="0" max="100" [(ngModel)]="data.talents.critChance" (ngModelChange)="updateData($event)"></td>
+    <td class="value">{{ data.talents.critChance }} %</td>
+    <td class="label">Crit Multiplier</td>
+    <td class="value">{{ Math.round(data.stats.critMult * 1000.0) / 1000.0 }}</td>
+    <td colspan="2"></td>
+    <td class="label"># Laser Archers</td>
+    <td class="value">{{ data.stats.laserArchers }}</td>
+  </tr>
+  <tr>
+    <td class="label">Crit Damage</td>
+    <td><input type="number" min="0" [(ngModel)]="data.talents.critDamage" (ngModelChange)="updateData($event)"></td>
+    <td class="value">{{ 150 + (data.talents.critDamage * 5) }} %</td>
+    <td class="label">Super Crit Chance</td>
+    <td class="value">{{ data.stats.superCritChance * 100}} %</td>
+  </tr>
+  <tr>
+    <td class="heading">Damage Per Second</td>
+  </tr>
+  <tr>
+    <td class="label">Arrow DPS</td>
+    <td class="value">{{ Math.round(data.stats.arrowDps * 10.0) / 10.0 | number }}/sec ({{ Math.round(data.stats.arrowDpsPct * 10000.0) / 100.0 | number }} %)</td>
+  </tr>
+  <tr>
+    <td class="label">Laser DPS</td>
+    <td class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec ({{ Math.round(data.stats.laserDpsPct * 10000.0) / 100.0 | number }} %)</td>
+  </tr>
+  <tr>
+    <td class="label">Total DPS</td>
+    <td class="value">{{ Math.round(data.stats.totalDps * 10.0) / 10.0 | number }}/sec</td>
+  </tr>
+</table>
 
