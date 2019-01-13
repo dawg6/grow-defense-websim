@@ -122,7 +122,9 @@ export class Stats {
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
 
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
-        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceFactor) + (this.avgLaser * this.laserArcherTicksPerSec);
+        var laserArcherBounceFactor = (this.laserMastery >= 3) ? data.params.laserBounceFactor : 1.0;
+
+        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceFactor) + (this.avgLaser * this.laserArcherTicksPerSec * laserArcherBounceFactor);
 
         this.totalDps = this.arrowDps + this.laserDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
