@@ -34,8 +34,8 @@
       <span class="no-wrap"> ticks per second per laser</span></td>
   </tr>
   <tr>
-    <td class="label">Laser Bounce Factor <div class="tooltip"><span class="tooltiptext">Multiplier to account for laser bounces against target. Unconfirmed value.</span></div></td>
-    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserBounceFactor" (ngModelChange)="updateData($event)">
+    <td class="label">Laser Bounce Factor <div class="tooltip"><span class="tooltiptext">Multiplier to account for laser bounces against target. (1 + .5 + .25 + .125 + .0625). Unconfirmed value.</span></div></td>
+    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserBounceMult" (ngModelChange)="updateData($event)">
     <span class="no-wrap"> X laser damage</span></td>
   </tr>
   <tr>

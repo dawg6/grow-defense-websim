@@ -2,13 +2,13 @@ export class Parameters {
     archerRoF: number;
     laserRoF: number;
     laserArcherMult: number;
-    laserBounceFactor: number;
+    laserBounceMult: number;
 
     constructor() {
         this.archerRoF = 10;
         this.laserRoF = 30;
         this.laserArcherMult = 3;
-        this.laserBounceFactor = 1.8;
+        this.laserBounceMult = 1 + 0.5 + 0.25 + 0.125 + 0.0625;
     }
 }
 
@@ -122,9 +122,9 @@ export class Stats {
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
 
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
-        var laserArcherBounceFactor = (this.laserMastery >= 3) ? data.params.laserBounceFactor : 1.0;
+        var laserArcherBounceFactor = (this.laserMastery >= 3) ? data.params.laserBounceMult : 1.0;
 
-        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceFactor) + (this.avgLaser * this.laserArcherTicksPerSec * laserArcherBounceFactor);
+        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceMult) + (this.avgLaser * this.laserArcherTicksPerSec * laserArcherBounceFactor);
 
         this.totalDps = this.arrowDps + this.laserDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
