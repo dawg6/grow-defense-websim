@@ -26,7 +26,7 @@ export class AppComponent {
   private getLocalStorage(field: string, defaultValue: string) {
     var value: string = this.storage.get(field);
 
-    return value ? value : defaultValue;
+    return (value != undefined) ? value : defaultValue;
   }
 
   private saveObject(prefix: string, object: any) {
