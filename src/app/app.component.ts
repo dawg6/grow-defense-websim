@@ -74,6 +74,7 @@ export class AppComponent {
     var l: Log = new Log();
     l.start = new Data();
     l.start.skills = this.data.skills;
+    l.start.params = this.data.params;
     l.skills = 0;
     l.levels = this.data.level;
     l.which = which;
@@ -90,8 +91,12 @@ export class AppComponent {
     var points = l.levels - 1;
 
     var max: Data = new Data();
+    var r: Data = new Data();
     max.skills = l.start.skills;
+    max.params = l.start.params;
     max.update();
+    r.skills = l.start.skills;
+    r.params = l.start.params;
 
     var arrowMin = 0;
     var laserMin = 0;
@@ -102,20 +107,18 @@ export class AppComponent {
       laserMin = l.levels > 100 ? 100 : 0;
     }
 
-    for (var arrow = arrowMin; arrow <= points; arrow++) {
+
+    for (var arrow:number = arrowMin; arrow <= points; arrow++) {
       var m = points - arrow;
 
-      for (var laser = laserMin; laser <= m; laser++) {
+      for (var laser:number = laserMin; laser <= m; laser++) {
 
         var n = Math.min(points - (arrow + laser), 100);
 
-        for (var cc = 0; cc <= n; cc++) {
+        for (var cc:number = 0; cc <= n; cc++) {
 
-          var cd = points - (arrow + laser + cc);
+          var cd:number = points - (arrow + laser + cc);
 
-          var r: Data = new Data();
-
-          r.skills = l.start.skills;
           r.talents.arrow = arrow;
           r.talents.laser = laser;
           r.talents.critChance = cc;
@@ -123,7 +126,12 @@ export class AppComponent {
           r.update();
 
           if (r.stats.totalDps > max.stats.totalDps) {
-            max = r;
+            // console.log("arrow", arrow, "laser", laser, "cc", cc, "cd", cd, "dps", r.stats.totalDps);
+            max.talents.arrow = arrow;
+            max.talents.laser = laser;
+            max.talents.critChance = cc;
+            max.talents.critDamage = cd;
+            max.stats.totalDps = r.stats.totalDps;
           }
         }
       }
