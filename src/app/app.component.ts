@@ -7,6 +7,7 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 const SAVE_PREFIX: string = "GrowDefense.";
 const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
 const SKILLS_PREFIX: string = SAVE_PREFIX + "skills.";
+const PARAMS_PREFIX: string = SAVE_PREFIX + "params.";
 
 @Component({
   selector: 'app-root',
@@ -54,6 +55,7 @@ export class AppComponent {
   save() {
     this.saveObject(SKILLS_PREFIX, this.data.skills);
     this.saveObject(TALENTS_PREFIX, this.data.talents);
+    this.saveObject(PARAMS_PREFIX, this.data.params);
 
     alert("Form Data Saved");
   }
@@ -61,11 +63,12 @@ export class AppComponent {
   load() {
     this.loadObject(SKILLS_PREFIX, this.data.skills);
     this.loadObject(TALENTS_PREFIX, this.data.talents);
+    this.loadObject(PARAMS_PREFIX, this.data.params);
 
     this.updateData();
   }
 
-  optimize() {
+  optimize(which: number) {
     this.spinnerService.show();
 
     var l: Log = new Log();
@@ -73,6 +76,7 @@ export class AppComponent {
     l.start.skills = this.data.skills;
     l.skills = 0;
     l.levels = this.data.level;
+    l.which = which;
 
     this.simulate(l);
 
@@ -89,10 +93,19 @@ export class AppComponent {
     max.skills = l.start.skills;
     max.update();
 
-    for (var arrow = 0; arrow <= points; arrow++) {
+    var arrowMin = 0;
+    var laserMin = 0;
+
+    if (l.which == 1) {
+      arrowMin = l.levels > 100 ? 100 : 0;
+    } else if (l.which == 2) {
+      laserMin = l.levels > 100 ? 100 : 0;
+    }
+
+    for (var arrow = arrowMin; arrow <= points; arrow++) {
       var m = points - arrow;
 
-      for (var laser = 0; laser <= m; laser++) {
+      for (var laser = laserMin; laser <= m; laser++) {
 
         var n = Math.min(points - (arrow + laser), 100);
 

@@ -1,11 +1,26 @@
+export class Parameters {
+    archerRoF: number;
+    laserRoF: number;
+    laserArcherMult: number;
+    laserBounceFactor: number;
+
+    constructor() {
+        this.archerRoF = 10;
+        this.laserRoF = 30;
+        this.laserArcherMult = 3;
+        this.laserBounceFactor = 1.8;
+    }
+}
 
 export class Skills {
     arrow: number;
     laser: number;
+    archers: number;
 
     constructor() {
         this.arrow = 0;
         this.laser = 0;
+        this.archers = 7;
     }
 }
 
@@ -40,11 +55,9 @@ export class Stats {
     laserBase: number;
     critChance: number;
     critDamage: number;
-    critMult: number;
     arrow: number;
     laser: number;
     superCritChance: number;
-    superCritMult: number;
     arrowMastery: number;
     laserMastery: number;
     arrowPct: number;
@@ -53,17 +66,17 @@ export class Stats {
     laserMasteryPct: number;
     arrowCrit: number;
     laserCrit: number;
-    arrowSuperCrit: number;
-    laserSuperCrit: number;
     superCrit: number;
     avgArrow: number;
     avgLaser: number;
     arrowRoF: number;
-    laserRoF: number;
     laserArchers: number;
     arrowDps : number;
     laserDps: number;
     totalDps: number;
+    arrowsPerSec: number;
+    laserTicksPerSec: number;
+    laserArcherTicksPerSec: number;
     arrowDpsPct: number;
     laserDpsPct: number;
 
@@ -76,7 +89,6 @@ export class Stats {
         this.laserBase = 12 + 3 * data.skills.laser;
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
-        this.critMult = 1.0 + (this.critChance * this.critDamage);
         this.arrowMastery = Math.min(Math.floor(data.talents.arrow / 100), 3);
         this.laserMastery = Math.min(Math.floor(data.talents.laser / 100), 3);
 
@@ -87,27 +99,30 @@ export class Stats {
         this.arrowMasteryPct = Math.round(this.arrowMastery * 8) / 100.0;
         this.laserMasteryPct = Math.round(this.laserMastery * 8) / 100.0;
 
-        this.arrow = this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct);
-        this.laser = this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct);
+        this.arrow = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
+        this.laser = Math.floor(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
 
-        this.arrowCrit = this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.critDamage);
-        this.laserCrit = this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct) * (1 + this.critDamage);
+        this.arrowCrit = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.critDamage));
+        this.laserCrit = Math.floor(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct) * (1 + this.critDamage));
 
-        this.superCrit = (data.talents.arrow >= 100) ? 2.0 : 0.0;
-        this.superCritMult = 1.0 + (this.superCritChance * this.superCrit);
+        this.superCrit = (data.talents.arrow >= 100) ? (2.0 * this.arrowCrit) : 0.0;
 
-        this.arrowSuperCrit = (this.superCrit > 0) ? Math.round(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.superCrit)) : 0;
-        this.laserSuperCrit = (this.superCrit > 0) ? Math.round(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct) * (1 + this.superCrit)) : 0;
-
-        this.avgArrow = this.arrow * this.critMult * this.superCritMult;
-        this.avgLaser = this.laser * this.critMult * this.superCritMult;
+        this.avgArrow =  (this.superCritChance * this.superCrit) +
+                ((1.0 - this.superCritChance)  * this.critChance * this.arrowCrit) +
+                ((1.0 - this.superCritChance) * (1.0 - this.critChance) * this.arrow );
+        
+        this.avgLaser = (this.critChance * this.laserCrit) +
+            ((1.0 - this.critChance) * this.laser);  
 
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
-        this.arrowRoF = ((this.arrowMastery >= 3) ? 11 : 10);
-        this.laserRoF = 15;
+        this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.archerRoF);
 
-        this.arrowDps = 7 * this.avgArrow * this.arrowRoF;
-        this.laserDps = (this.avgLaser * this.laserRoF) + (this.avgLaser * 3 * this.laserArchers * this.laserRoF);
+        this.arrowsPerSec = data.skills.archers * this.arrowRoF;
+        this.laserTicksPerSec = 2 * data.params.laserRoF;
+        this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
+
+        this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
+        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceFactor) + (this.avgLaser * this.laserArcherTicksPerSec);
 
         this.totalDps = this.arrowDps + this.laserDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
@@ -122,11 +137,13 @@ export class Data {
     skills: Skills;
     talents : Talents;
     stats : Stats;
+    params: Parameters;
 
     constructor() {
         this.skills = new Skills();
         this.talents = new Talents();
         this.stats = new Stats();
+        this.params = new Parameters();
 
         this.update();
     }
@@ -143,5 +160,5 @@ export class Log {
     levels: number;
     skills: number;
     best: Data;
-
+    which: number;
 }

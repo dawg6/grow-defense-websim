@@ -11,6 +11,29 @@
     <td class="value">{{ data.level }}</td>
   </tr>
   <tr>
+    <td class="heading">Static Parameters</td>
+  </tr>
+  <tr>
+    <td class="label">Archer RoF</td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.archerRoF" (ngModelChange)="updateData($event)"></td>
+    <td class="label">arrows per second per archer</td>
+  </tr>
+  <tr>
+    <td class="label">Laser RoF</td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserRoF" (ngModelChange)="updateData($event)"></td>
+    <td>ticks per second per laser</td>
+  </tr>
+  <tr>
+    <td class="label">Laser Bounce Factor</td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserBounceFactor" (ngModelChange)="updateData($event)"></td>
+    <td>X laser damage</td>
+  </tr>
+  <tr>
+    <td class="label">Laser Archer Multiplier</td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserArcherMult" (ngModelChange)="updateData($event)"></td>
+    <td>X laser damage</td>
+  </tr>
+  <tr>
     <td class="heading">Skills</td>
   </tr>
   <tr>
@@ -21,7 +44,7 @@
     <td class="label">Arrow Crit Damage</td>
     <td class="value">{{ Math.round(data.stats.arrowCrit) }}</td>
     <td class="label">Arrow Super Crit Damage</td>
-    <td class="value">{{ Math.round(data.stats.arrowSuperCrit) }}</td>
+    <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
   </tr>
   <tr>
     <td class="label">Laser Damage</td>
@@ -30,50 +53,53 @@
     <td class="value">{{ data.stats.laserBase }}</td>
     <td class="label">Laser Crit Damage</td>
     <td class="value">{{ Math.round(data.stats.laserCrit) }}</td>
-    <td class="label">Laser Super Crit Damage</td>
-    <td class="value">{{ Math.round(data.stats.laserSuperCrit) }}</td>
+  </tr>
+  <tr>
+    <td class="label"># of Archers</td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.archers" (ngModelChange)="updateData($event)"></td>
   </tr>
   <tr>
     <td class="heading">Talents</td>
-    <td><button class="btn" (click)="optimize()">Optimize</button></td>
+    <td>
+      <button class="btn" (click)="optimize(0)">Optimize</button>
+      <div class="divider"></div>
+      <button class="btn" (click)="optimize(1)">Arrow</button>
+      <button class="btn" (click)="optimize(2)">Laser</button>
+    </td>
   </tr>
   <tr>
     <td class="label">Arrow Damage</td>
     <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.talents.arrow" (ngModelChange)="updateData($event)"></td>
-    <td class="value">{{ data.stats.arrowPct * 100 }} %<span *ngIf="data.stats.arrowMastery > 0"> / {{
+    <td class="value">{{ Math.round(data.stats.arrowPct * 100.0) }} %<span *ngIf="data.stats.arrowMastery > 0"> / {{
         data.stats.arrowMasteryPct * 100 }} %</span></td>
     <td class="label">Normal Arrow Damage</td>
     <td class="value">{{ Math.round(data.stats.arrow) }}</td>
     <td class="label">Average Arrow Damage</td>
     <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 }}</td>
-    <td class="label">Arrow Rate of Fire</td>
-    <td class="value">{{ data.stats.arrowRoF }}/sec (per archer)</td>
-    <td class="label"># Archers</td>
-    <td class="value">7</td>
+    <td class="label">Arrow RoF</td>
+    <td class="value">{{ data.stats.arrowsPerSec }} arrows/sec</td>
   </tr>
   <tr>
     <td class="label">Laser Damage</td>
     <td><input type="number" min="0" [(ngModel)]="data.talents.laser" (ngModelChange)="updateData($event)"></td>
-    <td class="value">{{ data.stats.laserPct * 100 }} %<span *ngIf="data.stats.laserMastery > 0"> / {{
+    <td class="value">{{ Math.round(data.stats.laserPct * 100) }} %<span *ngIf="data.stats.laserMastery > 0"> / {{
         data.stats.laserMasteryPct * 100 }} %</span></td>
     <td class="label">Normal Laser Damage</td>
     <td class="value">{{ Math.round(data.stats.laser) }}</td>
     <td class="label">Average Laser Damage</td>
     <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
-    <td class="label">Laser Rate of Fire</td>
-    <td class="value">{{ data.stats.laserRoF }}/sec (per laser)</td>
-    <td class="label"># Lasers</td>
-    <td class="value">{{ 1 + data.stats.laserArchers }}</td>
+    <td class="label">Laser RoF</td>
+    <td class="value">{{ data.stats.laserTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
     <td class="label">Crit Chance</td>
     <td><input type="number" min="0" max="100" [(ngModel)]="data.talents.critChance" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ data.talents.critChance }} %</td>
-    <td class="label">Crit Multiplier</td>
-    <td class="value">{{ Math.round(data.stats.critMult * 1000.0) / 1000.0 }}</td>
-    <td colspan="2"></td>
     <td class="label"># Laser Archers</td>
     <td class="value">{{ data.stats.laserArchers }}</td>
+    <td colspan="2"></td>
+    <td class="label">Laser Archer RoF</td>
+    <td class="value">{{ data.stats.laserArcherTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
     <td class="label">Crit Damage</td>
@@ -81,22 +107,20 @@
     <td class="value">{{ 150 + (data.talents.critDamage * 5) }} %</td>
     <td class="label">Super Crit Chance</td>
     <td class="value">{{ data.stats.superCritChance * 100 }} %</td>
-    <td class="label">Super Crit Multiplier</td>
-    <td class="value">{{ Math.round(data.stats.superCritMult * 1000.0) / 1000.0 }}</td>
-    <td class="label">Laser Archer Multiplier</td>
-    <td class="value">{{ (data.stats.laserArchers > 0) ? 3 : 0 }}</td>
   </tr>
   <tr>
     <td class="heading">Damage Per Second</td>
   </tr>
   <tr>
     <td class="label">Arrow DPS</td>
-    <td class="value">{{ Math.round(data.stats.arrowDps * 10.0) / 10.0 | number }}/sec ({{
+    <td class="value">{{ Math.round(data.stats.arrowDps * 10.0) / 10.0 | number }}/sec</td>
+    <td class="value">({{
       Math.round(data.stats.arrowDpsPct * 10000.0) / 100.0 | number }} %)</td>
   </tr>
   <tr>
     <td class="label">Laser DPS</td>
-    <td class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec ({{
+    <td class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec</td>
+    <td class="value">({{
       Math.round(data.stats.laserDpsPct * 10000.0) / 100.0 | number }} %)</td>
   </tr>
   <tr>
