@@ -115,7 +115,7 @@ export class AppComponent {
     this.updateData();
   }
 
-  updateData() {
+  updateData(event?: any) {
     this.data.update();
   }
 
