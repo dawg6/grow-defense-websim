@@ -1,0 +1,9 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/ng-busy",
+  "deleteDestPath": false,
+  "lib": {
+    "entryFile": "src/public_api.ts"
+  },
+  "whitelistedNonPeerDependencies": ["rxjs", "@angular/common", "@angular/core", "@angular/animations"]
+}

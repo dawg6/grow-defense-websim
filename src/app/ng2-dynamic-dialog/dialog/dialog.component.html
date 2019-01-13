@@ -1,0 +1,67 @@
+
+<span *ngIf="displayController.isActive">
+
+
+    <!-- Full screen background -->
+    <ng2-dynamic-dialog-background [displayController]="displayController" [style.opacity]="displayController.dialogOpacity"></ng2-dynamic-dialog-background>
+
+    <!-- Main dialog body -->
+    <div [ngStyle]="displayController.setStyleModalDialog()">
+
+        <div [style.opacity]="displayController.contentOpacity">
+
+            <!-- Dialog title -->
+            <div *ngIf="displayController.currentContent.title" [ngStyle]="displayController.setStyleTitle()">
+                {{displayController.currentContent.title}}
+            </div>
+
+            <!-- Button 1, bottom left -->
+            <div *ngIf="displayController.currentContent.button1 && displayController.buttonOpacity > 0" class="ng2-dynamic-dialog-modal-button ng2-dynamic-dialog-modal-button-button1"
+            (click)="onButtonClicked(0)" [ngStyle]="displayController.setStyleButton(0)"
+            (mouseover)='onButtonMouseOver(0)' (mouseout)='onButtonMouseOut(0)'>
+                <div [ngStyle]="displayController.setStyleButtonText()">{{displayController.currentContent.button1}}</div>
+            </div>
+
+            <!-- Button 2, bottom right -->
+            <div *ngIf="displayController.currentContent.button2 && displayController.buttonOpacity > 0" class="ng2-dynamic-dialog-modal-button ng2-dynamic-dialog-modal-button-button2"
+            (click)="onButtonClicked(1)" [ngStyle]="displayController.setStyleButton(1)"
+            (mouseover)='onButtonMouseOver(1)' (mouseout)='onButtonMouseOut(1)'>
+                <div [ngStyle]="displayController.setStyleButtonText()">{{displayController.currentContent.button2}}</div>
+            </div>
+
+            <!-- 3rd button, across the entire dialog -->
+            <div *ngIf="displayController.currentContent.button3 && displayController.buttonOpacity > 0" class="ng2-dynamic-dialog-modal-button ng2-dynamic-dialog-modal-button-button3"
+            (click)="onButtonClicked(2)" [ngStyle]="displayController.setStyleButton(2)"
+            (mouseover)='onButtonMouseOver(2)' (mouseout)='onButtonMouseOut(2)'>
+                <div [ngStyle]="displayController.setStyleButtonText()">{{displayController.currentContent.button3}}</div>
+            </div>
+
+            <!-- Stock exit button -->
+            <img *ngIf="displayController.dialogStyle.buttonClose.image && displayController.buttonOpacity > 0"
+            [ngStyle]="displayController.setStyleCloseButton()"
+            (click)="displayController.close(false)"
+            src="{{displayController.dialogStyle.buttonClose.image}}">
+
+            <!-- Locked icon -->
+            <img *ngIf="displayController.dialogStyle.iconLocked.image && displayController.lockedIconOpacity > 0"
+            [ngStyle]="displayController.setStyleLockedIcon()"
+            src="{{displayController.dialogStyle.iconLocked.image}}">
+
+            <!-- Customisable per-dialog content containing unsanitized HTML-->
+            <div *ngIf="displayController.currentContent.unsafeHtmlContent" [innerHTML]="displayController.currentContent.unsafeHtmlContent">
+            </div>
+
+            <!-- Customisable per-dialog content containing sanitized HTML-->
+            <div *ngIf="displayController.currentContent.safeHtmlContent" [innerHTML]="displayController.currentContent.safeHtmlContent">
+            </div>
+
+            <!-- Customisable component content -->
+            <ng2-dynamic-creator-component *ngIf="displayController.currentContent.componentContent"
+                [componentType]="displayController.currentContent.componentContent"
+                [componentCreatedCallback]="boundOnComponentCreated"
+                [componentDestroyedCallback]="boundOnComponentDestroyed">
+            </ng2-dynamic-creator-component>
+
+        </div>
+    </div>
+</span>

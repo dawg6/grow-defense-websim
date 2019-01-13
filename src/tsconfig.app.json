@@ -7,5 +7,13 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
+  ],
+  "include": [
+    "../node_modules/tslerp/*.ts",
+    "../node_modules/tslerp/**/*.ts",
+    "./*.ts"
+  ],
+  "files" : [
+    "app/app.module.ts"
   ]
 }

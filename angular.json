@@ -54,6 +54,18 @@
             }
           }
         },
+        "build-worker": {
+          "builder": "@angular-builders/custom-webpack:server",
+          "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.webworker.config.js",
+              "mergeStrategies": { "externals": "append" }
+            },
+            "outputPath": "src/assets/workers",
+            "main": "worker/main.worker.ts",
+            "tsConfig": "worker/tsconfig.worker.json"
+          }
+        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
@@ -63,6 +75,19 @@
             "production": {
               "browserTarget": "grow-defense-websim:build:production"
             }
+          }
+        },
+        "serve-worker": {
+          "builder": "@angular-builders/custom-webpack:server",
+          "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.webworker.config.js",
+              "mergeStrategies": { "externals": "append" }
+            },
+            "outputPath": "src/assets/workers",
+            "main": "worker/main.worker.ts",
+            "tsConfig": "worker/tsconfig.worker.json",
+            "watch": true
           }
         },
         "extract-i18n": {

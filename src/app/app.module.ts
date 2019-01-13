@@ -3,7 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { StorageServiceModule} from 'angular-webstorage-service';
-import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { WorkerService } from './worker.service';
+import {NgBusyModule} from './ng-busy/src/lib/ng-busy.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Ng2DynamicDialogModule } from './ng2-dynamic-dialog';
 
 @NgModule({
   declarations: [
@@ -11,11 +14,13 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    Ng2DynamicDialogModule,
     FormsModule,
-    Ng4LoadingSpinnerModule.forRoot(),
+    NgBusyModule,
     StorageServiceModule
   ],
-  providers: [],
+  providers: [WorkerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

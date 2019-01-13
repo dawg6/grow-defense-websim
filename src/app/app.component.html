@@ -1,5 +1,5 @@
+<div  [ngBusy]="busy"></div>
 <h1 class="title">Grow Defense Damage Simulator</h1>
-<h2 class="heading">Notes</h2>
 <ul>
   <li class="label">Only simulates damage against a single target (i.e. boss)</li>
   <li class="label">Rate of fire is limited by browser framerate</li>
@@ -20,121 +20,176 @@
     <td class="value">{{ data.level }}</td>
   </tr>
   <tr>
-    <td class="heading">Static Parameters <div class="tooltip"><span class="tooltiptext">Parameters that vary by web browser or have not been confirmed</span></div></td>
+    <td class="heading">Static Parameters <div class="tooltip"><span class="tooltiptext">Parameters that vary by web
+          browser or have not been confirmed</span></div>
+    </td>
   </tr>
   <tr>
-    <td class="label">Archer RoF <div class="tooltip"><span class="tooltiptext">Arrows per second fired by each archer. Depends on browser framerate.</span></div></td>
+    <td class="label">Archer RoF <div class="tooltip"><span class="tooltiptext">Arrows per second fired by each archer.
+          Depends on browser framerate.</span></div>
+    </td>
     <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.archerRoF" (ngModelChange)="updateData($event)">
-    <span class="label"> arrows per second per archer</span>
-  </td>
+      <span class="label"> arrows per second per archer</span>
+    </td>
   </tr>
   <tr>
-    <td class="label">Laser RoF <div class="tooltip"><span class="tooltiptext">Laser ticks per second from each laser. Depends on browser framerate.</span></div></td>
+    <td class="label">Laser RoF <div class="tooltip"><span class="tooltiptext">Laser ticks per second from each laser.
+          Depends on browser framerate.</span></div>
+    </td>
     <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserRoF" (ngModelChange)="updateData($event)">
       <span class="no-wrap"> ticks per second per laser</span></td>
   </tr>
   <tr>
-    <td class="label">Laser Bounce Factor <div class="tooltip"><span class="tooltiptext">Multiplier to account for laser bounces against target. (1 + .5 + .25 + .125 + .0625). Unconfirmed value.</span></div></td>
-    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserBounceMult" (ngModelChange)="updateData($event)">
-    <span class="no-wrap"> X laser damage</span></td>
+    <td class="label">Laser Bounce Factor <div class="tooltip"><span class="tooltiptext">Multiplier to account for
+          laser bounces against target. (1 + .5 + .25 + .125 + .0625). Unconfirmed value.</span></div>
+    </td>
+    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserBounceMult"
+        (ngModelChange)="updateData($event)">
+      <span class="no-wrap"> X laser damage</span></td>
   </tr>
   <tr>
-    <td class="label">Laser Archer Multiplier <div class="tooltip"><span class="tooltiptext">Multiplier for Laser archer damage (compared to mage tower laser). Unconfirmed value.</span></div></td>
-    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserArcherMult" (ngModelChange)="updateData($event)">
-    <span class="no-wrap"> X laser damage</span></td>
+    <td class="label">Laser Archer Multiplier <div class="tooltip"><span class="tooltiptext">Multiplier for Laser
+          archer damage (compared to mage tower laser). Unconfirmed value.</span></div>
+    </td>
+    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserArcherMult"
+        (ngModelChange)="updateData($event)">
+      <span class="no-wrap"> X laser damage</span></td>
   </tr>
   <tr>
-    <td class="heading">Skills <div class="tooltip"><span class="tooltiptext">Coin upgrades</span></div></td>
-  </tr>
-  <tr>
-    <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext">Arrow damage coin upgrade</span></div></td>
-    <td colspan="2"><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.arrow" (ngModelChange)="updateData($event)"></td>
-    <td class="label">Base Arrow Damage <div class="tooltip"><span class="tooltiptext">Single arrow damage (without talents)</span></div></td>
-    <td class="value">{{ data.stats.arrowBase }}</td>
-    <td class="label">Arrow Crit Damage <div class="tooltip"><span class="tooltiptext">Single arrow critical hit</span></div></td>
-    <td class="value">{{ Math.round(data.stats.arrowCrit) }}</td>
-    <td class="label">Arrow Super Crit Damage<div class="tooltip"><span class="tooltiptext">Single arrow super critical hit (double critical hit damage)</span></div></td>
-    <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
-  </tr>
-  <tr>
-    <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext">Laser damage coin upgrade</span></div></td>
-    <td colspan="2"><input type="number" min="0" [(ngModel)]="data.skills.laser" (ngModelChange)="updateData($event)"></td>
-    <td class="label">Base Laser Damage <div class="tooltip"><span class="tooltiptext">Single laser damage tick (without talents)</span></div></td>
-    <td class="value">{{ data.stats.laserBase }}</td>
-    <td class="label">Laser Crit Damage <div class="tooltip"><span class="tooltiptext">Laser tick critical hit damage</span></div></td>
-    <td class="value">{{ Math.round(data.stats.laserCrit) }}</td>
-  </tr>
-  <tr>
-    <td class="label"># of Archers <div class="tooltip"><span class="tooltiptext"># of archers coin upgrade</span></div></td>
-    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.archers" (ngModelChange)="updateData($event)"></td>
-  </tr>
-  <tr>
-    <td class="heading">Talents <div class="tooltip"><span class="tooltiptext">Talent (mushroom) upgrades</span></div></td>
-    <td colspan="3" class="no-wrap">
-      <button class="btn" (click)="optimize(0)">Optimize</button><div class="tooltip"><span class="tooltiptext">Optimize talents to maximize total DPS</span></div>
-      <div class="divider"></div>
-      <button class="btn" (click)="optimize(1)">Arrow</button><div class="tooltip"><span class="tooltiptext">Unlock arrow mastery and optimize talents to maximize total DPS</span></div>
-      <div class="divider"></div>
-      <button class="btn" (click)="optimize(2)">Laser</button><div class="tooltip"><span class="tooltiptext">Unlock laser mastery and optimize talents to maximize total DPS</span></div>
+    <td class="heading">Skills <div class="tooltip"><span class="tooltiptext">Coin upgrades</span></div>
     </td>
   </tr>
   <tr>
-    <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext">Arrow Damage (3% per level)</span></div></td>
+    <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext">Arrow damage coin upgrade</span></div>
+    </td>
+    <td colspan="2"><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.arrow" (ngModelChange)="updateData($event)"></td>
+    <td class="label">Base Arrow Damage <div class="tooltip"><span class="tooltiptext">Single arrow damage (without
+          talents)</span></div>
+    </td>
+    <td class="value">{{ data.stats.arrowBase }}</td>
+    <td class="label">Arrow Crit Damage <div class="tooltip"><span class="tooltiptext">Single arrow critical hit</span></div>
+    </td>
+    <td class="value">{{ Math.round(data.stats.arrowCrit) }}</td>
+    <td class="label">Arrow Super Crit Damage<div class="tooltip"><span class="tooltiptext">Single arrow super critical
+          hit (double critical hit damage)</span></div>
+    </td>
+    <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
+  </tr>
+  <tr>
+    <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext">Laser damage coin upgrade</span></div>
+    </td>
+    <td colspan="2"><input type="number" min="0" [(ngModel)]="data.skills.laser" (ngModelChange)="updateData($event)"></td>
+    <td class="label">Base Laser Damage <div class="tooltip"><span class="tooltiptext">Single laser damage tick
+          (without talents)</span></div>
+    </td>
+    <td class="value">{{ data.stats.laserBase }}</td>
+    <td class="label">Laser Crit Damage <div class="tooltip"><span class="tooltiptext">Laser tick critical hit damage</span></div>
+    </td>
+    <td class="value">{{ Math.round(data.stats.laserCrit) }}</td>
+  </tr>
+  <tr>
+    <td class="label"># of Archers <div class="tooltip"><span class="tooltiptext"># of archers coin upgrade</span></div>
+    </td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.archers" (ngModelChange)="updateData($event)"></td>
+  </tr>
+  <tr>
+    <td class="heading">Talents <div class="tooltip"><span class="tooltiptext">Talent (mushroom) upgrades</span></div>
+    </td>
+    <td colspan="3" class="no-wrap">
+      <button class="btn" (click)="optimize(0)">Optimize</button>
+      <div class="tooltip"><span class="tooltiptext">Optimize talents to maximize total DPS</span></div>
+      <div class="divider"></div>
+      <button class="btn" (click)="optimize(1)">Arrow</button>
+      <div class="tooltip"><span class="tooltiptext">Unlock arrow mastery and optimize talents to maximize total DPS</span></div>
+      <div class="divider"></div>
+      <button class="btn" (click)="optimize(2)">Laser</button>
+      <div class="tooltip"><span class="tooltiptext">Unlock laser mastery and optimize talents to maximize total DPS</span></div>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext">Arrow Damage (3% per level)</span></div>
+    </td>
     <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.talents.arrow" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ Math.round(data.stats.arrowPct * 100.0) }} %<span *ngIf="data.stats.arrowMastery > 0"> / {{
         data.stats.arrowMasteryPct * 100 }} %</span></td>
-    <td class="label">Normal Arrow Damage <div class="tooltip"><span class="tooltiptext">Single arrow damage (white numbers)</span></div></td>
+    <td class="label">Normal Arrow Damage <div class="tooltip"><span class="tooltiptext">Single arrow damage (white
+          numbers)</span></div>
+    </td>
     <td class="value">{{ Math.round(data.stats.arrow) }}</td>
-    <td class="label">Average Arrow Damage <div class="tooltip"><span class="tooltiptext">Average single arrow damage (considering crtis, super crits)</span></div></td>
+    <td class="label">Average Arrow Damage <div class="tooltip"><span class="tooltiptext">Average single arrow damage
+          (considering crtis, super crits)</span></div>
+    </td>
     <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 }}</td>
-    <td class="label">Arrow RoF <div class="tooltip"><span class="tooltiptext">Total # of arrows per second, from all archers</span></div></td>
+    <td class="label">Arrow RoF <div class="tooltip"><span class="tooltiptext">Total # of arrows per second, from all
+          archers</span></div>
+    </td>
     <td class="value">{{ data.stats.arrowsPerSec }} arrows/sec</td>
   </tr>
   <tr>
-    <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext">Laser damage (3% per level)</span></div></td>
+    <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext">Laser damage (3% per level)</span></div>
+    </td>
     <td><input type="number" min="0" [(ngModel)]="data.talents.laser" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ Math.round(data.stats.laserPct * 100) }} %<span *ngIf="data.stats.laserMastery > 0"> / {{
         data.stats.laserMasteryPct * 100 }} %</span></td>
-    <td class="label">Normal Laser Damage <div class="tooltip"><span class="tooltiptext">Single laser tick damage for first enemy hit (red numbers)</span></div></td>
+    <td class="label">Normal Laser Damage <div class="tooltip"><span class="tooltiptext">Single laser tick damage for
+          first enemy hit (red numbers)</span></div>
+    </td>
     <td class="value">{{ Math.round(data.stats.laser) }}</td>
-    <td class="label">Average Laser Damage <div class="tooltip"><span class="tooltiptext">Average laser tick damage, considering crits and bounce damage</span></div></td>
+    <td class="label">Average Laser Damage <div class="tooltip"><span class="tooltiptext">Average laser tick damage,
+          considering crits and bounce damage</span></div>
+    </td>
     <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
-    <td class="label">Laser RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second from mage tower lasers, for first enemy hit (no bounces)</span></div></td>
+    <td class="label">Laser RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second from
+          mage tower lasers, for first enemy hit (no bounces)</span></div>
+    </td>
     <td class="value">{{ data.stats.laserTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
-    <td class="label">Crit Chance <div class="tooltip"><span class="tooltiptext">Critical Hit Chance (1% per level, max 100%)</span></div></td>
+    <td class="label">Crit Chance <div class="tooltip"><span class="tooltiptext">Critical Hit Chance (1% per level, max
+          100%)</span></div>
+    </td>
     <td><input type="number" min="0" max="100" [(ngModel)]="data.talents.critChance" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ data.talents.critChance }} %</td>
-    <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser archers from laser mastery</span></div></td>
+    <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser archers from laser
+          mastery</span></div>
+    </td>
     <td class="value">{{ data.stats.laserArchers }}</td>
     <td colspan="2"></td>
-    <td class="label">Laser Archer RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second from laser archers, for first enemy hit (no bounces)</span></div></td>
+    <td class="label">Laser Archer RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second
+          from laser archers, for first enemy hit (no bounces)</span></div>
+    </td>
     <td class="value">{{ data.stats.laserArcherTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
-    <td class="label">Crit Damage <div class="tooltip"><span class="tooltiptext">Critical Damage (5% per level)</span></div></td>
+    <td class="label">Crit Damage <div class="tooltip"><span class="tooltiptext">Critical Damage (5% per level)</span></div>
+    </td>
     <td><input type="number" min="0" [(ngModel)]="data.talents.critDamage" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ 150 + (data.talents.critDamage * 5) }} %</td>
-    <td class="label">Super Crit Chance <div class="tooltip"><span class="tooltiptext">Chance of super crit (double critical hit damage, for arrows only)</span></div></td>
+    <td class="label">Super Crit Chance <div class="tooltip"><span class="tooltiptext">Chance of super crit (double
+          critical hit damage, for arrows only)</span></div>
+    </td>
     <td class="value">{{ data.stats.superCritChance * 100 }} %</td>
   </tr>
   <tr>
-    <td class="heading">Damage Per Second <div class="tooltip"><span class="tooltiptext">Damage done per second to target</span></div></td>
+    <td class="heading">Damage Per Second <div class="tooltip"><span class="tooltiptext">Damage done per second to
+          target</span></div>
+    </td>
   </tr>
   <tr>
-    <td class="label">Arrow DPS <div class="tooltip"><span class="tooltiptext">Damage per second from arrows</span></div></td>
+    <td class="label">Arrow DPS <div class="tooltip"><span class="tooltiptext">Damage per second from arrows</span></div>
+    </td>
     <td colspan="2" class="value">{{ Math.round(data.stats.arrowDps * 10.0) / 10.0 | number }}/sec ({{
       Math.round(data.stats.arrowDpsPct * 10000.0) / 100.0 | number }} %)</td>
   </tr>
   <tr>
-    <td class="label">Laser DPS <div class="tooltip"><span class="tooltiptext">Damage per second from lasers</span></div></td>
+    <td class="label">Laser DPS <div class="tooltip"><span class="tooltiptext">Damage per second from lasers</span></div>
+    </td>
     <td colspan="2" class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec ({{
       Math.round(data.stats.laserDpsPct * 10000.0) / 100.0 | number }} %)</td>
   </tr>
   <tr>
-    <td class="label">Total DPS<div class="tooltip"><span class="tooltiptext">Total damage per second</span></div></td>
+    <td class="label">Total DPS<div class="tooltip"><span class="tooltiptext">Total damage per second</span></div>
+    </td>
     <td colspan="2" class="value">{{ Math.round(data.stats.totalDps * 10.0) / 10.0 | number }}/sec</td>
   </tr>
 </table>
-<ng4-loading-spinner [timeout]="60000" [loadingText]="'Please wait...'"> </ng4-loading-spinner>

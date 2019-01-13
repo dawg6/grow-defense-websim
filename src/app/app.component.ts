@@ -1,8 +1,13 @@
 import { Component, Inject } from '@angular/core';
 import { Data, Talents, Skills, Log } from './data';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, SelectMultipleControlValueAccessor } from '@angular/forms';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { Subscription } from 'rxjs';
+
+import { WorkerService } from './worker.service';
+import { WorkerMessage } from '../../worker/app-workers/shared/worker-message.model';
+import { WORKER_TOPIC } from '../../worker/app-workers/shared/worker-topic.constants';
+import { delay } from 'q';
 
 const SAVE_PREFIX: string = "GrowDefense.";
 const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
@@ -17,9 +22,14 @@ const PARAMS_PREFIX: string = SAVE_PREFIX + "params.";
 export class AppComponent {
   data: Data;
   Math = Math;
-  log: Log;
+  workerTopic: string;
+  currentWorkerMessage: WorkerMessage;
+  workerServiceSubscription: Subscription;
+  workerResponse: string;
+  busy: Promise<any>
+  resolver;
 
-  constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private spinnerService: Ng4LoadingSpinnerService) {
+  constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private workerService: WorkerService) {
     this.data = new Data();
   }
 
@@ -46,10 +56,47 @@ export class AppComponent {
 
   ngOnInit() {
     this.load();
+    this.workerTopic = WORKER_TOPIC.cpuIntensive;
+    this.listenForWorkerResponse();
   }
 
-  updateData(value?: any) {
-    this.data.update();
+  ngOnDestroy(): void {
+    if (this.workerServiceSubscription) {
+      this.workerServiceSubscription.unsubscribe();
+    }
+  }
+
+  sendWorkerRequest(log: Log) {
+
+    this.busy = new Promise<any>((resolve, reject) => {
+      this.resolver = resolve;
+    });
+
+    const workerMessage = new WorkerMessage(this.workerTopic, log);
+    this.workerService.doWork(workerMessage);
+  }
+
+  private listenForWorkerResponse() {
+    this.workerServiceSubscription = this.workerService.workerUpdate$
+      .subscribe(data => this.workerResponseParser(data));
+  }
+
+  private workerResponseParser(message: WorkerMessage) {
+    // console.log("message", message);
+
+    if (message.topic === this.workerTopic) {
+      this.currentWorkerMessage = message;
+
+      this.data.talents.arrow = message.data.best.talents.arrow;
+      this.data.talents.laser = message.data.best.talents.laser;
+      this.data.talents.critChance = message.data.best.talents.critChance;
+      this.data.talents.critDamage = message.data.best.talents.critDamage;
+
+      this.data.update();
+
+      this.resolver();
+      // console.log("data", this.data);
+    }
   }
 
   save() {
@@ -68,9 +115,11 @@ export class AppComponent {
     this.updateData();
   }
 
-  optimize(which: number) {
-    this.spinnerService.show();
+  updateData() {
+    this.data.update();
+  }
 
+  optimize(which: number) {
     var l: Log = new Log();
     l.start = new Data();
     l.start.skills = this.data.skills;
@@ -79,65 +128,6 @@ export class AppComponent {
     l.levels = this.data.level;
     l.which = which;
 
-    this.simulate(l);
-
-    this.log = l;
-
-    this.spinnerService.hide();
-  }
-
-  simulate(l: Log) {
-
-    var points = l.levels - 1;
-
-    var max: Data = new Data();
-    var r: Data = new Data();
-    max.skills = l.start.skills;
-    max.params = l.start.params;
-    max.update();
-    r.skills = l.start.skills;
-    r.params = l.start.params;
-
-    var arrowMin = 0;
-    var laserMin = 0;
-
-    if (l.which == 1) {
-      arrowMin = l.levels > 100 ? 100 : 0;
-    } else if (l.which == 2) {
-      laserMin = l.levels > 100 ? 100 : 0;
-    }
-
-
-    for (var arrow:number = arrowMin; arrow <= points; arrow++) {
-      var m = points - arrow;
-
-      for (var laser:number = laserMin; laser <= m; laser++) {
-
-        var n = Math.min(points - (arrow + laser), 100);
-
-        for (var cc:number = 0; cc <= n; cc++) {
-
-          var cd:number = points - (arrow + laser + cc);
-
-          r.talents.arrow = arrow;
-          r.talents.laser = laser;
-          r.talents.critChance = cc;
-          r.talents.critDamage = cd;
-          r.update();
-
-          if (r.stats.totalDps > max.stats.totalDps) {
-            // console.log("arrow", arrow, "laser", laser, "cc", cc, "cd", cd, "dps", r.stats.totalDps);
-            max.talents.arrow = arrow;
-            max.talents.laser = laser;
-            max.talents.critChance = cc;
-            max.talents.critDamage = cd;
-            max.stats.totalDps = r.stats.totalDps;
-          }
-        }
-      }
-    }
-
-    this.data.talents = max.talents;
-    this.data.update();
+    this.sendWorkerRequest(l);
   }
 }
