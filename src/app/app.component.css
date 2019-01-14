@@ -100,3 +100,15 @@ input {
     white-space: pre-wrap !important;
     opacity: 1;
   }
+
+  .link {
+      color: yellow;
+  }
+
+  .link:visited {
+      color: green;
+  }
+
+  .link:hover {
+      color: cyan;
+  }
