@@ -126,9 +126,11 @@ var Talents = /** @class */ (function () {
         this.laser = 0;
         this.critChance = 0;
         this.critDamage = 0;
+        this.unspent = 0;
+        this.lock = false;
     }
     Talents.prototype.getLevel = function () {
-        return this.arrow + this.laser + this.critChance + this.critDamage + 1;
+        return this.arrow + this.laser + this.critChance + this.critDamage + this.unspent + 1;
     };
     Talents.prototype.update = function () {
         this.arrow = Math.max(this.arrow, 0);
@@ -291,29 +293,31 @@ var CPUIntensiveWorker = /** @class */ (function () {
         r.params = l.start.params;
         var arrowMin = 0;
         var laserMin = 0;
-        if (l.which == 1) {
-            arrowMin = l.levels > 100 ? 100 : 0;
-        }
-        else if (l.which == 2) {
-            laserMin = l.levels > 100 ? 100 : 0;
+        if (!l.start.talents.lock) {
+            if (l.which == 1) {
+                arrowMin = l.levels > 100 ? 100 : 0;
+            }
+            else if (l.which == 2) {
+                laserMin = l.levels > 100 ? 100 : 0;
+            }
         }
         for (var arrow = arrowMin; arrow <= points; arrow++) {
             var m = points - arrow;
             for (var laser = laserMin; laser <= m; laser++) {
-                var n = Math.min(points - (arrow + laser), 100);
+                var n = Math.min(points - (arrow + laser), 100 - l.start.talents.critChance);
                 for (var cc = 0; cc <= n; cc++) {
                     var cd = points - (arrow + laser + cc);
-                    r.talents.arrow = arrow;
-                    r.talents.laser = laser;
-                    r.talents.critChance = cc;
-                    r.talents.critDamage = cd;
+                    r.talents.arrow = arrow + l.start.talents.arrow;
+                    r.talents.laser = laser + l.start.talents.laser;
+                    r.talents.critChance = cc + l.start.talents.critChance;
+                    r.talents.critDamage = cd + l.start.talents.critDamage;
                     r.update();
                     if (r.stats.totalDps > max.stats.totalDps) {
                         // console.log("arrow", arrow, "laser", laser, "cc", cc, "cd", cd, "dps", r.stats.totalDps);
-                        max.talents.arrow = arrow;
-                        max.talents.laser = laser;
-                        max.talents.critChance = cc;
-                        max.talents.critDamage = cd;
+                        max.talents.arrow = r.talents.arrow;
+                        max.talents.laser = r.talents.laser;
+                        max.talents.critChance = r.talents.critChance;
+                        max.talents.critDamage = r.talents.critDamage;
                         max.stats.totalDps = r.stats.totalDps;
                     }
                 }

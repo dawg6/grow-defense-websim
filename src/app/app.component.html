@@ -1,4 +1,4 @@
-<div  [ngBusy]="busy"></div>
+<div [ngBusy]="busy"></div>
 <h1 class="title">Grow Defense Damage Simulator</h1>
 <h2 class="heading">Notes</h2>
 <ul>
@@ -68,13 +68,10 @@
           talents)</span></div>
     </td>
     <td class="value">{{ data.stats.arrowBase }}</td>
-    <td class="label">Arrow Crit Damage <div class="tooltip"><span class="tooltiptext">Single arrow critical hit</span></div>
+    <td class="label">Arrow RoF <div class="tooltip"><span class="tooltiptext">Total # of arrows per second, from all
+          archers</span></div>
     </td>
-    <td class="value">{{ Math.round(data.stats.arrowCrit) }}</td>
-    <td class="label">Arrow Super Crit Damage<div class="tooltip"><span class="tooltiptext">Single arrow super critical
-          hit (double critical hit damage)</span></div>
-    </td>
-    <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
+    <td class="value">{{ data.stats.arrowsPerSec }} arrows/sec</td>
   </tr>
   <tr>
     <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext">Laser damage coin upgrade</span></div>
@@ -84,9 +81,10 @@
           (without talents)</span></div>
     </td>
     <td class="value">{{ data.stats.laserBase }}</td>
-    <td class="label">Laser Crit Damage <div class="tooltip"><span class="tooltiptext">Laser tick critical hit damage</span></div>
+    <td class="label">Laser RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second from
+          mage tower lasers, for first enemy hit (no bounces)</span></div>
     </td>
-    <td class="value">{{ Math.round(data.stats.laserCrit) }}</td>
+    <td class="value">{{ data.stats.laserTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
     <td class="label"># of Archers <div class="tooltip"><span class="tooltiptext"># of archers coin upgrade</span></div>
@@ -105,6 +103,11 @@
       <div class="divider"></div>
       <button class="btn" (click)="optimize(2)">Laser</button>
       <div class="tooltip"><span class="tooltiptext">Unlock laser mastery and optimize talents to maximize total DPS</span></div>
+      <div class="divider"></div>
+      <input class="cb" type="checkbox" [(ngModel)]="data.talents.lock" id="lock-cb">
+      <label class="cb-label" for="lock-cb">Lock current points <div class="tooltip"><span class="tooltiptext">Lock current points (only allocate unspent
+            points)</span></div>
+      </label>
     </td>
   </tr>
   <tr>
@@ -121,10 +124,6 @@
           (considering crtis, super crits)</span></div>
     </td>
     <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 }}</td>
-    <td class="label">Arrow RoF <div class="tooltip"><span class="tooltiptext">Total # of arrows per second, from all
-          archers</span></div>
-    </td>
-    <td class="value">{{ data.stats.arrowsPerSec }} arrows/sec</td>
   </tr>
   <tr>
     <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext">Laser damage (3% per level)</span></div>
@@ -140,10 +139,6 @@
           considering crits and bounce damage</span></div>
     </td>
     <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
-    <td class="label">Laser RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second from
-          mage tower lasers, for first enemy hit (no bounces)</span></div>
-    </td>
-    <td class="value">{{ data.stats.laserTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
     <td class="label">Crit Chance <div class="tooltip"><span class="tooltiptext">Critical Hit Chance (1% per level, max
@@ -151,25 +146,40 @@
     </td>
     <td><input type="number" min="0" max="100" [(ngModel)]="data.talents.critChance" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ data.talents.critChance }} %</td>
-    <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser archers from laser
-          mastery</span></div>
+    <td class="label">Super Crit Chance <div class="tooltip"><span class="tooltiptext">Chance of super crit (double
+          critical hit damage, for arrows only)</span></div>
     </td>
-    <td class="value">{{ data.stats.laserArchers }}</td>
-    <td colspan="2"></td>
-    <td class="label">Laser Archer RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second
-          from laser archers, for first enemy hit (no bounces)</span></div>
+    <td class="value">{{ data.stats.superCritChance * 100 }} %</td>
+    <td class="label">Arrow Super Crit Damage<div class="tooltip"><span class="tooltiptext">Single arrow super critical
+          hit (double critical hit damage)</span></div>
     </td>
-    <td class="value">{{ data.stats.laserArcherTicksPerSec }} ticks/sec</td>
+    <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
   </tr>
   <tr>
     <td class="label">Crit Damage <div class="tooltip"><span class="tooltiptext">Critical Damage (5% per level)</span></div>
     </td>
     <td><input type="number" min="0" [(ngModel)]="data.talents.critDamage" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ 150 + (data.talents.critDamage * 5) }} %</td>
-    <td class="label">Super Crit Chance <div class="tooltip"><span class="tooltiptext">Chance of super crit (double
-          critical hit damage, for arrows only)</span></div>
+    <td class="label">Arrow Crit Damage <div class="tooltip"><span class="tooltiptext">Single arrow critical hit</span></div>
     </td>
-    <td class="value">{{ data.stats.superCritChance * 100 }} %</td>
+    <td class="value">{{ Math.round(data.stats.arrowCrit) }}</td>
+    <td class="label">Laser Crit Damage <div class="tooltip"><span class="tooltiptext">Laser tick critical hit damage</span></div>
+    </td>
+    <td class="value">{{ Math.round(data.stats.laserCrit) }}</td>
+  </tr>
+  <tr>
+    <td class="label">Unspent <div class="tooltip"><span class="tooltiptext"># of unspent talent points</span></div>
+    </td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.talents.unspent" (ngModelChange)="updateData($event)"></td>
+    <td></td>
+    <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser archers from laser
+          mastery</span></div>
+    </td>
+    <td class="value">{{ data.stats.laserArchers }}</td>
+    <td class="label">Laser Archer RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks per second
+          from laser archers, for first enemy hit (no bounces)</span></div>
+    </td>
+    <td class="value">{{ data.stats.laserArcherTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
     <td class="heading">Damage Per Second <div class="tooltip"><span class="tooltiptext">Damage done per second to

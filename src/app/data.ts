@@ -29,16 +29,20 @@ export class Talents {
     laser: number;
     critChance: number;
     critDamage: number;
+    unspent: number;
+    lock: boolean;
 
     constructor() {
         this.arrow = 0;
         this.laser = 0;
         this.critChance = 0;
         this.critDamage = 0;
+        this.unspent = 0;
+        this.lock = false;
     }
 
     getLevel() : number {
-        return this.arrow + this.laser + this.critChance + this.critDamage + 1;
+        return this.arrow + this.laser + this.critChance + this.critDamage + this.unspent + 1;
     }
 
     update() {
@@ -140,7 +144,7 @@ export class Data {
     talents : Talents;
     stats : Stats;
     params: Parameters;
-
+    
     constructor() {
         this.skills = new Skills();
         this.talents = new Talents();

@@ -3,6 +3,15 @@
     white-space:nowrap;
 }
 
+.cb-label {
+    color: white;
+    white-space:nowrap;
+}
+
+.cb {
+    width: 15px;
+}
+
 .value {
     color: yellow;
     padding-left: 5px;

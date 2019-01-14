@@ -91,6 +91,7 @@ export class AppComponent {
       this.data.talents.laser = message.data.best.talents.laser;
       this.data.talents.critChance = message.data.best.talents.critChance;
       this.data.talents.critDamage = message.data.best.talents.critDamage;
+      this.data.talents.unspent = 0;
 
       this.data.update();
 
@@ -123,9 +124,16 @@ export class AppComponent {
     var l: Log = new Log();
     l.start = new Data();
     l.start.skills = this.data.skills;
+
+    if (this.data.talents.lock) {
+      l.start.talents = this.data.talents;
+      l.levels = this.data.talents.unspent + 1;
+    } else {
+      l.levels = this.data.level;
+    }
+
     l.start.params = this.data.params;
     l.skills = 0;
-    l.levels = this.data.level;
     l.which = which;
 
     this.sendWorkerRequest(l);
