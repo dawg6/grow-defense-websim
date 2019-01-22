@@ -301,6 +301,7 @@ var CPUIntensiveWorker = /** @class */ (function () {
         max.update();
         r.skills = l.start.skills;
         r.params = l.start.params;
+        r.power = l.start.power;
         var arrowMin = 0;
         var laserMin = 0;
         if (!l.start.talents.lock) {

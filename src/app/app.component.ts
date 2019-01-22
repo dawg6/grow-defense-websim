@@ -136,6 +136,7 @@ export class AppComponent {
     }
 
     l.start.params = this.data.params;
+    l.start.power = this.data.power;
     l.skills = 0;
     l.which = which;
 
