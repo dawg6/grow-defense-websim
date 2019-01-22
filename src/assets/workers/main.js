@@ -183,7 +183,7 @@ var Stats = /** @class */ (function () {
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
         var laserArcherBounceFactor = (this.laserMastery >= 3) ? data.params.laserBounceMult : 1.0;
-        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceMult) + (this.avgLaser * this.laserArcherTicksPerSec * laserArcherBounceFactor);
+        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceMult) + (this.avgLaser * data.params.laserArcherMult * this.laserArcherTicksPerSec * laserArcherBounceFactor);
         this.totalDps = this.arrowDps + this.laserDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
         this.laserDpsPct = this.laserDps / this.totalDps;
