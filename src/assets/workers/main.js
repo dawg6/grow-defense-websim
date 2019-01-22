@@ -164,8 +164,8 @@ var Stats = /** @class */ (function () {
         this.superCritChance = Math.round(this.arrowMastery * 10) / 100.0;
         this.arrowPct = Math.round(data.talents.arrow * 3) / 100.0;
         this.laserPct = Math.round(data.talents.laser * 3) / 100.0;
-        this.arrowMasteryPct = Math.round(this.arrowMastery * 8) / 100.0;
-        this.laserMasteryPct = Math.round(this.laserMastery * 8) / 100.0;
+        this.arrowMasteryPct = (this.arrowMastery == 0) ? 0.0 : ((this.arrowMastery) == 1 ? 0.08 : ((this.arrowMastery == 2) ? 0.16 : 0.25));
+        this.laserMasteryPct = (this.laserMastery == 0) ? 0.0 : ((this.laserMastery) == 1 ? 0.08 : ((this.laserMastery == 2) ? 0.16 : 0.25));
         this.arrow = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
         this.laser = Math.floor(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
         this.arrowCrit = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.critDamage));
