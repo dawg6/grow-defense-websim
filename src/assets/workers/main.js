@@ -90,13 +90,14 @@
 /*!*************************!*\
   !*** ./src/app/data.ts ***!
   \*************************/
-/*! exports provided: Parameters, Skills, Talents, Stats, Data, Log */
+/*! exports provided: Parameters, Skills, PowerGems, Talents, Stats, Data, Log */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Parameters", function() { return Parameters; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Skills", function() { return Skills; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PowerGems", function() { return PowerGems; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Talents", function() { return Talents; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Stats", function() { return Stats; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Data", function() { return Data; });
@@ -113,11 +114,19 @@ var Parameters = /** @class */ (function () {
 
 var Skills = /** @class */ (function () {
     function Skills() {
-        this.arrow = 0;
-        this.laser = 0;
+        this.arrow = 1;
+        this.laser = 1;
         this.archers = 7;
     }
     return Skills;
+}());
+
+var PowerGems = /** @class */ (function () {
+    function PowerGems() {
+        this.arrow = 0;
+        this.laser = 0;
+    }
+    return PowerGems;
 }());
 
 var Talents = /** @class */ (function () {
@@ -146,8 +155,8 @@ var Stats = /** @class */ (function () {
     function Stats() {
     }
     Stats.prototype.update = function (data) {
-        this.arrowBase = 23 + 7 * data.skills.arrow;
-        this.laserBase = 12 + 3 * data.skills.laser;
+        this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
+        this.laserBase = Math.floor(12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) - Math.floor(data.power.laser / 4.0);
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
         this.arrowMastery = Math.min(Math.floor(data.talents.arrow / 100), 3);
@@ -189,6 +198,7 @@ var Data = /** @class */ (function () {
         this.talents = new Talents();
         this.stats = new Stats();
         this.params = new Parameters();
+        this.power = new PowerGems();
         this.update();
     }
     Data.prototype.update = function () {

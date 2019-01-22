@@ -13,6 +13,7 @@ const SAVE_PREFIX: string = "GrowDefense.";
 const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
 const SKILLS_PREFIX: string = SAVE_PREFIX + "skills.";
 const PARAMS_PREFIX: string = SAVE_PREFIX + "params.";
+const POWER_PREFIX: string = SAVE_PREFIX + "power.";
 
 @Component({
   selector: 'app-root',
@@ -104,6 +105,7 @@ export class AppComponent {
     this.saveObject(SKILLS_PREFIX, this.data.skills);
     this.saveObject(TALENTS_PREFIX, this.data.talents);
     this.saveObject(PARAMS_PREFIX, this.data.params);
+    this.saveObject(POWER_PREFIX, this.data.power);
 
     alert("Form Data Saved");
   }
@@ -112,6 +114,7 @@ export class AppComponent {
     this.loadObject(SKILLS_PREFIX, this.data.skills);
     this.loadObject(TALENTS_PREFIX, this.data.talents);
     this.loadObject(PARAMS_PREFIX, this.data.params);
+    this.loadObject(POWER_PREFIX, this.data.power);
 
     this.updateData();
   }

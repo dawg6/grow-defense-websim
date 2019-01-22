@@ -18,9 +18,19 @@ export class Skills {
     archers: number;
 
     constructor() {
+        this.arrow = 1;
+        this.laser = 1;
+        this.archers = 7;
+    }
+}
+
+export class PowerGems {
+    arrow: number;
+    laser: number;
+
+    constructor() {
         this.arrow = 0;
         this.laser = 0;
-        this.archers = 7;
     }
 }
 
@@ -89,8 +99,8 @@ export class Stats {
     }
 
     update(data: Data) {
-        this.arrowBase = 23 + 7 * data.skills.arrow;
-        this.laserBase = 12 + 3 * data.skills.laser;
+        this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
+        this.laserBase = Math.floor(12.0 + (3.0 + data.power.laser/4.0) * data.skills.laser) - Math.floor(data.power.laser / 4.0);
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
         this.arrowMastery = Math.min(Math.floor(data.talents.arrow / 100), 3);
@@ -144,12 +154,14 @@ export class Data {
     talents : Talents;
     stats : Stats;
     params: Parameters;
+    power: PowerGems;
     
     constructor() {
         this.skills = new Skills();
         this.talents = new Talents();
         this.stats = new Stats();
         this.params = new Parameters();
+        this.power = new PowerGems();
 
         this.update();
     }
