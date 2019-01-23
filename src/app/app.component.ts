@@ -29,9 +29,14 @@ export class AppComponent {
   workerResponse: string;
   busy: Promise<any>
   resolver;
+  version: string;
+  versionDate: string;
 
   constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private workerService: WorkerService) {
     this.data = new Data();
+
+    this.version = this.data.params.version;
+    this.versionDate = this.data.params.versionDate;
   }
 
   private getLocalStorage(field: string, defaultValue: string) {

@@ -19,6 +19,13 @@
     white-space:nowrap;
 }
 
+.note {
+    color: gray;
+    padding-left: 5px;
+    padding-right: 5px;
+    white-space:nowrap;
+}
+
 .heading {
     color: cyan;
     white-space:nowrap;
