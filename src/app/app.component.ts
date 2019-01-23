@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { Data, Talents, Skills, Log } from './data';
+import { Data, Talents, Skills, Log, Parameters } from './data';
 import { FormsModule, SelectMultipleControlValueAccessor } from '@angular/forms';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Subscription } from 'rxjs';
@@ -54,7 +54,13 @@ export class AppComponent {
   private loadObject(prefix: string, object: any): any {
     for (var field of Object.keys(object)) {
       var value = this.getLocalStorage(prefix + field, '' + object[field]);
-      object[field] = Number(value);
+
+      var n : any = Number(value);
+
+      if (value && !n)
+        n = value;
+
+      object[field] = n;
     }
 
     return object;
@@ -107,6 +113,12 @@ export class AppComponent {
   }
 
   save() {
+
+    var d = new Parameters();
+
+    this.data.params.version = d.version;
+    this.data.params.versionDate = d.versionDate;
+    
     this.saveObject(SKILLS_PREFIX, this.data.skills);
     this.saveObject(TALENTS_PREFIX, this.data.talents);
     this.saveObject(PARAMS_PREFIX, this.data.params);

@@ -108,7 +108,7 @@ var Parameters = /** @class */ (function () {
         this.laserRoF = 30;
         this.laserArcherMult = 3;
         this.laserBounceMult = 1 + 0.5 + 0.25 + 0.125 + 0.0625;
-        this.version = "1.0";
+        this.version = "v1.0";
         this.versionDate = "01/23/2019";
     }
     return Parameters;
