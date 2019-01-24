@@ -40,9 +40,10 @@ export class AppComponent {
   }
 
   private getLocalStorage(field: string, defaultValue: string) {
+
     var value: string = this.storage.get(field);
 
-    return (value != undefined) ? value : defaultValue;
+    return ((value != null) && (value != undefined)) ? value : defaultValue;
   }
 
   private saveObject(prefix: string, object: any) {
@@ -61,9 +62,11 @@ export class AppComponent {
         n = value;
 
       object[field] = n;
+
     }
 
-    return object;
+
+      return object;
   }
 
   ngOnInit() {

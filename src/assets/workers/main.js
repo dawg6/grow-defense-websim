@@ -108,8 +108,8 @@ var Parameters = /** @class */ (function () {
         this.laserRoF = 30;
         this.laserArcherMult = 3;
         this.laserBounceMult = 1 + 0.5 + 0.25 + 0.125 + 0.0625;
-        this.version = "v1.0";
-        this.versionDate = "01/23/2019";
+        this.version = "v1.0.1";
+        this.versionDate = "01/24/2019";
     }
     return Parameters;
 }());
@@ -119,6 +119,9 @@ var Skills = /** @class */ (function () {
         this.arrow = 1;
         this.laser = 1;
         this.archers = 7;
+        this.numMissiles = 10;
+        this.missileDamage = 1;
+        this.missileFiringRate = 0;
     }
     return Skills;
 }());
@@ -127,6 +130,7 @@ var PowerGems = /** @class */ (function () {
     function PowerGems() {
         this.arrow = 0;
         this.laser = 0;
+        this.missile = 0;
     }
     return PowerGems;
 }());
@@ -159,6 +163,10 @@ var Stats = /** @class */ (function () {
     Stats.prototype.update = function (data) {
         this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
         this.laserBase = Math.floor(12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) - Math.floor(data.power.laser / 4.0);
+        this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
+        this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
+        this.missilesPerSec = Math.round(data.skills.numMissiles * (10.0 / this.missileROF)) / 10.0;
+        this.missileDps = Math.round(this.missilesPerSec * this.missileBase);
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
         this.arrowMastery = Math.min(Math.floor(data.talents.arrow / 100), 3);
@@ -186,9 +194,10 @@ var Stats = /** @class */ (function () {
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
         var laserArcherBounceFactor = (this.laserMastery >= 3) ? data.params.laserBounceMult : 1.0;
         this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceMult) + (this.avgLaser * data.params.laserArcherMult * this.laserArcherTicksPerSec * laserArcherBounceFactor);
-        this.totalDps = this.arrowDps + this.laserDps;
+        this.totalDps = this.arrowDps + this.laserDps + this.missileDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
         this.laserDpsPct = this.laserDps / this.totalDps;
+        this.missileDpsPct = this.missileDps / this.totalDps;
     };
     return Stats;
 }());
