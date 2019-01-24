@@ -103,15 +103,16 @@
     <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.archers" (ngModelChange)="updateData($event)"></td>
   </tr>
   <tr>
-    <td class="label"># of Missiles<div class="tooltip"><span class="tooltiptext">Total # of missiles from Rocket Launcher and Missle</span></div>
-    </td>
-    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.numMissiles" (ngModelChange)="updateData($event)"></td>
-  </tr>
-  <tr>
     <td class="label">Missile Firing Rate <div class="tooltip"><span class="tooltiptext">Missile Firing Rate coin upgrade level</span></div>
     </td>
     <td><input type="number" maxlength="4" min="0" max="20" [(ngModel)]="data.skills.missileFiringRate" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ data.stats.missileROF }} sec/missle</td>
+  </tr>
+  <tr>
+    <td class="label"># of Missiles<div class="tooltip"><span class="tooltiptext">Total # of missiles from Rocket Launcher and Missle</span></div>
+    </td>
+    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.numMissiles" (ngModelChange)="updateData($event)"></td>
+    <td class="value">{{ data.stats.missilesPerSec }} missles/sec</td>
   </tr>
   <tr>
     <td class="heading">Power Gems <div class="tooltip"><span class="tooltiptext">Upgrades from red power gems (bottom tab)</span></div></td>
