@@ -58,11 +58,11 @@ export class AppComponent {
 
       var n : any = Number(value);
 
-      if (value && !n)
-        n = value;
-
-      object[field] = n;
-
+      if (value && isNaN(n)) {
+        object[field] = value;
+      } else {
+        object[field] = n;
+      }
     }
 
 
