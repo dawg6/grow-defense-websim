@@ -1,5 +1,6 @@
 v1.0.1 01/24/2019:
 - Added missile damage
+- Added tooltip images
 
 v1.0 01/23/2019:
 - Added version # and changelog
