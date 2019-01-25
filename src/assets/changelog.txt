@@ -1,3 +1,7 @@
+v1.0.3 01/25/2008:
+- Added laser bounces, # lasers and laser bounce multiplier calculations
+- Added cannon and cannon bomb damage
+
 v1.0.2 01/25/2019:
 - Default Arrow Rate of Fire to 30/7 (based on limited testing)
 - Added finger damage. Note: after 100 talents, when clicking "Optimize" no additional points will be put in finger (takes too long to simulate all the permutations).

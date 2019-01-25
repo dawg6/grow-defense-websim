@@ -4,6 +4,8 @@
 <ul>
   <li class="label">Only simulates damage against a single target (i.e. boss)</li>
   <li class="label">Rate of fire is limited by browser framerate</li>
+  <li class="label">Assumes you've unlocked the appropriate masteries with gems (depending on # talent points in
+    arrow/laser)</li>
 </ul>
 <table class="mainTable">
   <tr>
@@ -27,7 +29,7 @@
   </tr>
   <tr>
     <td class="label">Arrow RoF <div class="tooltip"><span class="tooltiptext">Arrows per second fired by each archer.
-          Depends on browser framerate.</span></div>
+          Depends on browser framerate. Don't change if you don't know it.</span></div>
     </td>
     <td colspan="6"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.arrowRoF" (ngModelChange)="updateData($event)">
       <span class="label"> arrows per second per archer</span>
@@ -40,29 +42,27 @@
   </tr>
   <tr>
     <td class="label">Laser RoF <div class="tooltip"><span class="tooltiptext">Laser ticks per second from each laser.
-          Depends on browser framerate.</span></div>
+          Depends on browser framerate. Don't change if you don't know it.</span></div>
     </td>
     <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserRoF" (ngModelChange)="updateData($event)">
       <span class="no-wrap"> ticks per second per laser</span></td>
   </tr>
   <tr>
     <td class="label">Finger RoF <div class="tooltip"><span class="tooltiptext">Finger clicks per second. Might be a
-          hard limit in game (unconfirmed).</span></div>
+          hard limit in game (unconfirmed). Don't change if you don't know it.</span></div>
     </td>
     <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.fingerRoF" (ngModelChange)="updateData($event)">
       <span class="no-wrap"> clicks per second</span></td>
   </tr>
   <tr>
-    <td class="label">Laser Bounce Factor <div class="tooltip"><span class="tooltiptext">Multiplier to account for
-          laser bounces against target. (1 + .5 + .25 + .125 + .0625). Unconfirmed value.</span></div>
+    <td class="label">Cannon RoF <div class="tooltip"><span class="tooltiptext">Cannon Rate of Fire (seconds per shot). Don't change if you don't know it.</span></div>
     </td>
-    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserBounceMult"
-        (ngModelChange)="updateData($event)">
-      <span class="no-wrap"> X laser damage</span></td>
+    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.cannonRoF" (ngModelChange)="updateData($event)">
+      <span class="no-wrap"> seconds</span></td>
   </tr>
   <tr>
     <td class="label">Laser Archer Multiplier <div class="tooltip"><span class="tooltiptext">Multiplier for Laser
-          archer damage (compared to mage tower laser). Unconfirmed value.</span></div>
+          archer damage (compared to mage tower laser). Unconfirmed value. Don't change if you don't know it.</span></div>
     </td>
     <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserArcherMult"
         (ngModelChange)="updateData($event)">
@@ -102,6 +102,43 @@
     <td class="value">{{ data.stats.laserTicksPerSec }} ticks/sec</td>
   </tr>
   <tr>
+    <td class="label"># Mage Tower Lasers <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-num-lasers.png" />#
+          of mage tower lasers (0 = none, 1 = single, 2 = dual)</span></div>
+    </td>
+    <td colspan="2"><input type="number" min="0" max="2" [(ngModel)]="data.skills.lasers" (ngModelChange)="updateData($event)"></td>
+  </tr>
+  <tr>
+    <td class="label">Laser Bounces <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-laser-bounces.png" />#
+          of bounces per laser (0 = none, 5 = max)</span></div>
+    </td>
+    <td colspan="2"><input type="number" min="0" max="5" [(ngModel)]="data.skills.bounces" (ngModelChange)="updateData($event)"></td>
+  </tr>
+  <tr>
+    <td class="label">Laser Bounce Multiplier<div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+            src="assets/coins-bomb-laser-bounce-mult.png" />Laser bounce damage multiplir level (0 = none, 6 = max)</span></div>
+    </td>
+    <td colspan="2"><input type="number" min="0" max="6" [(ngModel)]="data.skills.bounceDmg" (ngModelChange)="updateData($event)"></td>
+    <td class="label">Laser Bounce Multiplier <div class="tooltip"><span class="tooltiptext">Laser damage multiplier considering all bounces</span></div>
+    </td>
+    <td class="value">{{ data.stats.laserBounceMult }}</td>
+  </tr>
+  <tr>
+    <td class="label">Cannon Ball Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-cannon-ball.png" />Cannon ball damage level (0 = none)</span></div>
+    </td>
+    <td colspan="2"><input type="number" min="0" [(ngModel)]="data.skills.cannon" (ngModelChange)="updateData($event)"></td>
+    <td class="label">Cannon Ball Damage <div class="tooltip"><span class="tooltiptext">Cannon bomb damage</span></div>
+    </td>
+    <td class="value">{{ data.stats.cannonBase }}</td>
+  </tr>
+  <tr>
+    <td class="label">Cannon Bomb Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-cannon-bomb.png" />Cannon bomb damage level (0 = none)</span></div>
+    </td>
+    <td colspan="2"><input type="number" min="0" [(ngModel)]="data.skills.bomb" (ngModelChange)="updateData($event)"></td>
+    <td class="label">Cannon Bomb Damage <div class="tooltip"><span class="tooltiptext">Cannon ball damage</span></div>
+    </td>
+    <td class="value">{{ data.stats.bombBase }}</td>
+  </tr>
+  <tr>
     <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-finger.png" />Finger
           damage coin upgrade level</span></div>
     </td>
@@ -123,22 +160,22 @@
   </tr>
   <tr>
     <td class="label"># of Archers <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-num-archers.png" />#
-          of archers coin upgrade</span></div>
+          of archers coin upgrade. (1 = min, 7 = max).</span></div>
     </td>
-    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.archers" (ngModelChange)="updateData($event)"></td>
+    <td><input type="number" maxlength="4" min="1" max="7" [(ngModel)]="data.skills.archers" (ngModelChange)="updateData($event)"></td>
   </tr>
   <tr>
     <td class="label">Missile Firing Rate <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-missile-rate.png" />Missile
-          Firing Rate coin upgrade level</span></div>
+          Firing Rate coin upgrade level. (0 = min, 20 = max)</span></div>
     </td>
     <td><input type="number" maxlength="4" min="0" max="20" [(ngModel)]="data.skills.missileFiringRate" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ data.stats.missileROF }} sec/missle</td>
   </tr>
   <tr>
     <td class="label"># of Missiles<div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-num-missiles.png" />Total
-          # of missiles from Rocket Launcher and Missle</span></div>
+          # of missiles from Rocket Launcher and Missle. (0 = none, 1 = missile, 10 = max w/rocket launcher)</span></div>
     </td>
-    <td><input type="number" maxlength="4" min="0" [(ngModel)]="data.skills.numMissiles" (ngModelChange)="updateData($event)"></td>
+    <td><input type="number" maxlength="4" min="0" max="10" [(ngModel)]="data.skills.numMissiles" (ngModelChange)="updateData($event)"></td>
     <td class="value">{{ data.stats.missilesPerSec }} missles/sec</td>
   </tr>
   <tr>
@@ -295,6 +332,12 @@
     </td>
     <td colspan="2" class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec ({{
       Math.round(data.stats.laserDpsPct * 10000.0) / 100.0 | number }} %)</td>
+  </tr>
+  <tr>
+    <td class="label">Cannon DPS <div class="tooltip"><span class="tooltiptext">Damage per second from cannon (ball + bomb)</span></div>
+    </td>
+    <td colspan="2" class="value">{{ Math.round(data.stats.cannonDps * 10.0) / 10.0 | number }}/sec ({{
+      Math.round(data.stats.cannonDpsPct * 10000.0) / 100.0 | number }} %)</td>
   </tr>
   <tr>
     <td class="label">Finger DPS <div class="tooltip"><span class="tooltiptext">Damage per second from finger clicks</span></div>

@@ -107,9 +107,9 @@ var Parameters = /** @class */ (function () {
         this.arrowRoF = Math.round(10.0 * 30.0 / 7.0) / 10.0;
         this.laserRoF = 30;
         this.fingerRoF = 10;
+        this.cannonRoF = 2.5;
         this.laserArcherMult = 3;
-        this.laserBounceMult = 1 + 0.5 + 0.25 + 0.125 + 0.0625;
-        this.version = "v1.0.2";
+        this.version = "v1.0.3";
         this.versionDate = "01/25/2019";
     }
     return Parameters;
@@ -123,6 +123,11 @@ var Skills = /** @class */ (function () {
         this.numMissiles = 10;
         this.missileDamage = 1;
         this.finger = 1;
+        this.cannon = 1;
+        this.bomb = 1;
+        this.lasers = 2;
+        this.bounces = 5;
+        this.bounceDmg = 6;
         this.missileFiringRate = 0;
     }
     return Skills;
@@ -196,17 +201,27 @@ var Stats = /** @class */ (function () {
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
         this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.arrowRoF);
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
-        this.laserTicksPerSec = 2 * data.params.laserRoF;
+        this.laserTicksPerSec = data.skills.lasers * data.params.laserRoF;
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
+        var bouncedmgmultiplier = 0.5 + (0.05 * data.skills.bounceDmg);
+        var mult = 1.0;
+        for (var i = 1; i <= data.skills.bounces; i++) {
+            mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
+        }
+        this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
-        var laserArcherBounceFactor = (this.laserMastery >= 3) ? data.params.laserBounceMult : 1.0;
-        this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceMult) + (this.avgLaser * data.params.laserArcherMult * this.laserArcherTicksPerSec * laserArcherBounceFactor);
+        var laserArcherBounceFactor = (this.laserMastery >= 3) ? this.laserBounceMult : 1.0;
+        this.laserDps = (this.avgLaser * this.laserTicksPerSec * this.laserBounceMult) + (this.avgLaser * data.params.laserArcherMult * this.laserArcherTicksPerSec * laserArcherBounceFactor);
         this.fingerDps = this.finger * data.params.fingerRoF;
-        this.totalDps = this.arrowDps + this.laserDps + this.missileDps + this.fingerDps;
+        this.cannonBase = (data.skills.cannon > 0) ? (2000 + ((data.skills.cannon - 1) * 150 * Math.floor(data.skills.cannon / 2))) : 0;
+        this.bombBase = (data.skills.bomb > 0) ? (2000 + ((data.skills.bomb - 1) * 300 * Math.floor(data.skills.bomb / 2))) : 0;
+        this.cannonDps = (this.cannonBase + this.bombBase) / data.params.cannonRoF;
+        this.totalDps = this.arrowDps + this.laserDps + this.missileDps + this.fingerDps + this.cannonDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
         this.laserDpsPct = this.laserDps / this.totalDps;
         this.fingerDpsPct = this.fingerDps / this.totalDps;
         this.missileDpsPct = this.missileDps / this.totalDps;
+        this.cannonDpsPct = this.cannonDps / this.totalDps;
     };
     return Stats;
 }());
