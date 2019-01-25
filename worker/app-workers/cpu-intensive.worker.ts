@@ -25,6 +25,7 @@ export class CPUIntensiveWorker {
 
         var arrowMin = 0;
         var laserMin = 0;
+        var fingerMin = 0;
 
         if (!l.start.talents.lock) {
             if (l.which == 1) {
@@ -33,7 +34,6 @@ export class CPUIntensiveWorker {
                 laserMin = l.levels > 100 ? 100 : 0;
             }
         }
-
 
         for (var arrow: number = arrowMin; arrow <= points; arrow++) {
             var m = points - arrow;
@@ -44,22 +44,28 @@ export class CPUIntensiveWorker {
 
                 for (var cc: number = 0; cc <= n; cc++) {
 
-                    var cd: number = points - (arrow + laser + cc);
+                    var o = (points >= 100) ? 0 : (points - (arrow + laser + cc));
 
-                    r.talents.arrow = arrow + l.start.talents.arrow;
-                    r.talents.laser = laser + l.start.talents.laser;
-                    r.talents.critChance = cc + l.start.talents.critChance;
-                    r.talents.critDamage = cd + l.start.talents.critDamage;
+                    for (var finger: number = 0; finger <= o; finger++) {
 
-                    r.update();
+                        var cd: number = points - (arrow + laser + cc + finger);
 
-                    if (r.stats.totalDps > max.stats.totalDps) {
-                        // console.log("arrow", arrow, "laser", laser, "cc", cc, "cd", cd, "dps", r.stats.totalDps);
-                        max.talents.arrow = r.talents.arrow;
-                        max.talents.laser = r.talents.laser;
-                        max.talents.critChance = r.talents.critChance;
-                        max.talents.critDamage = r.talents.critDamage;
-                        max.stats.totalDps = r.stats.totalDps;
+                        r.talents.arrow = arrow + l.start.talents.arrow;
+                        r.talents.laser = laser + l.start.talents.laser;
+                        r.talents.finger = finger + l.start.talents.finger;
+                        r.talents.critChance = cc + l.start.talents.critChance;
+                        r.talents.critDamage = cd + l.start.talents.critDamage;
+
+                        r.update();
+
+                        if (r.stats.totalDps > max.stats.totalDps) {
+                            max.talents.arrow = r.talents.arrow;
+                            max.talents.laser = r.talents.laser;
+                            max.talents.critChance = r.talents.critChance;
+                            max.talents.critDamage = r.talents.critDamage;
+                            max.talents.finger = r.talents.finger;
+                            max.stats.totalDps = r.stats.totalDps;
+                        }
                     }
                 }
             }

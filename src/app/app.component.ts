@@ -106,6 +106,9 @@ export class AppComponent {
       this.data.talents.laser = message.data.best.talents.laser;
       this.data.talents.critChance = message.data.best.talents.critChance;
       this.data.talents.critDamage = message.data.best.talents.critDamage;
+      this.data.talents.finger = message.data.best.talents.finger;
+      // leave defense alone
+      
       this.data.talents.unspent = 0;
 
       this.data.update();
@@ -152,7 +155,8 @@ export class AppComponent {
       l.start.talents = this.data.talents;
       l.levels = this.data.talents.unspent + 1;
     } else {
-      l.levels = this.data.level;
+      l.start.talents.defense = this.data.talents.defense;
+      l.levels = this.data.level - this.data.talents.defense;
     }
 
     l.start.params = this.data.params;

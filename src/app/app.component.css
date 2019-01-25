@@ -70,7 +70,7 @@ input {
   /* Tooltip text */
   .tooltip .tooltiptext {
     visibility: hidden;
-    width: 120px;
+    width: 200px;
     background-color: #555;
     color: #fff;
     text-align: center;
@@ -82,7 +82,7 @@ input {
     z-index: 1;
     bottom: 125%;
     left: 50%;
-    margin-left: -60px;
+    margin-left: -100px;
   
     /* Fade in tooltip */
     opacity: 0;
@@ -122,4 +122,8 @@ input {
 
   .tooltip-img {
       width: 200px;
+  }
+
+  .mainTable {
+      margin-left: 25px;
   }

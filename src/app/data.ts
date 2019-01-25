@@ -1,6 +1,7 @@
 export class Parameters {
     arrowRoF: number;
     laserRoF: number;
+    fingerRoF: number;
     laserArcherMult: number;
     laserBounceMult: number;
     version: string;
@@ -9,6 +10,7 @@ export class Parameters {
     constructor() {
         this.arrowRoF = Math.round(10.0 * 30.0 / 7.0 ) / 10.0;
         this.laserRoF = 30;
+        this.fingerRoF = 10;
         this.laserArcherMult = 3;
         this.laserBounceMult = 1 + 0.5 + 0.25 + 0.125 + 0.0625;
         this.version = "v1.0.2";
@@ -23,6 +25,7 @@ export class Skills {
     missileDamage: number;
     missileFiringRate: number;
     numMissiles: number;
+    finger: number;
 
     constructor() {
         this.arrow = 1;
@@ -30,6 +33,7 @@ export class Skills {
         this.archers = 7;
         this.numMissiles = 10;
         this.missileDamage = 1;
+        this.finger = 1;
         this.missileFiringRate = 0;
     }
 }
@@ -51,6 +55,8 @@ export class Talents {
     laser: number;
     critChance: number;
     critDamage: number;
+    finger: number;
+    defense: number;
     unspent: number;
     lock: boolean;
 
@@ -59,12 +65,14 @@ export class Talents {
         this.laser = 0;
         this.critChance = 0;
         this.critDamage = 0;
+        this.finger = 0;
+        this.defense = 0;
         this.unspent = 0;
         this.lock = false;
     }
 
     getLevel() : number {
-        return this.arrow + this.laser + this.critChance + this.critDamage + this.unspent + 1;
+        return this.arrow + this.laser + this.critChance + this.critDamage + this.unspent + this.defense + this.finger + 1;
     }
 
     update() {
@@ -79,10 +87,12 @@ export class Talents {
 export class Stats {
     arrowBase: number;
     laserBase: number;
+    fingerBase: number;
     critChance: number;
     critDamage: number;
     arrow: number;
     laser: number;
+    finger: number;
     superCritChance: number;
     arrowMastery: number;
     laserMastery: number;
@@ -110,6 +120,9 @@ export class Stats {
     missilesPerSec: number;
     missileDps: number;
     missileDpsPct: number;
+    fingerDps: number;
+    fingerPct: number;
+    fingerDpsPct: number;
 
     constructor() {
 
@@ -119,6 +132,7 @@ export class Stats {
         this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
         this.laserBase = Math.floor(12.0 + (3.0 + data.power.laser/4.0) * data.skills.laser) - Math.floor(data.power.laser / 4.0);
         this.missileBase = 500 + ((data.skills.missileDamage- 1 ) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
+        this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
         this.missilesPerSec = Math.round(data.skills.numMissiles * (10.0 / this.missileROF)) / 10.0;
         this.missileDps = Math.round(this.missilesPerSec * this.missileBase);
@@ -131,13 +145,14 @@ export class Stats {
         this.superCritChance = Math.round(this.arrowMastery * 10) / 100.0;
         this.arrowPct = Math.round(data.talents.arrow * 3) / 100.0;
         this.laserPct = Math.round(data.talents.laser * 3) / 100.0;
+        this.fingerPct = Math.round(data.talents.finger * 3) / 100.0;
 
         this.arrowMasteryPct = (this.arrowMastery == 0) ? 0.0 : ((this.arrowMastery) == 1 ? 0.08 : ((this.arrowMastery == 2) ? 0.16 : 0.25));
         this.laserMasteryPct = (this.laserMastery == 0) ? 0.0 : ((this.laserMastery) == 1 ? 0.08 : ((this.laserMastery == 2) ? 0.16 : 0.25));
 
         this.arrow = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
-
         this.laser = Math.floor(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
+        this.finger = Math.floor(this.fingerBase * (1 + this.fingerPct));
 
         this.arrowCrit = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.critDamage));
         this.laserCrit = Math.floor(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct) * (1 + this.critDamage));
@@ -162,10 +177,12 @@ export class Stats {
         var laserArcherBounceFactor = (this.laserMastery >= 3) ? data.params.laserBounceMult : 1.0;
 
         this.laserDps = (this.avgLaser * this.laserTicksPerSec * data.params.laserBounceMult) + (this.avgLaser * data.params.laserArcherMult * this.laserArcherTicksPerSec * laserArcherBounceFactor);
+        this.fingerDps = this.finger * data.params.fingerRoF;
 
-        this.totalDps = this.arrowDps + this.laserDps + this.missileDps;
+        this.totalDps = this.arrowDps + this.laserDps + this.missileDps + this.fingerDps;
         this.arrowDpsPct = this.arrowDps / this.totalDps;
         this.laserDpsPct = this.laserDps / this.totalDps;
+        this.fingerDpsPct = this.fingerDps / this.totalDps;
         this.missileDpsPct = this.missileDps / this.totalDps;
     }
 }
