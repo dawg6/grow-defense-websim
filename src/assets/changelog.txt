@@ -1,3 +1,6 @@
+v1.0.2 01/25/2019:
+- Default Arrow Rate of Fire to 30/7 (based on limited testing)
+
 v1.0.1 01/24/2019:
 - Added missile damage
 - Added tooltip images

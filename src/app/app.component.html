@@ -26,10 +26,10 @@
     </td>
   </tr>
   <tr>
-    <td class="label">Archer RoF <div class="tooltip"><span class="tooltiptext">Arrows per second fired by each archer.
+    <td class="label">Arrow RoF <div class="tooltip"><span class="tooltiptext">Arrows per second fired by each archer.
           Depends on browser framerate.</span></div>
     </td>
-    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.archerRoF" (ngModelChange)="updateData($event)">
+    <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.arrowRoF" (ngModelChange)="updateData($event)">
       <span class="label"> arrows per second per archer</span>
       <span class="value">
       How do I determine rate of fire for arrows and laser?<div class="tooltip"><span class="tooltiptext">Record video of game playing at 30 fps. Step through

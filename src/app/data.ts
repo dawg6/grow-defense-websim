@@ -1,5 +1,5 @@
 export class Parameters {
-    archerRoF: number;
+    arrowRoF: number;
     laserRoF: number;
     laserArcherMult: number;
     laserBounceMult: number;
@@ -7,12 +7,12 @@ export class Parameters {
     versionDate: string;
 
     constructor() {
-        this.archerRoF = 10;
+        this.arrowRoF = Math.round(10.0 * 30.0 / 7.0 ) / 10.0;
         this.laserRoF = 30;
         this.laserArcherMult = 3;
         this.laserBounceMult = 1 + 0.5 + 0.25 + 0.125 + 0.0625;
-        this.version = "v1.0.1";
-        this.versionDate = "01/24/2019";
+        this.version = "v1.0.2";
+        this.versionDate = "01/25/2019";
     }
 }
 
@@ -152,7 +152,7 @@ export class Stats {
             ((1.0 - this.critChance) * this.laser);  
 
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
-        this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.archerRoF);
+        this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.arrowRoF);
 
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
         this.laserTicksPerSec = 2 * data.params.laserRoF;

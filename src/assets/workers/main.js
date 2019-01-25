@@ -104,12 +104,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Log", function() { return Log; });
 var Parameters = /** @class */ (function () {
     function Parameters() {
-        this.archerRoF = 10;
+        this.arrowRoF = Math.round(10.0 * 30.0 / 7.0) / 10.0;
         this.laserRoF = 30;
         this.laserArcherMult = 3;
         this.laserBounceMult = 1 + 0.5 + 0.25 + 0.125 + 0.0625;
-        this.version = "v1.0.1";
-        this.versionDate = "01/24/2019";
+        this.version = "v1.0.2";
+        this.versionDate = "01/25/2019";
     }
     return Parameters;
 }());
@@ -187,7 +187,7 @@ var Stats = /** @class */ (function () {
         this.avgLaser = (this.critChance * this.laserCrit) +
             ((1.0 - this.critChance) * this.laser);
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
-        this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.archerRoF);
+        this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.arrowRoF);
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
         this.laserTicksPerSec = 2 * data.params.laserRoF;
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
