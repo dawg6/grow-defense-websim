@@ -1,5 +1,4 @@
 export class Parameters {
-    arrowRoF: number;
     laserRoF: number;
     fingerRoF: number;
     cannonRoF: number;
@@ -8,7 +7,6 @@ export class Parameters {
     versionDate: string;
 
     constructor() {
-        this.arrowRoF = Math.round(10.0 * 30.0 / 7.0 ) / 10.0;
         this.laserRoF = 30;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
@@ -31,6 +29,7 @@ export class Skills {
     lasers: number;
     bounces: number;
     bounceDmg: number;
+    arrowRoF: number;
 
     constructor() {
         this.arrow = 1;
@@ -45,6 +44,7 @@ export class Skills {
         this.bounces = 5;
         this.bounceDmg = 6;
         this.missileFiringRate = 0;
+        this.arrowRoF = 5;
     }
 }
 
@@ -138,6 +138,7 @@ export class Stats {
     bombBase: number;
     cannonDps: number;
     cannonDpsPct: number;
+    baseArrowsSec: number;
 
     constructor() {
 
@@ -181,8 +182,13 @@ export class Stats {
         this.avgLaser = (this.critChance * this.laserCrit) +
             ((1.0 - this.critChance) * this.laser);  
 
+
+        
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
-        this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.arrowRoF);
+
+        this.baseArrowsSec = Math.round(300.0 / (12 - data.skills.arrowRoF)) / 10.0;
+
+        this.arrowRoF = ((this.arrowMastery >= 3) ? 1.1 : 1.0) * this.baseArrowsSec;
 
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
         this.laserTicksPerSec = data.skills.lasers * data.params.laserRoF;

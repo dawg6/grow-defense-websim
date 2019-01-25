@@ -104,7 +104,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Log", function() { return Log; });
 var Parameters = /** @class */ (function () {
     function Parameters() {
-        this.arrowRoF = Math.round(10.0 * 30.0 / 7.0) / 10.0;
         this.laserRoF = 30;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
@@ -129,6 +128,7 @@ var Skills = /** @class */ (function () {
         this.bounces = 5;
         this.bounceDmg = 6;
         this.missileFiringRate = 0;
+        this.arrowRoF = 5;
     }
     return Skills;
 }());
@@ -199,7 +199,8 @@ var Stats = /** @class */ (function () {
         this.avgLaser = (this.critChance * this.laserCrit) +
             ((1.0 - this.critChance) * this.laser);
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
-        this.arrowRoF = Math.floor(((this.arrowMastery >= 3) ? 1.1 : 1.0) * data.params.arrowRoF);
+        this.baseArrowsSec = Math.round(300.0 / (12 - data.skills.arrowRoF)) / 10.0;
+        this.arrowRoF = ((this.arrowMastery >= 3) ? 1.1 : 1.0) * this.baseArrowsSec;
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
         this.laserTicksPerSec = data.skills.lasers * data.params.laserRoF;
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
@@ -456,7 +457,7 @@ var LAZY_MODULE_MAP = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\scott.clarke\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
+module.exports = __webpack_require__(/*! D:\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
 
 
 /***/ })
