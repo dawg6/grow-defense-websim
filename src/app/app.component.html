@@ -22,7 +22,7 @@
   </tr>
   <tr>
     <td class="heading">Static Parameters <div class="tooltip"><span class="tooltiptext">Parameters that vary by web
-          browser or have not been confirmed</span></div>
+          browser or have not been confirmed. Leave these alone if you don't know.</span></div>
     </td>
   </tr>
   <tr>
@@ -31,6 +31,9 @@
     </td>
     <td colspan="3"><input type="number" maxlength="4" min="0" [(ngModel)]="data.params.archerRoF" (ngModelChange)="updateData($event)">
       <span class="label"> arrows per second per archer</span>
+      <span class="value">
+      How do I determine rate of fire for arrows and laser?<div class="tooltip"><span class="tooltiptext">Record video of game playing at 30 fps. Step through
+        video one frame at a time and see how many frames it takes for arrow to fire or laser tick damage to appear.</span></div></span>
     </td>
   </tr>
   <tr>
