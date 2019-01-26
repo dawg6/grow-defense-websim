@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs';
 import { WorkerService } from './worker.service';
 import { WorkerMessage } from '../../worker/app-workers/shared/worker-message.model';
 import { WORKER_TOPIC } from '../../worker/app-workers/shared/worker-topic.constants';
-import { delay } from 'q';
 
 const SAVE_PREFIX: string = "GrowDefense.";
 const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
@@ -31,9 +30,12 @@ export class AppComponent {
   resolver;
   version: string;
   versionDate: string;
+  doPaste: boolean = false;
+  pasteText: string;
 
   constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private workerService: WorkerService) {
     this.data = new Data();
+    this.pasteText = "";
 
     this.version = this.data.params.version;
     this.versionDate = this.data.params.versionDate;
@@ -56,7 +58,7 @@ export class AppComponent {
     for (var field of Object.keys(object)) {
       var value = this.getLocalStorage(prefix + field, '' + object[field]);
 
-      var n : any = Number(value);
+      var n: any = Number(value);
 
       if (value && isNaN(n)) {
         object[field] = value;
@@ -66,7 +68,7 @@ export class AppComponent {
     }
 
 
-      return object;
+    return object;
   }
 
   ngOnInit() {
@@ -108,7 +110,7 @@ export class AppComponent {
       this.data.talents.critDamage = message.data.best.talents.critDamage;
       this.data.talents.finger = message.data.best.talents.finger;
       // leave defense alone
-      
+
       this.data.talents.unspent = 0;
 
       this.data.update();
@@ -124,7 +126,7 @@ export class AppComponent {
 
     this.data.params.version = d.version;
     this.data.params.versionDate = d.versionDate;
-    
+
     this.saveObject(SKILLS_PREFIX, this.data.skills);
     this.saveObject(TALENTS_PREFIX, this.data.talents);
     this.saveObject(PARAMS_PREFIX, this.data.params);
@@ -146,23 +148,24 @@ export class AppComponent {
     this.data.update();
   }
 
-  optimize(which: number) {
+  optimize() {
     var l: Log = new Log();
     l.start = new Data();
     l.start.skills = this.data.skills;
-
-    if (this.data.talents.lock) {
-      l.start.talents = this.data.talents;
-      l.levels = this.data.talents.unspent + 1;
-    } else {
-      l.start.talents.defense = this.data.talents.defense;
-      l.levels = this.data.level - this.data.talents.defense;
-    }
-
     l.start.params = this.data.params;
     l.start.power = this.data.power;
+
+    l.start.talents.arrow = this.data.talents.lockArrow ? this.data.talents.arrow : 0;
+    l.start.talents.laser = this.data.talents.lockLaser ? this.data.talents.laser : 0;
+    l.start.talents.critChance = this.data.talents.lockCC ? this.data.talents.critChance : 0;
+    l.start.talents.critDamage = this.data.talents.lockCD ? this.data.talents.critDamage : 0;
+    l.start.talents.defense = this.data.talents.lockDefense ? this.data.talents.defense : 0;
+    l.start.talents.finger = this.data.talents.lockFinger ? this.data.talents.finger : 0;
+    l.start.talents.unspent = 0;
+
+    l.levels = this.data.talents.getLevel() - l.start.talents.getLevel();
+
     l.skills = 0;
-    l.which = which;
 
     this.sendWorkerRequest(l);
   }
@@ -170,4 +173,36 @@ export class AppComponent {
   reset() {
     this.data = new Data();
   }
+
+  copy(data: Data) {
+    // console.log(data);
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', JSON.stringify(data));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+
+  }
+  paste() {
+    this.doPaste = true;
+    this.pasteText = "";
+  }
+
+  getPaste() {
+    var d:Data = Data.fromJSON(this.pasteText);
+
+    // console.log("Data = ", d);
+
+    this.data = d;
+    
+    this.doPaste = false;
+    this.pasteText = "";
+  }
+
+  cancelPaste() {
+    this.doPaste = false;
+    this.pasteText = "";
+  }
+
 }

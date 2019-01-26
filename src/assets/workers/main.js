@@ -151,7 +151,12 @@ var Talents = /** @class */ (function () {
         this.finger = 0;
         this.defense = 0;
         this.unspent = 0;
-        this.lock = false;
+        this.lockArrow = false;
+        this.lockCC = false;
+        this.lockCD = false;
+        this.lockDefense = false;
+        this.lockFinger = false;
+        this.lockLaser = false;
     }
     Talents.prototype.getLevel = function () {
         return this.arrow + this.laser + this.critChance + this.critDamage + this.unspent + this.defense + this.finger + 1;
@@ -242,6 +247,21 @@ var Data = /** @class */ (function () {
         this.level = this.talents.getLevel();
         this.stats.update(this);
     };
+    Data.fromJSON = function (json) {
+        if (typeof json === 'string') {
+            return JSON.parse(json, Data.reviver);
+        }
+        else if (json !== undefined && json !== null) {
+            var data = Object.create(Data.prototype);
+            return Object.assign(data, json);
+        }
+        else {
+            return json;
+        }
+    };
+    Data.reviver = function (key, value) {
+        return key === '' ? Data.fromJSON(value) : value;
+    };
     return Data;
 }());
 
@@ -329,7 +349,7 @@ var CPUIntensiveWorker = /** @class */ (function () {
         return new _shared_worker_message_model__WEBPACK_IMPORTED_MODULE_0__["WorkerMessage"](value.topic, value.data);
     };
     CPUIntensiveWorker.simulate = function (l) {
-        var points = l.levels - 1;
+        var points = l.levels;
         var max = new _src_app_data__WEBPACK_IMPORTED_MODULE_1__["Data"]();
         var r = new _src_app_data__WEBPACK_IMPORTED_MODULE_1__["Data"]();
         max.skills = l.start.skills;
@@ -338,20 +358,9 @@ var CPUIntensiveWorker = /** @class */ (function () {
         r.skills = l.start.skills;
         r.params = l.start.params;
         r.power = l.start.power;
-        var arrowMin = 0;
-        var laserMin = 0;
-        var fingerMin = 0;
-        if (!l.start.talents.lock) {
-            if (l.which == 1) {
-                arrowMin = l.levels > 100 ? 100 : 0;
-            }
-            else if (l.which == 2) {
-                laserMin = l.levels > 100 ? 100 : 0;
-            }
-        }
-        for (var arrow = arrowMin; arrow <= points; arrow++) {
+        for (var arrow = 0; arrow <= points; arrow++) {
             var m = points - arrow;
-            for (var laser = laserMin; laser <= m; laser++) {
+            for (var laser = 0; laser <= m; laser++) {
                 var n = Math.min(points - (arrow + laser), 100 - l.start.talents.critChance);
                 for (var cc = 0; cc <= n; cc++) {
                     var o = (points >= 100) ? 0 : (points - (arrow + laser + cc));

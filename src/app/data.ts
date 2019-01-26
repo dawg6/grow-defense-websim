@@ -68,7 +68,12 @@ export class Talents {
     finger: number;
     defense: number;
     unspent: number;
-    lock: boolean;
+    lockArrow: boolean;
+    lockLaser: boolean;
+    lockCC: boolean;
+    lockCD: boolean;
+    lockFinger: boolean;
+    lockDefense: boolean;
 
     constructor() {
         this.arrow = 0;
@@ -78,7 +83,12 @@ export class Talents {
         this.finger = 0;
         this.defense = 0;
         this.unspent = 0;
-        this.lock = false;
+        this.lockArrow = false;
+        this.lockCC = false;
+        this.lockCD = false;
+        this.lockDefense = false;
+        this.lockFinger = false;
+        this.lockLaser = false;
     }
 
     getLevel() : number {
@@ -249,6 +259,21 @@ export class Data {
         this.level = this.talents.getLevel();
         this.stats.update(this);
     }
+
+    public static fromJSON(json: any): Data {
+        if (typeof json === 'string') {
+            return JSON.parse(json, Data.reviver);
+        } else if (json !== undefined && json !== null) {
+            let data = Object.create(Data.prototype);
+            return Object.assign(data, json);
+        } else {
+            return json;
+        }
+    }
+    
+    public static reviver(key: string, value: any): any {
+        return key === '' ? Data.fromJSON(value) : value;
+    }
 }
 
 export class Log {
@@ -256,5 +281,4 @@ export class Log {
     levels: number;
     skills: number;
     best: Data;
-    which: number;
 }

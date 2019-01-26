@@ -12,7 +12,7 @@ export class CPUIntensiveWorker {
 
     static simulate(l: Log) {
 
-        var points = l.levels - 1;
+        var points = l.levels;
 
         var max: Data = new Data();
         var r: Data = new Data();
@@ -23,22 +23,10 @@ export class CPUIntensiveWorker {
         r.params = l.start.params;
         r.power = l.start.power;
 
-        var arrowMin = 0;
-        var laserMin = 0;
-        var fingerMin = 0;
-
-        if (!l.start.talents.lock) {
-            if (l.which == 1) {
-                arrowMin = l.levels > 100 ? 100 : 0;
-            } else if (l.which == 2) {
-                laserMin = l.levels > 100 ? 100 : 0;
-            }
-        }
-
-        for (var arrow: number = arrowMin; arrow <= points; arrow++) {
+        for (var arrow: number = 0; arrow <= points; arrow++) {
             var m = points - arrow;
 
-            for (var laser: number = laserMin; laser <= m; laser++) {
+            for (var laser: number = 0; laser <= m; laser++) {
 
                 var n = Math.min(points - (arrow + laser), 100 - l.start.talents.critChance);
 
