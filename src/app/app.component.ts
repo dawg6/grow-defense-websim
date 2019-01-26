@@ -62,7 +62,7 @@ export class AppComponent {
       var n: any = Number(value);
       var b: any = Boolean(value);
 
-      console.log(prefix + field, value, object[field]);
+      // console.log(prefix + field, value, object[field]);
 
       if (value && isBoolean(object[field])) {
         object[field] = value == 'true';
