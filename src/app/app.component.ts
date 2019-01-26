@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { WorkerService } from './worker.service';
 import { WorkerMessage } from '../../worker/app-workers/shared/worker-message.model';
 import { WORKER_TOPIC } from '../../worker/app-workers/shared/worker-topic.constants';
+import { isBoolean } from 'util';
 
 const SAVE_PREFIX: string = "GrowDefense.";
 const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
@@ -59,8 +60,13 @@ export class AppComponent {
       var value = this.getLocalStorage(prefix + field, '' + object[field]);
 
       var n: any = Number(value);
+      var b: any = Boolean(value);
 
-      if (value && isNaN(n)) {
+      console.log(prefix + field, value, object[field]);
+
+      if (value && isBoolean(object[field])) {
+        object[field] = value == 'true';
+      } else if (value && isNaN(n)) {
         object[field] = value;
       } else {
         object[field] = n;
@@ -195,7 +201,7 @@ export class AppComponent {
     // console.log("Data = ", d);
 
     this.data = d;
-    
+
     this.doPaste = false;
     this.pasteText = "";
   }
