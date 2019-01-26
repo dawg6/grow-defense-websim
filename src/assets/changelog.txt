@@ -1,4 +1,7 @@
-v1.0.3 01/25/2008:
+v1.0.4 01/26/2019:
+- Added reset button
+
+v1.0.3 01/25/2019:
 - Added laser bounces, # lasers and laser bounce multiplier calculations
 - Added cannon and cannon bomb damage
 - Added arrow firing rate calculation

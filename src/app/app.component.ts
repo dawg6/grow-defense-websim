@@ -166,4 +166,8 @@ export class AppComponent {
 
     this.sendWorkerRequest(l);
   }
+
+  reset() {
+    this.data = new Data();
+  }
 }

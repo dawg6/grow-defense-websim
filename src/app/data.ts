@@ -11,8 +11,8 @@ export class Parameters {
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
         this.laserArcherMult = 3;
-        this.version = "v1.0.3";
-        this.versionDate = "01/25/2019";
+        this.version = "v1.0.4";
+        this.versionDate = "01/26/2019";
     }
 }
 
@@ -34,17 +34,17 @@ export class Skills {
     constructor() {
         this.arrow = 1;
         this.laser = 1;
-        this.archers = 7;
-        this.numMissiles = 10;
-        this.missileDamage = 1;
+        this.archers = 1;
+        this.numMissiles = 0;
+        this.missileDamage = 0;
         this.finger = 1;
-        this.cannon = 1;
-        this.bomb = 1;
-        this.lasers = 2;
-        this.bounces = 5;
-        this.bounceDmg = 6;
+        this.cannon = 0;
+        this.bomb = 0;
+        this.lasers = 0;
+        this.bounces = 0;
+        this.bounceDmg = 0;
         this.missileFiringRate = 0;
-        this.arrowRoF = 5;
+        this.arrowRoF = 1;
     }
 }
 
