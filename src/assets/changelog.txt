@@ -1,3 +1,6 @@
+v1.0.5 01/27/2019:
+- Added "what if" calculation for most attributes
+
 v1.0.4 01/26/2019:
 - Added reset button
 - Added lock check boxes for each talent

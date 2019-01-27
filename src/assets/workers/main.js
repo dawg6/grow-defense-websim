@@ -90,7 +90,7 @@
 /*!*************************!*\
   !*** ./src/app/data.ts ***!
   \*************************/
-/*! exports provided: Parameters, Skills, PowerGems, Talents, Stats, Data, Log */
+/*! exports provided: Parameters, Skills, PowerGems, Talents, Stats, Data, Log, AttributeData */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -102,14 +102,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Stats", function() { return Stats; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Data", function() { return Data; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Log", function() { return Log; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AttributeData", function() { return AttributeData; });
 var Parameters = /** @class */ (function () {
     function Parameters() {
         this.laserRoF = 30;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
         this.laserArcherMult = 3;
-        this.version = "v1.0.4";
-        this.versionDate = "01/26/2019";
+        this.version = "v1.0.5";
+        this.versionDate = "01/27/2019";
     }
     return Parameters;
 }());
@@ -262,6 +263,20 @@ var Data = /** @class */ (function () {
     Data.reviver = function (key, value) {
         return key === '' ? Data.fromJSON(value) : value;
     };
+    Data.copy = function (d) {
+        var data = new Data();
+        data.level = d.level;
+        for (var _i = 0, _a = Object.keys(data); _i < _a.length; _i++) {
+            var a = _a[_i];
+            var x = data[a];
+            var y = d[a];
+            for (var _b = 0, _c = Object.keys(x); _b < _c.length; _b++) {
+                var b = _c[_b];
+                x[b] = y[b];
+            }
+        }
+        return data;
+    };
     return Data;
 }());
 
@@ -269,6 +284,30 @@ var Log = /** @class */ (function () {
     function Log() {
     }
     return Log;
+}());
+
+var AttributeData = /** @class */ (function () {
+    function AttributeData() {
+    }
+    AttributeData.prototype.calculate = function (data) {
+        var s = this.name.split(".");
+        this.value = data[s[0]][s[1]];
+        var old = data.stats.totalDps;
+        if (!this.max || (this.value < this.max)) {
+            var next = this.max ? Math.min(this.value + this.inc, this.max) : (this.value + this.inc);
+            data[s[0]][s[1]] = next;
+            data.update();
+            this.dps = Math.round(data.stats.totalDps * 10.0) / 10.0;
+            this.dpsPct = Math.round(10000.0 * ((this.dps - old) / old)) / 100.0;
+            data[s[0]][s[1]] = this.value;
+            data.update();
+        }
+        else {
+            this.dps = Math.round(old * 10.0) / 10.0;
+            this.dpsPct = 0;
+        }
+    };
+    return AttributeData;
 }());
 
 

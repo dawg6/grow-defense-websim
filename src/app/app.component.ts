@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { Data, Talents, Skills, Log, Parameters } from './data';
+import { Data, Talents, Skills, Log, Parameters, AttributeData } from './data';
 import { FormsModule, SelectMultipleControlValueAccessor } from '@angular/forms';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Subscription } from 'rxjs';
@@ -8,12 +8,31 @@ import { WorkerService } from './worker.service';
 import { WorkerMessage } from '../../worker/app-workers/shared/worker-message.model';
 import { WORKER_TOPIC } from '../../worker/app-workers/shared/worker-topic.constants';
 import { isBoolean } from 'util';
+import { copyAnimationEvent } from '@angular/animations/browser/src/render/shared';
 
 const SAVE_PREFIX: string = "GrowDefense.";
 const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
 const SKILLS_PREFIX: string = SAVE_PREFIX + "skills.";
 const PARAMS_PREFIX: string = SAVE_PREFIX + "params.";
 const POWER_PREFIX: string = SAVE_PREFIX + "power.";
+
+const ATTRIBUTES: string[] = [
+  "skills.arrow",
+  "skills.laser",
+  "skills.missileDamage",
+  "skills.missileFiringRate",
+  "skills.finger",
+  "skills.cannon",
+  "skills.bomb",
+  "talents.arrow",
+  "talents.laser",
+  "talents.critChance",
+  "talents.critDamage",
+  "talents.finger",
+  "power.arrow",
+  "power.laser",
+  "power.missile",
+];
 
 @Component({
   selector: 'app-root',
@@ -33,10 +52,16 @@ export class AppComponent {
   versionDate: string;
   doPaste: boolean = false;
   pasteText: string;
+  whatIf = {};
 
   constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private workerService: WorkerService) {
     this.data = new Data();
+
     this.pasteText = "";
+
+    this.initWhatIf();
+    this.data.update();
+    this.updateAttributes();
 
     this.version = this.data.params.version;
     this.versionDate = this.data.params.versionDate;
@@ -120,6 +145,7 @@ export class AppComponent {
       this.data.talents.unspent = 0;
 
       this.data.update();
+      this.updateAttributes();
 
       this.resolver();
       // console.log("data", this.data);
@@ -152,6 +178,26 @@ export class AppComponent {
 
   updateData(event?: any) {
     this.data.update();
+
+    this.updateAttributes();
+  }
+
+  updateAttributes() {
+    for (var a of Object.keys(this.whatIf)) {
+
+      var attr: AttributeData = this.whatIf[a];
+
+      attr.calculate(this.data);
+
+      // console.log(a, attr);
+
+    }
+  }
+
+  getTooltip(a: string, b: string) {
+    return "Adding " + this.whatIf[a]['inc'] + " to " + b + 
+      " results in a total dps of " + this.whatIf[a]['dps'] + 
+      ". a " + this.whatIf[a]['dpsPct'] + "% dps increase.";
   }
 
   optimize() {
@@ -178,6 +224,8 @@ export class AppComponent {
 
   reset() {
     this.data = new Data();
+    this.data.update();
+    this.updateAttributes();
   }
 
   copy(data: Data) {
@@ -196,11 +244,16 @@ export class AppComponent {
   }
 
   getPaste() {
-    var d:Data = Data.fromJSON(this.pasteText);
+    var d: Data = Data.fromJSON(this.pasteText);
 
-    // console.log("Data = ", d);
+    // console.log("paste = ", d);
 
-    this.data = d;
+    this.data = Data.copy(d);
+
+    // console.log("Data = ", this.data);
+
+    this.data.update();
+    this.updateAttributes();
 
     this.doPaste = false;
     this.pasteText = "";
@@ -211,4 +264,21 @@ export class AppComponent {
     this.pasteText = "";
   }
 
+  initWhatIf() {
+    this.whatIf = {};
+
+    for (var i = 0; i < ATTRIBUTES.length; i++) {
+      var name = ATTRIBUTES[i];
+      var a = new AttributeData();
+
+      a.name = name;
+      a.inc = 1;
+
+      this.whatIf[name] = a;
+    }
+
+    this.whatIf["skills.missileFiringRate"]["max"] = 20;
+    this.whatIf["talents.critChance"]["max"] = 100;
+
+  }
 }

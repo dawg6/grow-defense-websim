@@ -11,8 +11,8 @@ export class Parameters {
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
         this.laserArcherMult = 3;
-        this.version = "v1.0.4";
-        this.versionDate = "01/26/2019";
+        this.version = "v1.0.5";
+        this.versionDate = "01/27/2019";
     }
 }
 
@@ -274,6 +274,23 @@ export class Data {
     public static reviver(key: string, value: any): any {
         return key === '' ? Data.fromJSON(value) : value;
     }
+
+    public static copy(d:Data):Data {
+        var data = new Data();
+
+        data.level = d.level;
+
+        for (var a of Object.keys(data)) {
+            var x = data[a];
+            var y = d[a];
+
+            for (var b of Object.keys(x)) {
+                x[b] = y[b];
+            }
+        }
+
+        return data;
+    }
 }
 
 export class Log {
@@ -282,3 +299,34 @@ export class Log {
     skills: number;
     best: Data;
 }
+
+export class AttributeData {
+    name: string;
+    inc: number;
+    value : number;
+    dps: number;
+    dpsPct: number;
+    max: number;
+
+    public calculate(data:Data) {
+        var s = this.name.split(".");
+
+        this.value = data[s[0]][s[1]];
+        var old = data.stats.totalDps;
+
+        if (!this.max || (this.value < this.max)) {
+            var next = this.max ? Math.min(this.value + this.inc, this.max) : (this.value + this.inc);
+
+            data[s[0]][s[1]] = next;
+            data.update();
+            this.dps = Math.round(data.stats.totalDps * 10.0) / 10.0;
+            this.dpsPct = Math.round(10000.0 * ((this.dps - old) / old)) / 100.0;
+            data[s[0]][s[1]] = this.value;
+            data.update();
+        } else {
+            this.dps = Math.round(old * 10.0) / 10.0;
+            this.dpsPct = 0;
+        }
+    }
+}
+

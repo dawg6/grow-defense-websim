@@ -31,8 +31,12 @@
     white-space:nowrap;
 }
 
-input {
+.num-input {
     width: 100px;
+}
+
+.attr-input {
+    width: 40px;
 }
 
 .btn {
