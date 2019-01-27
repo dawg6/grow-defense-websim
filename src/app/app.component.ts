@@ -287,6 +287,7 @@ export class AppComponent {
     this.whatIf["skills.missileFiringRate"]["max"] = 20;
     this.whatIf["skills.numMissiles"]["max"] = 10;
     this.whatIf["skills.lasers"]["max"] = 2;
+    this.whatIf["skills.finger"]["max"] = 2000;
     this.whatIf["skills.missileFiringRate"]["max"] = 20;
     this.whatIf["skills.bounces"]["max"] = 5;
     this.whatIf["skills.bounceDmg"]["max"] = 6;

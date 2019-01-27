@@ -275,18 +275,19 @@
       </tr>
       <tr>
             <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-finger.png" />Finger
-                              damage coin upgrade level</span></div>
+                              damage coin upgrade level (max = 2000)</span></div>
             </td>
-            <td colspan="2"><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.finger"
+            <td colspan="2"><input class="num-input" type="number" min="1" max="2000" [(ngModel)]="data.skills.finger"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.finger']['inc']"
+            <td *ngIf="data.skills.finger < 2000" class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.finger']['inc']"
                         (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['skills.finger']['inc'] }} to finger
                               damage results in a total dps of {{ whatIf['skills.finger']['dps'] | number }} which is a
                               {{
                               whatIf['skills.finger']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value">+{{ whatIf['skills.finger']['dpsPct'] }}%</td>
+            <td *ngIf="data.skills.finger < 2000" colspan="2" class="value">+{{ whatIf['skills.finger']['dpsPct'] }}%</td>
+            <td *ngIf="data.skills.finger >= 2000" colspan="3"></td>
             <td class="label">Base Finger Damage <div class="tooltip"><span class="tooltiptext">Single finger click
                               damage
                               (without talents)</span></div>
