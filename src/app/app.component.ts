@@ -24,6 +24,12 @@ const ATTRIBUTES: string[] = [
   "skills.finger",
   "skills.cannon",
   "skills.bomb",
+  "skills.numMissiles",
+  "skills.arrowRoF",
+  "skills.archers",
+  "skills.lasers",
+  "skills.bounces",
+  "skills.bounceDmg",
   "talents.arrow",
   "talents.laser",
   "talents.critChance",
@@ -277,7 +283,14 @@ export class AppComponent {
       this.whatIf[name] = a;
     }
 
+    this.whatIf["skills.archers"]["max"] = 7;
     this.whatIf["skills.missileFiringRate"]["max"] = 20;
+    this.whatIf["skills.numMissiles"]["max"] = 10;
+    this.whatIf["skills.lasers"]["max"] = 2;
+    this.whatIf["skills.missileFiringRate"]["max"] = 20;
+    this.whatIf["skills.bounces"]["max"] = 5;
+    this.whatIf["skills.bounceDmg"]["max"] = 6;
+    this.whatIf["skills.arrowRoF"]["max"] = 5;
     this.whatIf["talents.critChance"]["max"] = 100;
 
   }
