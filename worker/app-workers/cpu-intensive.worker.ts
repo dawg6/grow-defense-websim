@@ -12,8 +12,10 @@ export class CPUIntensiveWorker {
 
     static simulate(l: Log) {
 
-        var points = l.levels;
+        l.startTime = new Date().getTime();
 
+        var points = l.levels;
+        var count = 0;
         var max: Data = new Data();
         var r: Data = new Data();
         max.skills = l.start.skills;
@@ -45,6 +47,7 @@ export class CPUIntensiveWorker {
                         r.talents.critDamage = cd + l.start.talents.critDamage;
 
                         r.update();
+                        count++;
 
                         if (r.stats.totalDps > max.stats.totalDps) {
                             max.talents.arrow = r.talents.arrow;
@@ -60,6 +63,10 @@ export class CPUIntensiveWorker {
         }
 
         l.best = max;
+
+        l.finishTime = new Date().getTime();
+        l.elapsedTime = l.finishTime - l.startTime;
+        l.count = count;
     }
 
 }

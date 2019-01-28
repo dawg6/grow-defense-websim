@@ -171,8 +171,24 @@ var Talents = /** @class */ (function () {
     return Talents;
 }());
 
+var BOUNCE_TABLE = [];
 var Stats = /** @class */ (function () {
     function Stats() {
+        if (BOUNCE_TABLE.length == 0) {
+            for (var n = 0; n <= 5; n++) {
+                var row = [];
+                for (var m = 0; m <= 6; m++) {
+                    var mult = 1.0;
+                    var bouncedmgmultiplier = 0.5 + (0.05 * m);
+                    for (var i = 1; i <= n; i++) {
+                        mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
+                    }
+                    row.push(mult);
+                }
+                BOUNCE_TABLE.push(row);
+            }
+            // console.log(BOUNCE_TABLE);
+        }
     }
     Stats.prototype.update = function (data) {
         this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
@@ -218,11 +234,9 @@ var Stats = /** @class */ (function () {
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
         this.laserTicksPerSec = data.skills.lasers * data.params.laserRoF;
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
-        var bouncedmgmultiplier = 0.5 + (0.05 * data.skills.bounceDmg);
-        var mult = 1.0;
-        for (var i = 1; i <= data.skills.bounces; i++) {
-            mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
-        }
+        var x = Math.max(Math.min(data.skills.bounces, 5), 0);
+        var y = Math.max(Math.min(data.skills.bounceDmg, 6), 0);
+        var mult = BOUNCE_TABLE[x][y];
         this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
         var laserArcherBounceFactor = (this.laserMastery >= 3) ? this.laserBounceMult : 1.0;
@@ -397,7 +411,9 @@ var CPUIntensiveWorker = /** @class */ (function () {
         return new _shared_worker_message_model__WEBPACK_IMPORTED_MODULE_0__["WorkerMessage"](value.topic, value.data);
     };
     CPUIntensiveWorker.simulate = function (l) {
+        l.startTime = new Date().getTime();
         var points = l.levels;
+        var count = 0;
         var max = new _src_app_data__WEBPACK_IMPORTED_MODULE_1__["Data"]();
         var r = new _src_app_data__WEBPACK_IMPORTED_MODULE_1__["Data"]();
         max.skills = l.start.skills;
@@ -420,6 +436,7 @@ var CPUIntensiveWorker = /** @class */ (function () {
                         r.talents.critChance = cc + l.start.talents.critChance;
                         r.talents.critDamage = cd + l.start.talents.critDamage;
                         r.update();
+                        count++;
                         if (r.stats.totalDps > max.stats.totalDps) {
                             max.talents.arrow = r.talents.arrow;
                             max.talents.laser = r.talents.laser;
@@ -433,6 +450,9 @@ var CPUIntensiveWorker = /** @class */ (function () {
             }
         }
         l.best = max;
+        l.finishTime = new Date().getTime();
+        l.elapsedTime = l.finishTime - l.startTime;
+        l.count = count;
     };
     return CPUIntensiveWorker;
 }());

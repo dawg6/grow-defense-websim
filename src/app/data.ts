@@ -102,6 +102,8 @@ export class Talents {
     }
 }
 
+var BOUNCE_TABLE = [];
+
 export class Stats {
     arrowBase: number;
     laserBase: number;
@@ -149,7 +151,26 @@ export class Stats {
     baseArrowsSec: number;
 
     constructor() {
+        if (BOUNCE_TABLE.length == 0) {
+            for (var n = 0; n <= 5; n++) {
+                var row = [];
 
+                for (var m = 0; m <= 6; m++) {
+                    var mult = 1.0;
+                    var bouncedmgmultiplier = 0.5 + (0.05 * m);
+
+                    for (var i = 1; i <= n; i++) {
+                        mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
+                    }
+
+                    row.push(mult);
+                }
+
+                BOUNCE_TABLE.push(row);
+            }
+
+            // console.log(BOUNCE_TABLE);
+        }
     }
 
     update(data: Data) {
@@ -199,8 +220,6 @@ export class Stats {
         
         this.avgLaser = (this.critChance * this.laserCrit) +
             ((1.0 - this.critChance) * this.laser);  
-
-
         
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
 
@@ -212,13 +231,9 @@ export class Stats {
         this.laserTicksPerSec = data.skills.lasers * data.params.laserRoF;
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
 
-        var bouncedmgmultiplier = 0.5 + (0.05 * data.skills.bounceDmg);
-        
-        var mult = 1.0;
-
-        for (var i = 1; i <= data.skills.bounces; i++) {
-            mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
-        }
+        var x = Math.max(Math.min(data.skills.bounces, 5), 0);
+        var y = Math.max(Math.min(data.skills.bounceDmg, 6), 0);
+        var mult = BOUNCE_TABLE[x][y];
 
         this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
 
@@ -306,6 +321,10 @@ export class Log {
     levels: number;
     skills: number;
     best: Data;
+    startTime: number;
+    finishTime: number;
+    elapsedTime: number;
+    count: number;
 }
 
 export class AttributeData {

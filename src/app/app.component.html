@@ -427,6 +427,10 @@
                   <div class="tooltip"><span class="tooltiptext">Optimize talents to maximize total DPS</span></div>
                   <div class="divider"></div>
             </td>
+            <td colspan="3" *ngIf="log" class="value">
+                  <span>Evaluated {{ log.count | number }} combinations in {{ log.elapsedTime | number }}ms</span>
+                  <span *ngIf="log.elapsedTime > 0"> ( {{ Math.round(log.count / log.elapsedTime) | number }} combos/ms)</span>
+                  </td>
       </tr>
       <tr>
             <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-arrow.png" />Arrow

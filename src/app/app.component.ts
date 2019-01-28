@@ -59,6 +59,7 @@ export class AppComponent {
   doPaste: boolean = false;
   pasteText: string;
   whatIf = {};
+  log: Log = null;
 
   constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private workerService: WorkerService) {
     this.data = new Data();
@@ -153,6 +154,8 @@ export class AppComponent {
       this.data.update();
       this.updateAttributes();
 
+      this.log = message.data;
+      
       this.resolver();
       // console.log("data", this.data);
     }
