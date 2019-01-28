@@ -105,6 +105,30 @@ export class Talents {
 export class StaticData {
     public static BOUNCE_TABLE = [];
     public static BOUNCE_HIT_TABLE = [];
+    public static ATTRIBUTES: string[] = [
+        "skills.arrow",
+        "skills.laser",
+        "skills.missileDamage",
+        "skills.missileFiringRate",
+        "skills.finger",
+        "skills.cannon",
+        "skills.bomb",
+        "skills.numMissiles",
+        "skills.arrowRoF",
+        "skills.archers",
+        "skills.lasers",
+        "skills.bounces",
+        "skills.bounceDmg",
+        "talents.arrow",
+        "talents.laser",
+        "talents.critChance",
+        "talents.critDamage",
+        "talents.finger",
+        "power.arrow",
+        "power.laser",
+        "power.missile",
+      ];
+
     private static instance: StaticData;
 
     static getInstance() {
@@ -280,6 +304,7 @@ export class Data {
     stats : Stats;
     params: Parameters;
     power: PowerGems;
+    attributes : any;
     
     constructor() {
         this.skills = new Skills();
@@ -287,7 +312,12 @@ export class Data {
         this.stats = new Stats();
         this.params = new Parameters();
         this.power = new PowerGems();
+        this.attributes = {};
 
+        for (var a of StaticData.ATTRIBUTES) {
+            this.attributes[a] = 1;
+        }
+      
         this.update();
     }
 

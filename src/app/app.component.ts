@@ -15,30 +15,7 @@ const TALENTS_PREFIX: string = SAVE_PREFIX + "talents.";
 const SKILLS_PREFIX: string = SAVE_PREFIX + "skills.";
 const PARAMS_PREFIX: string = SAVE_PREFIX + "params.";
 const POWER_PREFIX: string = SAVE_PREFIX + "power.";
-
-const ATTRIBUTES: string[] = [
-  "skills.arrow",
-  "skills.laser",
-  "skills.missileDamage",
-  "skills.missileFiringRate",
-  "skills.finger",
-  "skills.cannon",
-  "skills.bomb",
-  "skills.numMissiles",
-  "skills.arrowRoF",
-  "skills.archers",
-  "skills.lasers",
-  "skills.bounces",
-  "skills.bounceDmg",
-  "talents.arrow",
-  "talents.laser",
-  "talents.critChance",
-  "talents.critDamage",
-  "talents.finger",
-  "power.arrow",
-  "power.laser",
-  "power.missile",
-];
+const ATTRIBUTE_PREFIX: string = SAVE_PREFIX + "attributes.";
 
 @Component({
   selector: 'app-root',
@@ -156,7 +133,7 @@ export class AppComponent {
       this.updateAttributes();
 
       this.log = message.data;
-      
+
       this.resolver();
       // console.log("data", this.data);
     }
@@ -174,7 +151,31 @@ export class AppComponent {
     this.saveObject(PARAMS_PREFIX, this.data.params);
     this.saveObject(POWER_PREFIX, this.data.power);
 
+    this.setAttributeData();
+
+    this.saveObject(ATTRIBUTE_PREFIX, this.data.attributes);
+
     alert("Form Data Saved");
+  }
+
+  setAttributeData() {
+    for (var a of StaticData.ATTRIBUTES) {
+      var attr: AttributeData = this.whatIf[a];
+      this.data.attributes[a] = attr.inc;
+    }
+  }
+
+  getAttributeData() {
+
+    for (var a of StaticData.ATTRIBUTES) {
+      var attr: AttributeData = this.whatIf[a];
+
+      if (this.data.attributes[a]) {
+        attr.inc = this.data.attributes[a] as number;
+      } else {
+        attr.inc = 1;
+      }
+    }
   }
 
   load() {
@@ -182,6 +183,12 @@ export class AppComponent {
     this.loadObject(TALENTS_PREFIX, this.data.talents);
     this.loadObject(PARAMS_PREFIX, this.data.params);
     this.loadObject(POWER_PREFIX, this.data.power);
+
+    this.setAttributeData();
+
+    this.loadObject(ATTRIBUTE_PREFIX, this.data.attributes);
+
+    this.getAttributeData();
 
     this.updateData();
   }
@@ -199,22 +206,22 @@ export class AppComponent {
     for (var a of Object.keys(this.whatIf)) {
 
       var s = a.split('.');
-      var b : number = best[s[0]];
+      var b: number = best[s[0]];
 
       var attr: AttributeData = this.whatIf[a];
 
       attr.calculate(this.data);
 
       if (!b || (attr.dps > b)) {
-          b = attr.dps;
-          best[s[0]] = b;
+        b = attr.dps;
+        best[s[0]] = b;
       }
     }
 
     for (var a of Object.keys(this.whatIf)) {
 
       var s = a.split('.');
-      var b : number = best[s[0]];
+      var b: number = best[s[0]];
       var attr: AttributeData = this.whatIf[a];
 
       attr.best = (attr.dps >= b);
@@ -223,8 +230,8 @@ export class AppComponent {
   }
 
   getTooltip(a: string, b: string) {
-    return "Adding " + this.whatIf[a]['inc'] + " to " + b + 
-      " results in a total dps of " + this.whatIf[a]['dps'] + 
+    return "Adding " + this.whatIf[a]['inc'] + " to " + b +
+      " results in a total dps of " + this.whatIf[a]['dps'] +
       ". a " + this.whatIf[a]['dpsPct'] + "% dps increase.";
   }
 
@@ -255,7 +262,7 @@ export class AppComponent {
 
     for (var a of Object.keys(this.whatIf)) {
       var attr: AttributeData = this.whatIf[a];
-      attr.inc = 1;
+      attr.inc = this.data.attributes[a];
     }
 
     this.data.update();
@@ -280,9 +287,13 @@ export class AppComponent {
   getPaste() {
     var d: Data = Data.fromJSON(this.pasteText);
 
+    this.setAttributeData();
+
     // console.log("paste = ", d);
+    // console.log("before Data = ", this.data);
 
     this.data = Data.copy(d);
+    this.getAttributeData();
 
     // console.log("Data = ", this.data);
 
@@ -301,8 +312,8 @@ export class AppComponent {
   initWhatIf() {
     this.whatIf = {};
 
-    for (var i = 0; i < ATTRIBUTES.length; i++) {
-      var name = ATTRIBUTES[i];
+    for (var i = 0; i < StaticData.ATTRIBUTES.length; i++) {
+      var name = StaticData.ATTRIBUTES[i];
       var a = new AttributeData();
 
       a.name = name;
@@ -324,7 +335,7 @@ export class AppComponent {
 
   }
 
-  getBounceData() : any[] {
+  getBounceData(): any[] {
     return StaticData.BOUNCE_HIT_TABLE;
   }
 

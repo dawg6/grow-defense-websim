@@ -3,6 +3,7 @@ v1.0.6 01/28/2019:
 - Removed Laser Archer Multiplier (confirmed it does not exist in game)
 - Optimize performance improvements and display # combinations/mastery
 - Display laser tick table
+- save/load/copy/paste attribute incrementors
 
 v1.0.5 01/27/2019:
 - Added "what if" calculation for most attributes

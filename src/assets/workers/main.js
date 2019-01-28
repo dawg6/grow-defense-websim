@@ -197,6 +197,29 @@ var StaticData = /** @class */ (function () {
     };
     StaticData.BOUNCE_TABLE = [];
     StaticData.BOUNCE_HIT_TABLE = [];
+    StaticData.ATTRIBUTES = [
+        "skills.arrow",
+        "skills.laser",
+        "skills.missileDamage",
+        "skills.missileFiringRate",
+        "skills.finger",
+        "skills.cannon",
+        "skills.bomb",
+        "skills.numMissiles",
+        "skills.arrowRoF",
+        "skills.archers",
+        "skills.lasers",
+        "skills.bounces",
+        "skills.bounceDmg",
+        "talents.arrow",
+        "talents.laser",
+        "talents.critChance",
+        "talents.critDamage",
+        "talents.finger",
+        "power.arrow",
+        "power.laser",
+        "power.missile",
+    ];
     return StaticData;
 }());
 
@@ -277,6 +300,11 @@ var Data = /** @class */ (function () {
         this.stats = new Stats();
         this.params = new Parameters();
         this.power = new PowerGems();
+        this.attributes = {};
+        for (var _i = 0, _a = StaticData.ATTRIBUTES; _i < _a.length; _i++) {
+            var a = _a[_i];
+            this.attributes[a] = 1;
+        }
         this.update();
     }
     Data.prototype.update = function () {
