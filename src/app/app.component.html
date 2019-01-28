@@ -104,7 +104,8 @@
                               {{
                               whatIf['skills.arrowRoF']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value" *ngIf="data.skills.arrowRoF < 5"><span [class.best]="whatIf['skills.arrowRoF']['best']">+{{ whatIf['skills.arrowRoF']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value" *ngIf="data.skills.arrowRoF < 5"><span [class.best]="whatIf['skills.arrowRoF']['best']">+{{
+                        whatIf['skills.arrowRoF']['dpsPct'] }}%</span></td>
             <td *ngIf="data.skills.arrowRoF >= 5" colspan="3"></td>
             <td class="label">Base Arrow RoF <div class="tooltip"><span class="tooltiptext">Base # of arrows per per
                               archer</span></div>
@@ -124,7 +125,8 @@
                               {{
                               whatIf['skills.arrow']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value"><span [class.best]="whatIf['skills.arrow']['best']">+{{ whatIf['skills.arrow']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value"><span [class.best]="whatIf['skills.arrow']['best']">+{{
+                        whatIf['skills.arrow']['dpsPct'] }}%</span></td>
             <td class="label">Base Arrow Damage <div class="tooltip"><span class="tooltiptext">Single arrow damage
                               (without
                               talents)</span></div>
@@ -150,7 +152,8 @@
                               {{
                               whatIf['skills.laser']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value"><span [class.best]="whatIf['skills.laser']['best']">+{{ whatIf['skills.laser']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value"><span [class.best]="whatIf['skills.laser']['best']">+{{
+                        whatIf['skills.laser']['dpsPct'] }}%</span></td>
             <td class="label">Base Laser Damage <div class="tooltip"><span class="tooltiptext">Single laser damage tick
                               (without talents)</span></div>
             </td>
@@ -177,7 +180,8 @@
                               {{
                               whatIf['skills.lasers']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value" *ngIf="data.skills.lasers < 2"><span [class.best]="whatIf['skills.lasers']['best']">+{{ whatIf['skills.lasers']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value" *ngIf="data.skills.lasers < 2"><span [class.best]="whatIf['skills.lasers']['best']">+{{
+                        whatIf['skills.lasers']['dpsPct'] }}%</span></td>
             <td *ngIf="data.skills.lasers >= 2" colspan="3"></td>
       </tr>
       <tr>
@@ -194,7 +198,8 @@
                               {{
                               whatIf['skills.bounces']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value" *ngIf="data.skills.bounces < 5"><span [class.best]="whatIf['skills.bounces']['best']">+{{ whatIf['skills.bounces']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value" *ngIf="data.skills.bounces < 5"><span [class.best]="whatIf['skills.bounces']['best']">+{{
+                        whatIf['skills.bounces']['dpsPct'] }}%</span></td>
             <td *ngIf="data.skills.bounces >= 5" colspan="3"></td>
       </tr>
       <tr>
@@ -213,8 +218,9 @@
                               {{
                               whatIf['skills.bounceDmg']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value" *ngIf="data.skills.bounceDmg < 6"><span [class.best]="whatIf['skills.bounceDmg']['best']">+{{ whatIf['skills.bounceDmg']['dpsPct']
-                  }}%</span></td>
+            <td colspan="2" class="value" *ngIf="data.skills.bounceDmg < 6"><span [class.best]="whatIf['skills.bounceDmg']['best']">+{{
+                        whatIf['skills.bounceDmg']['dpsPct']
+                        }}%</span></td>
             <td *ngIf="data.skills.bounceDmg >= 6" colspan="3"></td>
 
             <td class="label">Laser Bounce Multiplier <div class="tooltip"><span class="tooltiptext">Laser damage
@@ -222,6 +228,28 @@
                               considering all bounces</span></div>
             </td>
             <td class="value">{{ data.stats.laserBounceMult }}</td>
+            <td colspan="2" rowspan="7" class="tick-table-holder" *ngIf="data.skills.lasers > 0">
+                  <table class="tick-table">
+                        <tr class="tick-table-header">
+                              <td><span class="tick-table-header">Laser Tick Damage</span></td>
+                              <td><span class="tick-table-header">Normal</span></td>
+                              <td><span class="tick-table-header">Critical</span></td>
+                        </tr>
+                        <tr *ngFor="let b of getBounceData(); let i = index" class="tick-table-row">
+                              <ng-container *ngIf="i <= data.skills.bounces">
+                                    <td class="left" *ngIf="i == 0"><span class="tick-table-label">Initial Hit</span></td>
+                                    <td class="left" *ngIf="i > 0"><span class="tick-table-label">Bounce # {{ i }}</span></td>
+                                    <td class="right"><span class="tick-table-value">{{ Math.floor(b[data.skills.bounceDmg] * data.stats.laser) }}</span></td>
+                                    <td class="right"><span class="tick-table-value">{{ Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) }}</span></td>
+                              </ng-container>
+                        </tr>
+                        <tr  *ngIf="data.skills.bounces > 0">
+                              <td class="left"><span class="tick-table-label">Total</span></td>
+                              <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult * data.stats.laser) }}</span></td>
+                              <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult * data.stats.laserCrit) }}</span></td>
+                        </tr>
+                  </table>
+            </td>
       </tr>
       <tr>
             <td class="label">Cannon Ball Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
@@ -238,7 +266,8 @@
                               {{
                               whatIf['skills.cannon']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value"><span [class.best]="whatIf['skills.cannon']['best']">+{{ whatIf['skills.cannon']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value"><span [class.best]="whatIf['skills.cannon']['best']">+{{
+                        whatIf['skills.cannon']['dpsPct'] }}%</span></td>
             <td class="label">Cannon Ball Damage <div class="tooltip"><span class="tooltiptext">Cannon bomb damage</span></div>
             </td>
             <td class="value">{{ data.stats.cannonBase }}</td>
@@ -258,7 +287,8 @@
                               {{
                               whatIf['skills.bomb']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value"><span [class.best]="whatIf['skills.bomb']['best']">+{{ whatIf['skills.bomb']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value"><span [class.best]="whatIf['skills.bomb']['best']">+{{
+                        whatIf['skills.bomb']['dpsPct'] }}%</span></td>
             <td class="label">Cannon Bomb Damage <div class="tooltip"><span class="tooltiptext">Cannon ball damage</span></div>
             </td>
             <td class="value">{{ data.stats.bombBase }}</td>
@@ -269,14 +299,15 @@
             </td>
             <td colspan="2"><input class="num-input" type="number" min="1" max="2000" [(ngModel)]="data.skills.finger"
                         (ngModelChange)="updateData($event)"></td>
-            <td *ngIf="data.skills.finger < 2000" class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.finger']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td *ngIf="data.skills.finger < 2000" class="value">+ <input class="attr-input" type="number" maxlength="2"
+                        min="1" [(ngModel)]="whatIf['skills.finger']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['skills.finger']['inc'] }} to finger
                               damage results in a total dps of {{ whatIf['skills.finger']['dps'] | number }} which is a
                               {{
                               whatIf['skills.finger']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td *ngIf="data.skills.finger < 2000" colspan="2" class="value"><span [class.best]="whatIf['skills.finger']['best']">+{{ whatIf['skills.finger']['dpsPct'] }}%</span></td>
+            <td *ngIf="data.skills.finger < 2000" colspan="2" class="value"><span [class.best]="whatIf['skills.finger']['best']">+{{
+                        whatIf['skills.finger']['dpsPct'] }}%</span></td>
             <td *ngIf="data.skills.finger >= 2000" colspan="3"></td>
             <td class="label">Base Finger Damage <div class="tooltip"><span class="tooltiptext">Single finger click
                               damage
@@ -300,7 +331,8 @@
                               {{
                               whatIf['skills.missileDamage']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value"><span [class.best]="whatIf['skills.missileDamage']['best']">+{{ whatIf['skills.missileDamage']['dpsPct'] }}%</span></td>
+            <td colspan="2" class="value"><span [class.best]="whatIf['skills.missileDamage']['best']">+{{
+                        whatIf['skills.missileDamage']['dpsPct'] }}%</span></td>
 
             <td class="label">Single Missile Damage <div class="tooltip"><span class="tooltiptext">Single Missile
                               damage per
@@ -322,8 +354,9 @@
                               {{
                               whatIf['skills.archers']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value" *ngIf="data.skills.archers < 7"><span [class.best]="whatIf['skills.archers']['best']">+{{ whatIf['skills.archers']['dpsPct']
-                  }}%</span></td>
+            <td colspan="2" class="value" *ngIf="data.skills.archers < 7"><span [class.best]="whatIf['skills.archers']['best']">+{{
+                        whatIf['skills.archers']['dpsPct']
+                        }}%</span></td>
             <td *ngIf="data.skills.archers >= 7" colspan="3"></td>
       </tr>
       <tr>
@@ -346,7 +379,7 @@
                               whatIf['skills.missileFiringRate']['dpsPct'] }}% dps increase.</span></div>
             </td>
             <td class="value" *ngIf="data.skills.missileFiringRate < 20"><span [class.best]="whatIf['skills.missileFiringRate']['best']">+{{
-                  whatIf['skills.missileFiringRate']['dpsPct'] }}%</span></td>
+                        whatIf['skills.missileFiringRate']['dpsPct'] }}%</span></td>
       </tr>
       <tr>
             <td class="label"># of Missiles<div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-num-missiles.png" />Total
@@ -364,8 +397,9 @@
                               {{
                               whatIf['skills.numMissiles']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td colspan="2" class="value" *ngIf="data.skills.numMissiles < 10"><span [class.best]="whatIf['skills.numMissiles']['best']">+{{ whatIf['skills.numMissiles']['dpsPct']
-                  }}%</span></td>
+            <td colspan="2" class="value" *ngIf="data.skills.numMissiles < 10"><span [class.best]="whatIf['skills.numMissiles']['best']">+{{
+                        whatIf['skills.numMissiles']['dpsPct']
+                        }}%</span></td>
             <td *ngIf="data.skills.numMissiles >= 10" colspan="3"></td>
 
       </tr>
@@ -386,7 +420,8 @@
                               arrow damage results in a total dps of {{ whatIf['power.arrow']['dps'] | number }}
                               which is a {{whatIf['power.arrow']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value"><span [class.best]="whatIf['power.arrow']['best']">+{{ whatIf['power.arrow']['dpsPct'] }}%</span></td>
+            <td class="value"><span [class.best]="whatIf['power.arrow']['best']">+{{ whatIf['power.arrow']['dpsPct']
+                        }}%</span></td>
       </tr>
       <tr>
             <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/power-laser.png" />Laser
@@ -400,7 +435,8 @@
                               laser damage results in a total dps of {{ whatIf['power.laser']['dps'] | number }}
                               which is a {{whatIf['power.laser']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value"><span [class.best]="whatIf['power.laser']['best']">+{{ whatIf['power.laser']['dpsPct'] }}%</span></td>
+            <td class="value"><span [class.best]="whatIf['power.laser']['best']">+{{ whatIf['power.laser']['dpsPct']
+                        }}%</span></td>
       </tr>
       <tr>
             <td class="label">Missile Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
@@ -415,7 +451,8 @@
                               missile damage results in a total dps of {{ whatIf['power.missile']['dps'] | number }}
                               which is a {{whatIf['power.missile']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value"><span [class.best]="whatIf['power.missile']['best']">+{{ whatIf['power.missile']['dpsPct'] }}%</span></td>
+            <td class="value"><span [class.best]="whatIf['power.missile']['best']">+{{
+                        whatIf['power.missile']['dpsPct'] }}%</span></td>
       </tr>
       <tr>
             <td colspan="5" class="heading">Talents <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
@@ -429,8 +466,9 @@
             </td>
             <td colspan="3" *ngIf="log" class="value">
                   <span>Evaluated {{ log.count | number }} combinations in {{ log.elapsedTime | number }}ms</span>
-                  <span *ngIf="log.elapsedTime > 0"> ( {{ Math.round(log.count / log.elapsedTime) | number }} combos/ms)</span>
-                  </td>
+                  <span *ngIf="log.elapsedTime > 0"> ( {{ Math.round(log.count / log.elapsedTime) | number }}
+                        combos/ms)</span>
+            </td>
       </tr>
       <tr>
             <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-arrow.png" />Arrow
@@ -447,7 +485,8 @@
                               arrow damage results in a total dps of {{ whatIf['talents.arrow']['dps'] | number }}
                               which is a {{whatIf['talents.arrow']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value"><span [class.best]="whatIf['talents.arrow']['best']">+{{ whatIf['talents.arrow']['dpsPct'] }}%</span></td>
+            <td class="value"><span [class.best]="whatIf['talents.arrow']['best']">+{{
+                        whatIf['talents.arrow']['dpsPct'] }}%</span></td>
             <td>
                   <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockArrow" id="lock-cb">
                   <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
@@ -480,7 +519,8 @@
                               laser damage results in a total dps of {{ whatIf['talents.laser']['dps'] | number }}
                               which is a {{whatIf['talents.laser']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value"><span [class.best]="whatIf['talents.laser']['best']">+{{ whatIf['talents.laser']['dpsPct'] }}%</span></td>
+            <td class="value"><span [class.best]="whatIf['talents.laser']['best']">+{{
+                        whatIf['talents.laser']['dpsPct'] }}%</span></td>
             <td>
                   <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockLaser" id="lock-cb">
                   <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
@@ -494,8 +534,7 @@
             </td>
             <td class="value">{{ Math.round(data.stats.laser) }}</td>
             <td class="label">Average Laser Damage <div class="tooltip"><span class="tooltiptext">Average laser tick
-                              damage,
-                              considering crits and bounce damage</span></div>
+                              damage on initial hit, considering crits</span></div>
             </td>
             <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
       </tr>
@@ -511,7 +550,8 @@
                               finger damage results in a total dps of {{ whatIf['talents.finger']['dps'] | number }}
                               which is a {{whatIf['talents.finger']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value"><span [class.best]="whatIf['talents.finger']['best']">+{{ whatIf['talents.finger']['dpsPct'] }}%</span></td>
+            <td class="value"><span [class.best]="whatIf['talents.finger']['best']">+{{
+                        whatIf['talents.finger']['dpsPct'] }}%</span></td>
             <td>
                   <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockFinger" id="lock-cb">
                   <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
@@ -539,7 +579,8 @@
                               crit chance results in a total dps of {{ whatIf['talents.critChance']['dps'] | number }}
                               which is a {{whatIf['talents.critChance']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value" *ngIf="data.talents.critChance < 100"><span [class.best]="whatIf['talents.critChance']['best']">+{{ whatIf['talents.critChance']['dpsPct'] }}%</span></td>
+            <td class="value" *ngIf="data.talents.critChance < 100"><span [class.best]="whatIf['talents.critChance']['best']">+{{
+                        whatIf['talents.critChance']['dpsPct'] }}%</span></td>
             <td *ngIf="data.talents.critChance >= 100" colspan="2"></td>
             <td>
                   <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockCC" id="lock-cb">
@@ -571,7 +612,8 @@
                               crit damage results in a total dps of {{ whatIf['talents.critDamage']['dps'] | number }}
                               which is a {{whatIf['talents.critDamage']['dpsPct'] }}% dps increase.</span></div>
             </td>
-            <td class="value"><span [class.best]="whatIf['talents.critDamage']['best']">+{{ whatIf['talents.critDamage']['dpsPct'] }}%</span></td>
+            <td class="value"><span [class.best]="whatIf['talents.critDamage']['best']">+{{
+                        whatIf['talents.critDamage']['dpsPct'] }}%</span></td>
             <td>
                   <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockCD" id="lock-cb">
                   <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock

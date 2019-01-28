@@ -102,7 +102,40 @@ export class Talents {
     }
 }
 
-var BOUNCE_TABLE = [];
+export class StaticData {
+    public static BOUNCE_TABLE = [];
+    public static BOUNCE_HIT_TABLE = [];
+    private static instance: StaticData;
+
+    static getInstance() {
+        if (!StaticData.instance)
+            StaticData.instance = new StaticData();
+
+        return StaticData.instance;
+    }
+
+    private constructor() {
+        for (var n = 0; n <= 5; n++) {
+            var row = [];
+            var hitRow = [];
+
+            for (var m = 0; m <= 6; m++) {
+                var mult = 1.0;
+                var bouncedmgmultiplier = 0.5 + (0.05 * m);
+
+                for (var i = 1; i <= n; i++) {
+                    mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
+                }
+
+                hitRow.push((n == 0) ? 1.0 : ((n == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (n * 0.8))));
+                row.push(mult);
+            }
+
+            StaticData.BOUNCE_TABLE.push(row);
+            StaticData.BOUNCE_HIT_TABLE.push(hitRow);
+        }
+    }
+}
 
 export class Stats {
     arrowBase: number;
@@ -150,27 +183,8 @@ export class Stats {
     cannonDpsPct: number;
     baseArrowsSec: number;
 
-    constructor() {
-        if (BOUNCE_TABLE.length == 0) {
-            for (var n = 0; n <= 5; n++) {
-                var row = [];
-
-                for (var m = 0; m <= 6; m++) {
-                    var mult = 1.0;
-                    var bouncedmgmultiplier = 0.5 + (0.05 * m);
-
-                    for (var i = 1; i <= n; i++) {
-                        mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
-                    }
-
-                    row.push(mult);
-                }
-
-                BOUNCE_TABLE.push(row);
-            }
-
-            // console.log(BOUNCE_TABLE);
-        }
+    constructor() { 
+        StaticData.getInstance();
     }
 
     update(data: Data) {
@@ -233,7 +247,7 @@ export class Stats {
 
         var x = Math.max(Math.min(data.skills.bounces, 5), 0);
         var y = Math.max(Math.min(data.skills.bounceDmg, 6), 0);
-        var mult = BOUNCE_TABLE[x][y];
+        var mult = StaticData.BOUNCE_TABLE[x][y];
 
         this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
 

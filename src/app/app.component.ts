@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { Data, Talents, Skills, Log, Parameters, AttributeData } from './data';
+import { Data, Talents, Skills, Log, Parameters, AttributeData, StaticData } from './data';
 import { FormsModule, SelectMultipleControlValueAccessor } from '@angular/forms';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Subscription } from 'rxjs';
@@ -46,6 +46,7 @@ const ATTRIBUTES: string[] = [
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  StaticData: StaticData = StaticData.getInstance();
   data: Data;
   Math = Math;
   workerTopic: string;
@@ -322,4 +323,9 @@ export class AppComponent {
     this.whatIf["talents.critChance"]["max"] = 100;
 
   }
+
+  getBounceData() : any[] {
+    return StaticData.BOUNCE_HIT_TABLE;
+  }
+
 }

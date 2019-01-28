@@ -90,7 +90,7 @@
 /*!*************************!*\
   !*** ./src/app/data.ts ***!
   \*************************/
-/*! exports provided: Parameters, Skills, PowerGems, Talents, Stats, Data, Log, AttributeData */
+/*! exports provided: Parameters, Skills, PowerGems, Talents, StaticData, Stats, Data, Log, AttributeData */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -99,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Skills", function() { return Skills; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PowerGems", function() { return PowerGems; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Talents", function() { return Talents; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StaticData", function() { return StaticData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Stats", function() { return Stats; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Data", function() { return Data; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Log", function() { return Log; });
@@ -171,24 +172,37 @@ var Talents = /** @class */ (function () {
     return Talents;
 }());
 
-var BOUNCE_TABLE = [];
+var StaticData = /** @class */ (function () {
+    function StaticData() {
+        for (var n = 0; n <= 5; n++) {
+            var row = [];
+            var hitRow = [];
+            for (var m = 0; m <= 6; m++) {
+                var mult = 1.0;
+                var bouncedmgmultiplier = 0.5 + (0.05 * m);
+                for (var i = 1; i <= n; i++) {
+                    mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
+                }
+                hitRow.push((n == 0) ? 1.0 : ((n == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (n * 0.8))));
+                row.push(mult);
+            }
+            StaticData.BOUNCE_TABLE.push(row);
+            StaticData.BOUNCE_HIT_TABLE.push(hitRow);
+        }
+    }
+    StaticData.getInstance = function () {
+        if (!StaticData.instance)
+            StaticData.instance = new StaticData();
+        return StaticData.instance;
+    };
+    StaticData.BOUNCE_TABLE = [];
+    StaticData.BOUNCE_HIT_TABLE = [];
+    return StaticData;
+}());
+
 var Stats = /** @class */ (function () {
     function Stats() {
-        if (BOUNCE_TABLE.length == 0) {
-            for (var n = 0; n <= 5; n++) {
-                var row = [];
-                for (var m = 0; m <= 6; m++) {
-                    var mult = 1.0;
-                    var bouncedmgmultiplier = 0.5 + (0.05 * m);
-                    for (var i = 1; i <= n; i++) {
-                        mult += (i == 1) ? bouncedmgmultiplier : (bouncedmgmultiplier / (i * 0.8));
-                    }
-                    row.push(mult);
-                }
-                BOUNCE_TABLE.push(row);
-            }
-            // console.log(BOUNCE_TABLE);
-        }
+        StaticData.getInstance();
     }
     Stats.prototype.update = function (data) {
         this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
@@ -236,7 +250,7 @@ var Stats = /** @class */ (function () {
         this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
         var x = Math.max(Math.min(data.skills.bounces, 5), 0);
         var y = Math.max(Math.min(data.skills.bounceDmg, 6), 0);
-        var mult = BOUNCE_TABLE[x][y];
+        var mult = StaticData.BOUNCE_TABLE[x][y];
         this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
         var laserArcherBounceFactor = (this.laserMastery >= 3) ? this.laserBounceMult : 1.0;

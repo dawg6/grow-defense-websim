@@ -136,3 +136,47 @@
   .mainTable {
       margin-left: 25px;
   }
+
+  .tick-table {
+      margin-left: 30px;
+  }
+
+  .tick-table-row {
+      text-align: center;
+  }
+
+  .tick-table-holder {
+      vertical-align: top;
+  }
+
+  .tick-table-label {
+      text-align: left;
+      color: cyan;
+      padding-right: 5px;
+      padding-left: 5px;
+  }
+
+  .tick-table-header {
+    padding-right: 5px;
+    padding-left: 5px;
+    font-weight: bold;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.cemter {
+    text-align: center;
+}
+
+  .tick-table-value {
+      text-align: right;
+      color: yellow;
+      padding-right: 5px;
+      padding-left: 5px;
+  }
