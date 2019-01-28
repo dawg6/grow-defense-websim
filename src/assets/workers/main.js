@@ -187,6 +187,15 @@ var Stats = /** @class */ (function () {
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
         this.arrowMastery = Math.min(Math.floor(data.talents.arrow / 100), 3);
         this.laserMastery = Math.min(Math.floor(data.talents.laser / 100), 3);
+        var masteryPts = Math.min(Math.floor(data.talents.arrow / 100) + Math.floor(data.talents.laser / 100), 6);
+        if (data.talents.laser >= data.talents.arrow) {
+            this.laserMastery = Math.min(masteryPts, 3);
+            this.arrowMastery = Math.min(masteryPts - this.laserMastery, 3);
+        }
+        else {
+            this.arrowMastery = Math.min(masteryPts, 3);
+            this.laserMastery = Math.min(masteryPts - this.arrowMastery, 3);
+        }
         this.superCritChance = Math.round(this.arrowMastery * 10) / 100.0;
         this.arrowPct = Math.round(data.talents.arrow * 3) / 100.0;
         this.laserPct = Math.round(data.talents.laser * 3) / 100.0;
@@ -198,7 +207,7 @@ var Stats = /** @class */ (function () {
         this.finger = Math.floor(this.fingerBase * (1 + this.fingerPct));
         this.arrowCrit = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.critDamage));
         this.laserCrit = Math.floor(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct) * (1 + this.critDamage));
-        this.superCrit = (data.talents.arrow >= 100) ? (2.0 * this.arrowCrit) : 0.0;
+        this.superCrit = (this.arrowMastery >= 1) ? (2.0 * this.arrowCrit) : 0.0;
         this.avgArrow = (this.superCritChance * this.superCrit) +
             ((1.0 - this.superCritChance) * this.critChance * this.arrowCrit) +
             ((1.0 - this.superCritChance) * (1.0 - this.critChance) * this.arrow);

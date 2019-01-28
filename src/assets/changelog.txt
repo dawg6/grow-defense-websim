@@ -1,5 +1,6 @@
 v1.0.5 01/27/2019:
 - Added "what if" calculation for most attributes
+- Fix mastery when more than 400 pts allocated
 
 v1.0.4 01/26/2019:
 - Added reset button
