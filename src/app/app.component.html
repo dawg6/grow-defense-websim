@@ -231,7 +231,7 @@
             <td colspan="2" rowspan="7" class="tick-table-holder" *ngIf="data.skills.lasers > 0">
                   <table class="tick-table">
                         <tr class="tick-table-header">
-                              <td><span class="tick-table-header">Laser Tick Damage</span></td>
+                              <td colspan="2"><span class="tick-table-header">Laser Tick Damage</span></td>
                               <td><span class="tick-table-header">Normal</span></td>
                               <td><span class="tick-table-header">Critical</span></td>
                         </tr>
@@ -239,12 +239,14 @@
                               <ng-container *ngIf="i <= data.skills.bounces">
                                     <td class="left" *ngIf="i == 0"><span class="tick-table-label">Initial Hit</span></td>
                                     <td class="left" *ngIf="i > 0"><span class="tick-table-label">Bounce # {{ i }}</span></td>
+                                    <td class="right"><span class="tick-table-value">{{ Math.round(b[data.skills.bounceDmg] * 100) }}%</span></td>
                                     <td class="right"><span class="tick-table-value">{{ Math.floor(b[data.skills.bounceDmg] * data.stats.laser) }}</span></td>
                                     <td class="right"><span class="tick-table-value">{{ Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) }}</span></td>
                               </ng-container>
                         </tr>
                         <tr  *ngIf="data.skills.bounces > 0">
                               <td class="left"><span class="tick-table-label">Total</span></td>
+                              <td class="right"><span class="tick-table-value">{{ Math.round(data.stats.laserBounceMult * 100) }}%</span></td>
                               <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult * data.stats.laser) }}</span></td>
                               <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult * data.stats.laserCrit) }}</span></td>
                         </tr>
