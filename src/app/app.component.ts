@@ -248,6 +248,12 @@ export class AppComponent {
 
   reset() {
     this.data = new Data();
+
+    for (var a of Object.keys(this.whatIf)) {
+      var attr: AttributeData = this.whatIf[a];
+      attr.inc = 1;
+    }
+
     this.data.update();
     this.updateAttributes();
   }
