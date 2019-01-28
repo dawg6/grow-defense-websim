@@ -108,7 +108,6 @@ var Parameters = /** @class */ (function () {
         this.laserRoF = 30;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.laserArcherMult = 3;
         this.version = "v1.0.5";
         this.versionDate = "01/27/2019";
     }
@@ -227,7 +226,7 @@ var Stats = /** @class */ (function () {
         this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
         var laserArcherBounceFactor = (this.laserMastery >= 3) ? this.laserBounceMult : 1.0;
-        this.laserDps = (this.avgLaser * this.laserTicksPerSec * this.laserBounceMult) + (this.avgLaser * data.params.laserArcherMult * this.laserArcherTicksPerSec * laserArcherBounceFactor);
+        this.laserDps = (this.avgLaser * this.laserTicksPerSec * this.laserBounceMult) + (this.avgLaser * this.laserArcherTicksPerSec * laserArcherBounceFactor);
         this.fingerDps = this.finger * data.params.fingerRoF;
         this.cannonBase = (data.skills.cannon > 0) ? (2000 + ((data.skills.cannon - 1) * 150 * Math.floor(data.skills.cannon / 2))) : 0;
         this.bombBase = (data.skills.bomb > 0) ? (2000 + ((data.skills.bomb - 1) * 300 * Math.floor(data.skills.bomb / 2))) : 0;
