@@ -189,15 +189,33 @@ export class AppComponent {
   }
 
   updateAttributes() {
+
+    var best = {};
+
     for (var a of Object.keys(this.whatIf)) {
+
+      var s = a.split('.');
+      var b : number = best[s[0]];
 
       var attr: AttributeData = this.whatIf[a];
 
       attr.calculate(this.data);
 
-      // console.log(a, attr);
-
+      if (!b || (attr.dps > b)) {
+          b = attr.dps;
+          best[s[0]] = b;
+      }
     }
+
+    for (var a of Object.keys(this.whatIf)) {
+
+      var s = a.split('.');
+      var b : number = best[s[0]];
+      var attr: AttributeData = this.whatIf[a];
+
+      attr.best = (attr.dps >= b);
+    }
+
   }
 
   getTooltip(a: string, b: string) {

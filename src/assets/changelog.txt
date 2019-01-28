@@ -1,3 +1,6 @@
+v1.0.6 01/28/2019:
+- Added indicator of "best" upgrade for each category (coins, talents, power gems)
+
 v1.0.5 01/27/2019:
 - Added "what if" calculation for most attributes
 - Fix mastery when more than 400 pts allocated

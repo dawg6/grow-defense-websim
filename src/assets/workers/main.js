@@ -300,6 +300,7 @@ var AttributeData = /** @class */ (function () {
     }
     AttributeData.prototype.calculate = function (data) {
         var s = this.name.split(".");
+        this.best = false;
         this.value = data[s[0]][s[1]];
         var old = data.stats.totalDps;
         if (!this.max || (this.value < this.max)) {
@@ -514,7 +515,7 @@ var LAZY_MODULE_MAP = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
+module.exports = __webpack_require__(/*! C:\Users\scott.clarke\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
 
 
 /***/ })

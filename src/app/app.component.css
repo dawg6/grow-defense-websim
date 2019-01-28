@@ -112,6 +112,11 @@
     opacity: 1;
   }
 
+  .best {
+      font-weight: bold;
+      color: lime;
+    }
+
   .link {
       color: yellow;
   }

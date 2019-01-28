@@ -317,9 +317,11 @@ export class AttributeData {
     dps: number;
     dpsPct: number;
     max: number;
+    best: boolean;
 
     public calculate(data:Data) {
         var s = this.name.split(".");
+        this.best = false;
 
         this.value = data[s[0]][s[1]];
         var old = data.stats.totalDps;
