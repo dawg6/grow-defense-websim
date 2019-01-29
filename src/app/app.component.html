@@ -184,7 +184,10 @@
             <td colspan="2" class="value" *ngIf="data.skills.lasers < 2"><span [class.best]="whatIf['skills.lasers']['best']">+{{
                         whatIf['skills.lasers']['dpsPct'] }}%</span></td>
             <td *ngIf="data.skills.lasers >= 2" colspan="3"></td>
-      </tr>
+            <td class="label">Stats Page Laser Damage <div class="tooltip"><span class="tooltiptext">Value shown in-game on stats page for laser damage</span></div>
+</td>
+<td class="value">{{ data.stats.statsLaserDamage }}</td>
+</tr>
       <tr>
             <td class="label">Laser Bounces <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-laser-bounces.png" />#
                               of bounces per laser (0 = none, 5 = max)</span></div>
