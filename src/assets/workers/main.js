@@ -229,7 +229,11 @@ var Stats = /** @class */ (function () {
     }
     Stats.prototype.update = function (data) {
         this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
-        this.laserBase = Math.round(Math.floor((12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) - (data.power.laser / 4.0)) * 1.3);
+        // next update: 
+        // long damage = (long)(((((LaserDamageLevel - 1) * LaserDamageIncrease) + laserDamage) * LaserDamageTalent) * laserMasteryDamage * 1.8f); 
+        // LaserDamageIncrease = return laserDamageIncrease + (LaserUpgradeBoostLevel * laserUpgradeBoostIncrement);
+        // current 1.7 (verified by endomlic in discord chat)
+        this.laserBase = Math.round(Math.floor((12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) - (data.power.laser / 4.0)) * 1.7);
         this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
@@ -576,7 +580,7 @@ var LAZY_MODULE_MAP = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
+module.exports = __webpack_require__(/*! C:\Users\scott.clarke\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
 
 
 /***/ })

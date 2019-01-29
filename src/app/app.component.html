@@ -6,6 +6,7 @@
       <li class="label">Rate of fire is limited by browser framerate</li>
       <li class="label">Assumes you've unlocked the appropriate masteries with gems (depending on # talent points in
             arrow/laser)</li>
+      <li class="label">1/29/19: Developer confirmed a bug in in-game stats UI for laser damage, so values here are accurate, but stats page is incorrect.</li>
 </ul>
 <table class="mainTable">
       <tr>
@@ -239,16 +240,22 @@
                               <ng-container *ngIf="i <= data.skills.bounces">
                                     <td class="left" *ngIf="i == 0"><span class="tick-table-label">Initial Hit</span></td>
                                     <td class="left" *ngIf="i > 0"><span class="tick-table-label">Bounce # {{ i }}</span></td>
-                                    <td class="right"><span class="tick-table-value">{{ Math.round(b[data.skills.bounceDmg] * 100) }}%</span></td>
-                                    <td class="right"><span class="tick-table-value">{{ Math.floor(b[data.skills.bounceDmg] * data.stats.laser) }}</span></td>
-                                    <td class="right"><span class="tick-table-value">{{ Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) }}</span></td>
+                                    <td class="right"><span class="tick-table-value">{{
+                                                Math.round(b[data.skills.bounceDmg] * 100) }}%</span></td>
+                                    <td class="right"><span class="tick-table-value">{{
+                                                Math.floor(b[data.skills.bounceDmg] * data.stats.laser) }}</span></td>
+                                    <td class="right"><span class="tick-table-value">{{
+                                                Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) }}</span></td>
                               </ng-container>
                         </tr>
-                        <tr  *ngIf="data.skills.bounces > 0">
+                        <tr *ngIf="data.skills.bounces > 0">
                               <td class="left"><span class="tick-table-label">Total</span></td>
-                              <td class="right"><span class="tick-table-value">{{ Math.round(data.stats.laserBounceMult * 100) }}%</span></td>
-                              <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult * data.stats.laser) }}</span></td>
-                              <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult * data.stats.laserCrit) }}</span></td>
+                              <td class="right"><span class="tick-table-value">{{ Math.round(data.stats.laserBounceMult
+                                          * 100) }}%</span></td>
+                              <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult
+                                          * data.stats.laser) }}</span></td>
+                              <td class="right"><span class="tick-table-value">{{ Math.floor(data.stats.laserBounceMult
+                                          * data.stats.laserCrit) }}</span></td>
                         </tr>
                   </table>
             </td>

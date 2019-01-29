@@ -1,3 +1,6 @@
+v1.0.7 01/29/2019
+- Changed laser multiplier to 1.7 to match dev's comments in discord today (glitch in stat UI in game)
+
 v1.0.6 01/28/2019:
 - Added indicator of "best" upgrade for each category (coins, talents, power gems)
 - Removed Laser Archer Multiplier (confirmed it does not exist in game)
