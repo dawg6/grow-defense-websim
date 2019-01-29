@@ -261,9 +261,7 @@
             <td><input class="num-input" type="number" min="0" max="6" [(ngModel)]="data.skills.bounceDmg"
                         (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ data.stats.laserBounceMult }} <div class="tooltip"><span class="tooltiptext">Laser
-                              damage
-                              multiplier
-                              considering all bounces</span></div>
+                              damage multiplier considering all bounces</span></div>
             </td>
             <td class="value" *ngIf="data.skills.bounceDmg < 6">+ <input class="attr-input" type="number" maxlength="2"
                         min="1" [(ngModel)]="whatIf['skills.bounceDmg']['inc']" (ngModelChange)="updateAttributes()">
@@ -398,8 +396,8 @@
                               mastery</span></div>
             </td>
             <ng-container *ngIf="data.skills.archers < 7">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2"
-                              min="1" [(ngModel)]="whatIf['skills.archers']['inc']" (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.archers']['inc']"
+                              (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['skills.archers']['inc'] }} to
                                     # archers
                                     results in a total dps of {{ whatIf['skills.archers']['dps'] | number }} which is a
@@ -543,7 +541,11 @@
             <td><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.talents.arrow"
                         (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ Math.round(data.stats.arrowPct * 100.0) }} %<span *ngIf="data.stats.arrowMastery > 0">
-                        / {{
+                        / 
+                        <div *ngIf="data.stats.arrowMastery >= 1" class="mastery-img"></div>
+                        <div *ngIf="data.stats.arrowMastery >= 2" class="mastery-img"></div>
+                        <div *ngIf="data.stats.arrowMastery >= 3" class="mastery-img"></div>
+                              {{
                         data.stats.arrowMasteryPct * 100 }} %</span></td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['talents.arrow']['inc']"
                         (ngModelChange)="updateAttributes()">
@@ -571,9 +573,15 @@
                               damage (3% per level)</span></div>
             </td>
             <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.laser" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ Math.round(data.stats.laserPct * 100) }} %<span *ngIf="data.stats.laserMastery > 0"> /
+            <td class="value">
+                  {{ Math.round(data.stats.laserPct * 100) }} %
+                  <span *ngIf="data.stats.laserMastery > 0"> /
+                        <div *ngIf="data.stats.laserMastery >= 1" class="mastery-img"></div>
+                        <div *ngIf="data.stats.laserMastery >= 2" class="mastery-img"></div>
+                        <div *ngIf="data.stats.laserMastery >= 3" class="mastery-img"></div>
                         {{
-                        data.stats.laserMasteryPct * 100 }} %</span></td>
+                        data.stats.laserMasteryPct * 100 }} %
+                  </span></td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['talents.laser']['inc']"
                         (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['talents.laser']['inc'] }} to
@@ -693,12 +701,19 @@
                   </label>
 
             </td>
-
-            <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser archers
-                              from laser
-                              mastery</span></div>
-            </td>
-            <td class="value">{{ data.stats.laserArchers }}</td>
+            <ng-container *ngIf="data.stats.laserArchers > 0">
+                  <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser
+                                    archers
+                                    from laser
+                                    mastery</span></div>
+                  </td>
+                  <td class="value">{{ data.stats.laserArchers }}
+                        <ng-container *ngIf="data.stats.laserArcherBounceFactor > 1">
+                              x {{ data.stats.laserArcherBounceFactor }} <div class="tooltip"><span class="tooltiptext">Laser
+                                          archer damage multiplier considering all laser archer bounces</span></div>
+                        </ng-container>
+                  </td>
+            </ng-container>
       </tr>
       <tr>
             <td class="label">Unspent <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-unspent.png" />#

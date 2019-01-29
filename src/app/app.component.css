@@ -133,7 +133,18 @@
       width: 200px;
   }
 
-  .mainTable {
+  .mastery-img {
+    background-image: url('../assets/star.png');
+    background-color: black;
+    background-size: 18px 18px;
+    display: inline-block;
+    width: 18px; 
+    height: 18px;
+    content:"";
+    vertical-align:top;
+}
+
+.mainTable {
       margin-left: 25px;
   }
 

@@ -282,8 +282,8 @@ var Stats = /** @class */ (function () {
         var mult = StaticData.BOUNCE_TABLE[x][y];
         this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
-        var laserArcherBounceFactor = (this.laserMastery >= 3) ? this.laserBounceMult : 1.0;
-        this.laserDps = (this.avgLaser * this.laserTicksPerSec * this.laserBounceMult) + (this.avgLaser * this.laserArcherTicksPerSec * laserArcherBounceFactor);
+        this.laserArcherBounceFactor = (this.laserMastery >= 3) ? this.laserBounceMult : 1.0;
+        this.laserDps = (this.avgLaser * this.laserTicksPerSec * this.laserBounceMult) + (this.avgLaser * this.laserArcherTicksPerSec * this.laserArcherBounceFactor);
         this.fingerDps = this.finger * data.params.fingerRoF;
         this.cannonBase = (data.skills.cannon > 0) ? (2000 + ((data.skills.cannon - 1) * 150 * Math.floor(data.skills.cannon / 2))) : 0;
         this.bombBase = (data.skills.bomb > 0) ? (2000 + ((data.skills.bomb - 1) * 300 * Math.floor(data.skills.bomb / 2))) : 0;
