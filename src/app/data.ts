@@ -213,7 +213,7 @@ export class Stats {
 
     update(data: Data) {
         this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
-        this.laserBase = Math.floor((12.0 + (3.0 + data.power.laser/4.0) * data.skills.laser) * 1.3 - (data.power.laser / 4.0));
+        this.laserBase = Math.round(Math.floor((12.0 + (3.0 + data.power.laser/4.0) * data.skills.laser) - (data.power.laser / 4.0)) * 1.3);
         this.missileBase = 500 + ((data.skills.missileDamage- 1 ) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
@@ -243,8 +243,8 @@ export class Stats {
         this.arrowMasteryPct = (this.arrowMastery == 0) ? 0.0 : ((this.arrowMastery) == 1 ? 0.08 : ((this.arrowMastery == 2) ? 0.16 : 0.25));
         this.laserMasteryPct = (this.laserMastery == 0) ? 0.0 : ((this.laserMastery) == 1 ? 0.08 : ((this.laserMastery == 2) ? 0.16 : 0.25));
 
-        this.arrow = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
-        this.laser = Math.floor(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
+        this.arrow = Math.round(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
+        this.laser = Math.round(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
         this.finger = Math.floor(this.fingerBase * (1 + this.fingerPct));
 
         this.arrowCrit = Math.floor(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.critDamage));
