@@ -9,7 +9,7 @@ export class Parameters {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.0.5";
+        this.version = "v1.0.8";
         this.versionDate = "01/27/2019";
     }
 }
@@ -89,7 +89,7 @@ export class Talents {
         this.lockLaser = false;
     }
 
-    getLevel() : number {
+    getLevel(): number {
         return this.arrow + this.laser + this.critChance + this.critDamage + this.unspent + this.defense + this.finger + 1;
     }
 
@@ -127,7 +127,7 @@ export class StaticData {
         "power.arrow",
         "power.laser",
         "power.missile",
-      ];
+    ];
 
     private static instance: StaticData;
 
@@ -184,7 +184,7 @@ export class Stats {
     avgLaser: number;
     arrowRoF: number;
     laserArchers: number;
-    arrowDps : number;
+    arrowDps: number;
     laserDps: number;
     totalDps: number;
     arrowsPerSec: number;
@@ -208,7 +208,7 @@ export class Stats {
     baseArrowsSec: number;
     statsLaserDamage: number;
 
-    constructor() { 
+    constructor() {
         StaticData.getInstance();
     }
 
@@ -218,9 +218,9 @@ export class Stats {
         // long damage = (long)(((((LaserDamageLevel - 1) * LaserDamageIncrease) + laserDamage) * LaserDamageTalent) * laserMasteryDamage * 1.8f); 
         // LaserDamageIncrease = return laserDamageIncrease + (LaserUpgradeBoostLevel * laserUpgradeBoostIncrement);
         // current 1.7 (verified by endomlic in discord chat)
-        this.laserBase = Math.round(Math.floor((12.0 + (3.0 + data.power.laser/4.0) * data.skills.laser) - (data.power.laser / 4.0)) * 1.7);
-        var oldLaserBase = Math.round(Math.floor((12.0 + (3.0 + data.power.laser/4.0) * data.skills.laser) - (data.power.laser / 4.0)) * 1.3);
-        this.missileBase = 500 + ((data.skills.missileDamage- 1 ) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
+        this.laserBase = Math.round(Math.floor((12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) - (data.power.laser / 4.0)) * 1.7);
+        var oldLaserBase = Math.round(Math.floor((12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) - (data.power.laser / 4.0)) * 1.3);
+        this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
         this.missilesPerSec = Math.round(data.skills.numMissiles * (10.0 / this.missileROF)) / 10.0;
@@ -246,8 +246,8 @@ export class Stats {
         this.laserPct = Math.round(data.talents.laser * 3) / 100.0;
         this.fingerPct = Math.round(data.talents.finger * 3) / 100.0;
 
-        this.arrowMasteryPct = (this.arrowMastery == 0) ? 0.0 : ((this.arrowMastery) == 1 ? 0.08 : ((this.arrowMastery == 2) ? 0.16 : 0.25));
-        this.laserMasteryPct = (this.laserMastery == 0) ? 0.0 : ((this.laserMastery) == 1 ? 0.08 : ((this.laserMastery == 2) ? 0.16 : 0.25));
+        this.arrowMasteryPct = MASTERY_PCT[this.arrowMastery];
+        this.laserMasteryPct = MASTERY_PCT[this.laserMastery];
 
         this.arrow = Math.round(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
         this.laser = Math.round(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
@@ -259,13 +259,13 @@ export class Stats {
 
         this.superCrit = (this.arrowMastery >= 1) ? (2.0 * this.arrowCrit) : 0.0;
 
-        this.avgArrow =  (this.superCritChance * this.superCrit) +
-                ((1.0 - this.superCritChance)  * this.critChance * this.arrowCrit) +
-                ((1.0 - this.superCritChance) * (1.0 - this.critChance) * this.arrow );
-        
+        this.avgArrow = (this.superCritChance * this.superCrit) +
+            ((1.0 - this.superCritChance) * this.critChance * this.arrowCrit) +
+            ((1.0 - this.superCritChance) * (1.0 - this.critChance) * this.arrow);
+
         this.avgLaser = (this.critChance * this.laserCrit) +
-            ((1.0 - this.critChance) * this.laser);  
-        
+            ((1.0 - this.critChance) * this.laser);
+
         this.laserArchers = LASER_ARCHERS[this.laserMastery];
 
         this.baseArrowsSec = Math.round(300.0 / (12 - data.skills.arrowRoF)) / 10.0;
@@ -288,8 +288,8 @@ export class Stats {
         this.laserDps = (this.avgLaser * this.laserTicksPerSec * this.laserBounceMult) + (this.avgLaser * this.laserArcherTicksPerSec * laserArcherBounceFactor);
         this.fingerDps = this.finger * data.params.fingerRoF;
 
-        this.cannonBase = (data.skills.cannon > 0) ? (2000 + ((data.skills.cannon - 1) * 150 * Math.floor(data.skills.cannon/2))) : 0;
-        this.bombBase = (data.skills.bomb > 0) ? (2000 + ((data.skills.bomb - 1) * 300 * Math.floor(data.skills.bomb/2))) : 0;
+        this.cannonBase = (data.skills.cannon > 0) ? (2000 + ((data.skills.cannon - 1) * 150 * Math.floor(data.skills.cannon / 2))) : 0;
+        this.bombBase = (data.skills.bomb > 0) ? (2000 + ((data.skills.bomb - 1) * 300 * Math.floor(data.skills.bomb / 2))) : 0;
 
         this.cannonDps = (this.cannonBase + this.bombBase) / data.params.cannonRoF;
 
@@ -302,17 +302,18 @@ export class Stats {
     }
 }
 
-const LASER_ARCHERS = [ 0, 1, 2, 4];
+const LASER_ARCHERS = [0, 1, 2, 4];
+const MASTERY_PCT = [0.0, 0.08, 0.16, 0.25];
 
 export class Data {
     level: number;
     skills: Skills;
-    talents : Talents;
-    stats : Stats;
+    talents: Talents;
+    stats: Stats;
     params: Parameters;
     power: PowerGems;
-    attributes : any;
-    
+    attributes: any;
+
     constructor() {
         this.skills = new Skills();
         this.talents = new Talents();
@@ -324,7 +325,7 @@ export class Data {
         for (var a of StaticData.ATTRIBUTES) {
             this.attributes[a] = 1;
         }
-      
+
         this.update();
     }
 
@@ -344,12 +345,12 @@ export class Data {
             return json;
         }
     }
-    
+
     public static reviver(key: string, value: any): any {
         return key === '' ? Data.fromJSON(value) : value;
     }
 
-    public static copy(d:Data):Data {
+    public static copy(d: Data): Data {
         var data = new Data();
 
         data.level = d.level;
@@ -381,15 +382,83 @@ export class Log {
 export class AttributeData {
     name: string;
     inc: number;
-    value : number;
+    value: number;
     dps: number;
     dpsPct: number;
     max: number;
     best: boolean;
+    bestCoin: boolean;
+    coins: number;
+    dpsPerCoin: number;
 
-    public calculate(data:Data) {
+    public getCost(i: number, data: Data): number {
+        if (this.name == "skills.finger") {
+            return 100 * i;
+        } else if (this.name == "skills.arrow") {
+            var c = 200;
+
+            if (i > 1)
+                c = 200 * (i * i + 1);
+
+            if (data.stats.arrowMastery > 0) {
+                c *= (1.0 - data.stats.arrowMasteryPct);
+            }
+
+            return c;
+        } else if (this.name == "skills.laser") {
+            var c = 200;
+
+            if (i > 1)
+                c = 200 * ((i - 1) * (i - 1) + 20);
+
+            if (data.stats.laserMastery > 0) {
+                c *= (1.0 - data.stats.laserMasteryPct);
+            }
+
+            return c;
+        } else if (this.name == "skills.missileDamage") {
+
+            if (i == 0)
+                return 100000;
+            else
+                return 25000 + ((i - 1) * (i - 1) * 5000);
+        } else if (this.name == "skills.cannon") {
+
+            if (i == 0)
+                return 500000;
+            else
+                return 50000 + ((i - 1) * (i - 1) * 5000);
+        } else if (this.name == "skills.bomb") {
+
+            if (i == 0)
+                return 750000;
+            else
+                return 100000 + ((i - 1) * (i - 1) * 5000);
+        }
+
+        return 0;
+    }
+
+    public calculateCoinCost(data: Data): number {
+        var value: number = 0;
+
+        var n = this.inc;
+
+        if (this.max) {
+            var n = Math.min(n, this.max - this.value);
+        }
+
+        for (var i = 0; i < n; i++) {
+            value += this.getCost(this.value + i, data);
+        }
+
+        return value;
+    }
+
+    public calculate(data: Data) {
         var s = this.name.split(".");
         this.best = false;
+        this.bestCoin = false;
 
         this.value = data[s[0]][s[1]];
         var old = data.stats.totalDps;
@@ -406,6 +475,16 @@ export class AttributeData {
         } else {
             this.dps = Math.round(old * 10.0) / 10.0;
             this.dpsPct = 0;
+        }
+
+        var cost = this.calculateCoinCost(data);
+
+        if (cost > 0) {
+            this.coins = cost;
+            this.dpsPerCoin = Math.round(10000.0 * ((this.dps - old) / this.coins)) / 10.0;
+        } else {
+            this.coins = 0;
+            this.dpsPerCoin = 0;
         }
     }
 }

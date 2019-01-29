@@ -138,7 +138,7 @@
   }
 
   .tick-table {
-      margin-left: 30px;
+      margin-left: 0px;
   }
 
   .tick-table-row {
@@ -152,14 +152,12 @@
   .tick-table-label {
       text-align: left;
       color: cyan;
-      padding-right: 5px;
-      padding-left: 5px;
-  }
+      white-space: nowrap; /* Chrome */
+    }
 
   .tick-table-header {
-    padding-right: 5px;
-    padding-left: 5px;
     font-weight: bold;
+    white-space: nowrap; /* Chrome */
 }
 
 .left {
@@ -177,6 +175,4 @@
   .tick-table-value {
       text-align: right;
       color: yellow;
-      padding-right: 5px;
-      padding-left: 5px;
   }

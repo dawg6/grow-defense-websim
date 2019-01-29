@@ -109,7 +109,7 @@ var Parameters = /** @class */ (function () {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.0.5";
+        this.version = "v1.0.8";
         this.versionDate = "01/27/2019";
     }
     return Parameters;
@@ -257,8 +257,8 @@ var Stats = /** @class */ (function () {
         this.arrowPct = Math.round(data.talents.arrow * 3) / 100.0;
         this.laserPct = Math.round(data.talents.laser * 3) / 100.0;
         this.fingerPct = Math.round(data.talents.finger * 3) / 100.0;
-        this.arrowMasteryPct = (this.arrowMastery == 0) ? 0.0 : ((this.arrowMastery) == 1 ? 0.08 : ((this.arrowMastery == 2) ? 0.16 : 0.25));
-        this.laserMasteryPct = (this.laserMastery == 0) ? 0.0 : ((this.laserMastery) == 1 ? 0.08 : ((this.laserMastery == 2) ? 0.16 : 0.25));
+        this.arrowMasteryPct = MASTERY_PCT[this.arrowMastery];
+        this.laserMasteryPct = MASTERY_PCT[this.laserMastery];
         this.arrow = Math.round(this.arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
         this.laser = Math.round(this.laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
         this.statsLaserDamage = Math.round(oldLaserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct));
@@ -299,6 +299,7 @@ var Stats = /** @class */ (function () {
 }());
 
 var LASER_ARCHERS = [0, 1, 2, 4];
+var MASTERY_PCT = [0.0, 0.08, 0.16, 0.25];
 var Data = /** @class */ (function () {
     function Data() {
         this.skills = new Skills();
@@ -359,9 +360,63 @@ var Log = /** @class */ (function () {
 var AttributeData = /** @class */ (function () {
     function AttributeData() {
     }
+    AttributeData.prototype.getCost = function (i, data) {
+        if (this.name == "skills.finger") {
+            return 100 * i;
+        }
+        else if (this.name == "skills.arrow") {
+            var c = 200;
+            if (i > 1)
+                c = 200 * (i * i + 1);
+            if (data.stats.arrowMastery > 0) {
+                c *= (1.0 - data.stats.arrowMasteryPct);
+            }
+            return c;
+        }
+        else if (this.name == "skills.laser") {
+            var c = 200;
+            if (i > 1)
+                c = 200 * ((i - 1) * (i - 1) + 20);
+            if (data.stats.laserMastery > 0) {
+                c *= (1.0 - data.stats.laserMasteryPct);
+            }
+            return c;
+        }
+        else if (this.name == "skills.missileDamage") {
+            if (i == 0)
+                return 100000;
+            else
+                return 25000 + ((i - 1) * (i - 1) * 5000);
+        }
+        else if (this.name == "skills.cannon") {
+            if (i == 0)
+                return 500000;
+            else
+                return 50000 + ((i - 1) * (i - 1) * 5000);
+        }
+        else if (this.name == "skills.bomb") {
+            if (i == 0)
+                return 750000;
+            else
+                return 100000 + ((i - 1) * (i - 1) * 5000);
+        }
+        return 0;
+    };
+    AttributeData.prototype.calculateCoinCost = function (data) {
+        var value = 0;
+        var n = this.inc;
+        if (this.max) {
+            var n = Math.min(n, this.max - this.value);
+        }
+        for (var i = 0; i < n; i++) {
+            value += this.getCost(this.value + i, data);
+        }
+        return value;
+    };
     AttributeData.prototype.calculate = function (data) {
         var s = this.name.split(".");
         this.best = false;
+        this.bestCoin = false;
         this.value = data[s[0]][s[1]];
         var old = data.stats.totalDps;
         if (!this.max || (this.value < this.max)) {
@@ -376,6 +431,15 @@ var AttributeData = /** @class */ (function () {
         else {
             this.dps = Math.round(old * 10.0) / 10.0;
             this.dpsPct = 0;
+        }
+        var cost = this.calculateCoinCost(data);
+        if (cost > 0) {
+            this.coins = cost;
+            this.dpsPerCoin = Math.round(10000.0 * ((this.dps - old) / this.coins)) / 10.0;
+        }
+        else {
+            this.coins = 0;
+            this.dpsPerCoin = 0;
         }
     };
     return AttributeData;

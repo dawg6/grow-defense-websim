@@ -1,3 +1,6 @@
+v1.0.8 01/29/2019
+- Added coin upgrade costs
+
 v1.0.7 01/29/2019
 - Changed laser multiplier to 1.7 to match dev's comments in discord today (glitch in stat UI in game)
 
