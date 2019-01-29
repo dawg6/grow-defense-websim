@@ -1,5 +1,3 @@
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
-
 export class Parameters {
     laserRoFv2: number;
     fingerRoF: number;
