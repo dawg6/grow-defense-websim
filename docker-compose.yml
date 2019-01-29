@@ -1,0 +1,9 @@
+version: '2.3'
+
+services:
+  grow-defense-websim:
+    hostname: localhost
+    container_name: grow-defense-websim-container
+    build: .
+    ports:
+      - 80:80
