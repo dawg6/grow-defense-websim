@@ -106,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AttributeData", function() { return AttributeData; });
 var Parameters = /** @class */ (function () {
     function Parameters() {
-        this.laserRoF = 30;
+        this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
         this.version = "v1.0.5";
@@ -229,7 +229,7 @@ var Stats = /** @class */ (function () {
     }
     Stats.prototype.update = function (data) {
         this.arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
-        this.laserBase = Math.floor(12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) - Math.floor(data.power.laser / 4.0);
+        this.laserBase = Math.floor((12.0 + (3.0 + data.power.laser / 4.0) * data.skills.laser) * 1.3) - Math.floor(data.power.laser / 4.0);
         this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
@@ -269,8 +269,8 @@ var Stats = /** @class */ (function () {
         this.baseArrowsSec = Math.round(300.0 / (12 - data.skills.arrowRoF)) / 10.0;
         this.arrowRoF = ((this.arrowMastery >= 3) ? 1.1 : 1.0) * this.baseArrowsSec;
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
-        this.laserTicksPerSec = data.skills.lasers * data.params.laserRoF;
-        this.laserArcherTicksPerSec = data.params.laserRoF * this.laserArchers;
+        this.laserTicksPerSec = data.skills.lasers * data.params.laserRoFv2;
+        this.laserArcherTicksPerSec = data.params.laserRoFv2 * this.laserArchers;
         var x = Math.max(Math.min(data.skills.bounces, 5), 0);
         var y = Math.max(Math.min(data.skills.bounceDmg, 6), 0);
         var mult = StaticData.BOUNCE_TABLE[x][y];
@@ -576,7 +576,7 @@ var LAZY_MODULE_MAP = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\scott.clarke\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
+module.exports = __webpack_require__(/*! D:\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
 
 
 /***/ })
