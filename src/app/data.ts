@@ -1,3 +1,5 @@
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+
 export class Parameters {
     laserRoFv2: number;
     fingerRoF: number;
@@ -379,6 +381,9 @@ export class Log {
     count: number;
 }
 
+const ARROW_ROF_COST = [300, 1000, 3000, 7000];
+const ARCHER_COST = [300, 2000, 4000, 35000, 53000, 107000];
+
 export class AttributeData {
     name: string;
     inc: number;
@@ -434,6 +439,29 @@ export class AttributeData {
                 return 750000;
             else
                 return 100000 + ((i - 1) * (i - 1) * 5000);
+        } else if (this.name == "skills.missileFiringRate") {
+
+            return 50000 + (i * i * i * 50000);
+        } else if (this.name == "skills.arrowRoF") {
+
+            if ((i < 1) || (i > 4))
+                return 0;
+            else
+                return ARROW_ROF_COST[i - 1];
+        } else if (this.name == "skills.archers") {
+
+            if ((i < 1) || (i > 6))
+                return 0;
+            else
+                return ARCHER_COST[i - 1];
+        } else if (this.name == "skills.lasers") {
+
+            if (i == 0)
+                return 12500;
+            else if (i == 1)
+                return 50000;
+            else
+                return 0;
         }
 
         return 0;
