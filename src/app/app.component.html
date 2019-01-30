@@ -241,41 +241,58 @@
             </td>
             <td colspan="2"><input class="num-input" type="number" min="0" max="5" [(ngModel)]="data.skills.bounces"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value" *ngIf="data.skills.bounces < 5">+ <input class="attr-input" type="number" maxlength="2"
-                        min="1" [(ngModel)]="whatIf['skills.bounces']['inc']" (ngModelChange)="updateAttributes()">
-                  <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['skills.bounces']['inc'] }} to #
-                              bounces
-                              results in a total dps of {{ whatIf['skills.bounces']['dps'] | number }} which is a
-                              {{
-                              whatIf['skills.bounces']['dpsPct'] }}% dps increase.</span></div>
-            </td>
-            <td colspan="2" class="value" *ngIf="data.skills.bounces < 5"><span [class.best]="whatIf['skills.bounces']['best']">+{{
-                        whatIf['skills.bounces']['dpsPct'] }}%</span></td>
-            <td *ngIf="data.skills.bounces >= 5" colspan="3"></td>
+            <ng-container *ngIf="data.skills.bounces < 5">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.bounces']['inc']"
+                              (ngModelChange)="updateAttributes()">
+                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['skills.bounces']['inc'] }} to
+                                    #
+                                    bounces
+                                    results in a total dps of {{ whatIf['skills.bounces']['dps'] | number }} which is a
+                                    {{
+                                    whatIf['skills.bounces']['dpsPct'] }}% dps increase.</span></div>
+                  </td>
+                  <td class="value"><span [class.best]="whatIf['skills.bounces']['best']">+{{
+                              whatIf['skills.bounces']['dpsPct'] }}%</span></td>
+                  <td class="value">{{ whatIf['skills.bounces']['coins'] | number }}
+                        coins</td>
+                  <td class="value" [class.best]="whatIf['skills.bounces']['bestCoin']">{{
+                        whatIf['skills.bounces']['dpsPerCoin']
+                        | number }}
+                        dps/Kcoin</td>
+            </ng-container>
       </tr>
       <tr>
             <td class="label">Laser Bounce Multiplier<div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
                                     src="assets/coins-bomb-laser-bounce-mult.png" />Laser bounce damage multiplir level
-                              (0 = none, 6 = max)</span></div>
+                              (1 = min, 6 = max)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" max="6" [(ngModel)]="data.skills.bounceDmg"
+            <td><input class="num-input" type="number" min="1" max="6" [(ngModel)]="data.skills.bounceDmg"
                         (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ data.stats.laserBounceMult }} <div class="tooltip"><span class="tooltiptext">Laser
                               damage multiplier considering all bounces</span></div>
             </td>
-            <td class="value" *ngIf="data.skills.bounceDmg < 6">+ <input class="attr-input" type="number" maxlength="2"
-                        min="1" [(ngModel)]="whatIf['skills.bounceDmg']['inc']" (ngModelChange)="updateAttributes()">
-                  <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['skills.bounceDmg']['inc'] }} to
-                              bounce
-                              damage
-                              results in a total dps of {{ whatIf['skills.bounceDmg']['dps'] | number }} which is a
-                              {{
-                              whatIf['skills.bounceDmg']['dpsPct'] }}% dps increase.</span></div>
-            </td>
-            <td colspan="3" class="value" *ngIf="data.skills.bounceDmg < 6"><span [class.best]="whatIf['skills.bounceDmg']['best']">+{{
-                        whatIf['skills.bounceDmg']['dpsPct']
-                        }}%</span></td>
-            <td *ngIf="data.skills.bounceDmg >= 6" colspan="4"></td>
+            <ng-container *ngIf="data.skills.bounceDmg < 6">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.bounceDmg']['inc']"
+                              (ngModelChange)="updateAttributes()">
+                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['skills.bounceDmg']['inc'] }}
+                                    to
+                                    bounce
+                                    damage
+                                    results in a total dps of {{ whatIf['skills.bounceDmg']['dps'] | number }} which is
+                                    a
+                                    {{
+                                    whatIf['skills.bounceDmg']['dpsPct'] }}% dps increase.</span></div>
+                  </td>
+                  <td class="value"><span [class.best]="whatIf['skills.bounceDmg']['best']">+{{
+                              whatIf['skills.bounceDmg']['dpsPct']
+                              }}%</span></td>
+                  <td class="value">{{ whatIf['skills.bounceDmg']['coins'] | number }}
+                        coins</td>
+                  <td class="value" [class.best]="whatIf['skills.bounceDmg']['bestCoin']">{{
+                        whatIf['skills.bounceDmg']['dpsPerCoin']
+                        | number }}
+                        dps/Kcoin</td>
+            </ng-container>
       </tr>
       <tr>
             <td class="label">Cannon Ball Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"

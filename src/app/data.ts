@@ -40,7 +40,7 @@ export class Skills {
         this.bomb = 0;
         this.lasers = 0;
         this.bounces = 0;
-        this.bounceDmg = 0;
+        this.bounceDmg = 1;
         this.missileFiringRate = 0;
         this.arrowRoF = 1;
     }
@@ -400,7 +400,7 @@ export class AttributeData {
         if (i < 0)
             return 0;
         else
-            return Math.floor(i/3) + 1;
+            return Math.floor(i / 3) + 1;
     }
 
     public getCost(i: number, data: Data): number {
@@ -472,6 +472,22 @@ export class AttributeData {
                 return 12500;
             else if (i == 1)
                 return 50000;
+            else
+                return 0;
+        } else if (this.name == "skills.bounces") {
+
+            if (i == 0)
+                return 5000000;
+            else if (i < 5)
+                return 5000000 + (i * i * 5000000);
+            else
+                return 0;
+        } else if (this.name == "skills.bounceDmg") {
+
+            if (i == 0)
+                return 0;
+            else if (i < 6)
+                return 2500000 + (i * i * 2500000);
             else
                 return 0;
         }
