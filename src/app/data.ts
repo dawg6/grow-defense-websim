@@ -1,3 +1,5 @@
+import { elementStart } from '@angular/core/src/render3';
+
 export class Parameters {
     laserRoFv2: number;
     fingerRoF: number;
@@ -399,10 +401,18 @@ export class AttributeData {
     dpsPerCoin: number;
 
     public getGemCost(i: number, data: Data): number {
+
         if (i < 0)
             return 0;
-        else
+
+        if (this.name == "power.numRockets") {
+            if (i < 8)
+                return 1;
+            else
+                return 0;
+        } else {
             return Math.floor(i / 3) + 1;
+        }
     }
 
     public getCost(i: number, data: Data): number {

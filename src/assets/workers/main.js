@@ -360,15 +360,22 @@ var Log = /** @class */ (function () {
 }());
 
 var ARROW_ROF_COST = [300, 1000, 3000, 7000];
-var ARCHER_COST = [300, 2000, 4000, 35000, 53000, 107000];
+var ARCHER_COST = [300, 2000, 4000, 35000, 65000, 120000];
 var AttributeData = /** @class */ (function () {
     function AttributeData() {
     }
     AttributeData.prototype.getGemCost = function (i, data) {
         if (i < 0)
             return 0;
-        else
+        if (this.name == "power.numRockets") {
+            if (i < 8)
+                return 1;
+            else
+                return 0;
+        }
+        else {
             return Math.floor(i / 3) + 1;
+        }
     };
     AttributeData.prototype.getCost = function (i, data) {
         if (this.name == "skills.finger") {
@@ -727,7 +734,7 @@ var LAZY_MODULE_MAP = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
+module.exports = __webpack_require__(/*! C:\Users\scott.clarke\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
 
 
 /***/ })
