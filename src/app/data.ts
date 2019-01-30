@@ -406,7 +406,8 @@ export class AttributeData {
             return 0;
 
         if (this.name == "power.numRockets") {
-            if (i < 8)
+            
+            if (i < 9)
                 return 1;
             else
                 return 0;
