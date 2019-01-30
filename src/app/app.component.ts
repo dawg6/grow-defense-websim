@@ -203,12 +203,13 @@ export class AppComponent {
 
     var best = {};
     var bestCoin: number = 0;
+    var bestGem: number = 0;
 
     for (var a of Object.keys(this.whatIf)) {
 
       var s = a.split('.');
       var b: number = best[s[0]];
-      
+
       var attr: AttributeData = this.whatIf[a];
 
       attr.calculate(this.data);
@@ -218,9 +219,15 @@ export class AppComponent {
         best[s[0]] = b;
       }
 
-      if (attr.dpsPerCoin && (attr.dpsPerCoin > bestCoin)) {
-        bestCoin = attr.dpsPerCoin;
-      }
+      if (attr.name.startsWith("skills.")) {
+        if (attr.dpsPerCoin && (attr.dpsPerCoin > bestCoin)) {
+          bestCoin = attr.dpsPerCoin;
+        }
+      } else if (attr.name.startsWith("power.")) {
+          if (attr.dpsPerCoin && (attr.dpsPerCoin > bestGem)) {
+            bestGem = attr.dpsPerCoin;
+          }
+        }
     }
 
     for (var a of Object.keys(this.whatIf)) {
@@ -230,7 +237,12 @@ export class AppComponent {
       var attr: AttributeData = this.whatIf[a];
 
       attr.best = (attr.dps >= b);
-      attr.bestCoin = (attr.dpsPerCoin >= bestCoin);
+
+      if (attr.name.startsWith("skills.")) {
+        attr.bestCoin = (attr.dpsPerCoin >= bestCoin);
+      } else if (attr.name.startsWith("power.")) {
+        attr.bestCoin = (attr.dpsPerCoin >= bestGem);
+      }
     }
   }
 

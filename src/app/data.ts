@@ -395,6 +395,14 @@ export class AttributeData {
     coins: number;
     dpsPerCoin: number;
 
+    public getGemCost(i: number, data: Data): number {
+
+        if (i < 0)
+            return 0;
+        else
+            return Math.floor(i/3) + 1;
+    }
+
     public getCost(i: number, data: Data): number {
         if (this.name == "skills.finger") {
             return 100 * i;
@@ -418,7 +426,7 @@ export class AttributeData {
             if (i < 1)
                 return 0;
 
-                var c = 200 * ((i - 1) * (i - 1) + 20);
+            var c = 200 * ((i - 1) * (i - 1) + 20);
 
             if (data.stats.laserMastery > 0) {
                 c *= (1.0 - data.stats.laserMasteryPct);
@@ -487,6 +495,22 @@ export class AttributeData {
         return value;
     }
 
+    public calculateGemCost(data: Data): number {
+        var value: number = 0;
+
+        var n = this.inc;
+
+        if (this.max) {
+            var n = Math.min(n, this.max - this.value);
+        }
+
+        for (var i = 0; i < n; i++) {
+            value += this.getGemCost(this.value + i, data);
+        }
+
+        return value;
+    }
+
     public calculate(data: Data) {
         var s = this.name.split(".");
         this.best = false;
@@ -509,14 +533,26 @@ export class AttributeData {
             this.dpsPct = 0;
         }
 
-        var cost = this.calculateCoinCost(data);
+        if (this.name.startsWith("skills.")) {
+            var cost = this.calculateCoinCost(data);
 
-        if (cost > 0) {
-            this.coins = cost;
-            this.dpsPerCoin = Math.round(10000.0 * ((this.dps - old) / this.coins)) / 10.0;
-        } else {
-            this.coins = 0;
-            this.dpsPerCoin = 0;
+            if (cost > 0) {
+                this.coins = cost;
+                this.dpsPerCoin = Math.round(10000.0 * ((this.dps - old) / this.coins)) / 10.0;
+            } else {
+                this.coins = 0;
+                this.dpsPerCoin = 0;
+            }
+        } else if (this.name.startsWith("power.")) {
+            var cost = this.calculateGemCost(data);
+
+            if (cost > 0) {
+                this.coins = cost;
+                this.dpsPerCoin = Math.round(10.0 * ((this.dps - old) / this.coins)) / 10.0;
+            } else {
+                this.coins = 0;
+                this.dpsPerCoin = 0;
+            }
         }
     }
 }

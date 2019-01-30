@@ -362,6 +362,12 @@ var ARCHER_COST = [300, 2000, 4000, 35000, 53000, 107000];
 var AttributeData = /** @class */ (function () {
     function AttributeData() {
     }
+    AttributeData.prototype.getGemCost = function (i, data) {
+        if (i < 0)
+            return 0;
+        else
+            return Math.floor(i / 3) + 1;
+    };
     AttributeData.prototype.getCost = function (i, data) {
         if (this.name == "skills.finger") {
             return 100 * i;
@@ -440,6 +446,17 @@ var AttributeData = /** @class */ (function () {
         }
         return value;
     };
+    AttributeData.prototype.calculateGemCost = function (data) {
+        var value = 0;
+        var n = this.inc;
+        if (this.max) {
+            var n = Math.min(n, this.max - this.value);
+        }
+        for (var i = 0; i < n; i++) {
+            value += this.getGemCost(this.value + i, data);
+        }
+        return value;
+    };
     AttributeData.prototype.calculate = function (data) {
         var s = this.name.split(".");
         this.best = false;
@@ -459,14 +476,27 @@ var AttributeData = /** @class */ (function () {
             this.dps = Math.round(old * 10.0) / 10.0;
             this.dpsPct = 0;
         }
-        var cost = this.calculateCoinCost(data);
-        if (cost > 0) {
-            this.coins = cost;
-            this.dpsPerCoin = Math.round(10000.0 * ((this.dps - old) / this.coins)) / 10.0;
+        if (this.name.startsWith("skills.")) {
+            var cost = this.calculateCoinCost(data);
+            if (cost > 0) {
+                this.coins = cost;
+                this.dpsPerCoin = Math.round(10000.0 * ((this.dps - old) / this.coins)) / 10.0;
+            }
+            else {
+                this.coins = 0;
+                this.dpsPerCoin = 0;
+            }
         }
-        else {
-            this.coins = 0;
-            this.dpsPerCoin = 0;
+        else if (this.name.startsWith("power.")) {
+            var cost = this.calculateGemCost(data);
+            if (cost > 0) {
+                this.coins = cost;
+                this.dpsPerCoin = Math.round(10.0 * ((this.dps - old) / this.coins)) / 10.0;
+            }
+            else {
+                this.coins = 0;
+                this.dpsPerCoin = 0;
+            }
         }
     };
     return AttributeData;
