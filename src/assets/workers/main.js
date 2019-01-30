@@ -121,7 +121,7 @@ var Skills = /** @class */ (function () {
         this.laser = 1;
         this.archers = 1;
         this.numMissiles = 0;
-        this.missileDamage = 0;
+        this.missileDamage = 1;
         this.finger = 1;
         this.cannon = 0;
         this.bomb = 0;
@@ -240,8 +240,9 @@ var Stats = /** @class */ (function () {
         this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
-        this.missilesPerSec = Math.round((data.skills.numMissiles + data.power.numRockets) * (10.0 / this.missileROF)) / 10.0;
-        this.missileDps = Math.round(this.missilesPerSec * this.missileBase);
+        this.missilesPerSec = Math.round(data.skills.numMissiles * (10.0 / this.missileROF)) / 10.0;
+        this.rocketsPerSec = Math.round(data.power.numRockets * (10.0 / this.missileROF)) / 10.0;
+        this.missileDps = Math.round((data.skills.numMissiles + data.power.numRockets) * this.missileROF * this.missileBase);
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
         this.arrowMastery = Math.min(Math.floor(data.talents.arrow / 100), 3);
@@ -368,7 +369,7 @@ var AttributeData = /** @class */ (function () {
         if (i < 0)
             return 0;
         if (this.name == "power.numRockets") {
-            if (i < 8)
+            if (i < 9)
                 return 1;
             else
                 return 0;

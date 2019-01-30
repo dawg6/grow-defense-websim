@@ -377,11 +377,11 @@
       <tr>
             <td class="label">Missile Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
                                     src="assets/coins-bomb-missile-damage.png" />Missile
-                              damage coin upgrade level (0 = locked)</span></div>
+                              damage coin upgrade level (1 = min)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.skills.missileDamage" (ngModelChange)="updateData($event)"></td>
+            <td><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.missileDamage" (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ data.stats.missileBase }} <div class="tooltip"><span class="tooltiptext">Single
-                              Missile
+                              Missile/Rocket
                               damage per
                               hit</span></div>
             </td>
@@ -469,7 +469,7 @@
             <td><input class="num-input" type="number" maxlength="4" min="0" max="1" [(ngModel)]="data.skills.numMissiles"
                         (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ data.stats.missilesPerSec }} missles/sec <div class="tooltip"><span class="tooltiptext">Total
-                              # of missiles per second, including rockets</span></div>
+                              # of missiles per second</span></div>
             </td>
             <ng-container *ngIf="data.skills.numMissiles < 1">
                   <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.numMissiles']['inc']"
@@ -562,12 +562,16 @@
             <td class="label"># Rockets <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-num-rockets.png" />#
                               of Rockets (0 = none, 9 = max)</span></div>
             </td>
-            <td colspan="2"><input class="num-input" type="number" maxlength="4" min="0" max="9" [(ngModel)]="data.power.numRockets"
+            <td><input class="num-input" type="number" maxlength="4" min="0" max="9" [(ngModel)]="data.power.numRockets"
                         (ngModelChange)="updateData($event)"></td>
+            <td class="value">{{ data.stats.rocketsPerSec }} rockets/sec <div class="tooltip"><span class="tooltiptext">Total
+                              # of rockets per second</span></div>
+            </td>
             <ng-container *ngIf="data.power.numRockets < 9">
                   <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['power.numRockets']['inc']"
                               (ngModelChange)="updateAttributes()">
-                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['power.numRockets']['inc'] }} to
+                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['power.numRockets']['inc'] }}
+                                    to
                                     # rockets results in a total dps of {{ whatIf['power.numRockets']['dps'] | number
                                     }}
                                     which is a {{whatIf['power.numRockets']['dpsPct'] }}% dps increase.</span></div>
@@ -827,7 +831,7 @@
       </tr>
       <tr>
             <td class="label">Missile DPS <div class="tooltip"><span class="tooltiptext">Damage per second from
-                              missiles</span></div>
+                              missiles and rockets</span></div>
             </td>
             <td colspan="2" class="value">{{ Math.round(data.stats.missileDps * 10.0) / 10.0 | number }}/sec ({{
                   Math.round(data.stats.missileDpsPct * 10000.0) / 100.0 | number }} %)</td>

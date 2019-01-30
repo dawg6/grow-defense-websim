@@ -36,7 +36,7 @@ export class Skills {
         this.laser = 1;
         this.archers = 1;
         this.numMissiles = 0;
-        this.missileDamage = 0;
+        this.missileDamage = 1;
         this.finger = 1;
         this.cannon = 0;
         this.bomb = 0;
@@ -200,6 +200,7 @@ export class Stats {
     missileBase: number;
     missileROF: number;
     missilesPerSec: number;
+    rocketsPerSec: number;
     missileDps: number;
     missileDpsPct: number;
     fingerDps: number;
@@ -229,8 +230,9 @@ export class Stats {
         this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
-        this.missilesPerSec = Math.round((data.skills.numMissiles + data.power.numRockets) * (10.0 / this.missileROF)) / 10.0;
-        this.missileDps = Math.round(this.missilesPerSec * this.missileBase);
+        this.missilesPerSec = Math.round(data.skills.numMissiles * (10.0 / this.missileROF)) / 10.0;
+        this.rocketsPerSec = Math.round(data.power.numRockets * (10.0 / this.missileROF)) / 10.0;
+        this.missileDps = Math.round((data.skills.numMissiles + data.power.numRockets) *  this.missileROF * this.missileBase);
 
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;

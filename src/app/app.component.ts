@@ -190,6 +190,7 @@ export class AppComponent {
     this.loadObject(ATTRIBUTE_PREFIX, this.data.attributes);
 
     var n = this.data.skills.numMissiles;
+    this.data.skills.missileDamage = Math.max(this.data.skills.missileDamage, 1);
 
     if (n > 1) {
       this.data.skills.numMissiles = 1;
@@ -321,6 +322,7 @@ export class AppComponent {
     this.getAttributeData();
 
     var n = this.data.skills.numMissiles;
+    this.data.skills.missileDamage = Math.max(this.data.skills.missileDamage, 1);
 
     if (n > 1) {
       this.data.skills.numMissiles = 1;
