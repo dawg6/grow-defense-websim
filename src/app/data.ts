@@ -384,7 +384,7 @@ export class Log {
 }
 
 const ARROW_ROF_COST = [300, 1000, 3000, 7000];
-const ARCHER_COST = [300, 2000, 4000, 35000, 53000, 107000];
+const ARCHER_COST = [300, 2000, 4000, 35000, 65000, 120000];
 
 export class AttributeData {
     name: string;
