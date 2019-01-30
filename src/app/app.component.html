@@ -438,7 +438,7 @@
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="0" max="20" [(ngModel)]="data.skills.missileFiringRate"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.missileROF }} sec/missle</td>
+            <td class="value">{{ data.stats.missileROF }} sec/missile</td>
             <ng-container *ngIf="data.skills.missileFiringRate < 20">
                   <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['skills.missileFiringRate']['inc']"
                               (ngModelChange)="updateAttributes()">
@@ -468,7 +468,7 @@
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="0" max="1" [(ngModel)]="data.skills.numMissiles"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.missilesPerSec }} missles/sec <div class="tooltip"><span class="tooltiptext">Total
+            <td class="value">{{ data.stats.missilesPerSec }} missiles/sec <div class="tooltip"><span class="tooltiptext">Total
                               # of missiles per second</span></div>
             </td>
             <ng-container *ngIf="data.skills.numMissiles < 1">
