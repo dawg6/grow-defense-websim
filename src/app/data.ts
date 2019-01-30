@@ -50,11 +50,13 @@ export class PowerGems {
     arrow: number;
     laser: number;
     missile: number;
+    numRockets: number;
 
     constructor() {
         this.arrow = 0;
         this.laser = 0;
         this.missile = 0;
+        this.numRockets = 0;
     }
 }
 
@@ -114,6 +116,7 @@ export class StaticData {
         "skills.cannon",
         "skills.bomb",
         "skills.numMissiles",
+        "power.numRockets",
         "skills.arrowRoF",
         "skills.archers",
         "skills.lasers",
@@ -224,7 +227,7 @@ export class Stats {
         this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         this.fingerBase = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
-        this.missilesPerSec = Math.round(data.skills.numMissiles * (10.0 / this.missileROF)) / 10.0;
+        this.missilesPerSec = Math.round((data.skills.numMissiles + data.power.numRockets) * (10.0 / this.missileROF)) / 10.0;
         this.missileDps = Math.round(this.missilesPerSec * this.missileBase);
 
         this.critChance = 0.01 * data.talents.critChance;
@@ -396,7 +399,6 @@ export class AttributeData {
     dpsPerCoin: number;
 
     public getGemCost(i: number, data: Data): number {
-
         if (i < 0)
             return 0;
         else
@@ -488,6 +490,12 @@ export class AttributeData {
                 return 0;
             else if (i < 6)
                 return 2500000 + (i * i * 2500000);
+            else
+                return 0;
+        } else if (this.name == "skills.numMissiles") {
+
+            if (i == 0)
+                return 100000;
             else
                 return 0;
         }

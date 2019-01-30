@@ -184,9 +184,17 @@ export class AppComponent {
     this.loadObject(PARAMS_PREFIX, this.data.params);
     this.loadObject(POWER_PREFIX, this.data.power);
 
+
     this.setAttributeData();
 
     this.loadObject(ATTRIBUTE_PREFIX, this.data.attributes);
+
+    var n = this.data.skills.numMissiles;
+
+    if (n > 1) {
+      this.data.skills.numMissiles = 1;
+      this.data.power.numRockets = n - 1;
+    }
 
     this.getAttributeData();
 
@@ -341,7 +349,8 @@ export class AppComponent {
 
     this.whatIf["skills.archers"]["max"] = 7;
     this.whatIf["skills.missileFiringRate"]["max"] = 20;
-    this.whatIf["skills.numMissiles"]["max"] = 10;
+    this.whatIf["skills.numMissiles"]["max"] = 1;
+    this.whatIf["power.numRockets"]["max"] = 9;
     this.whatIf["skills.lasers"]["max"] = 2;
     this.whatIf["skills.finger"]["max"] = 2000;
     this.whatIf["skills.missileFiringRate"]["max"] = 20;
