@@ -367,6 +367,8 @@ var AttributeData = /** @class */ (function () {
             return 100 * i;
         }
         else if (this.name == "skills.arrow") {
+            if (i < 1)
+                return 0;
             var c = 200;
             if (i > 1)
                 c = 200 * (i * i + 1);
@@ -376,9 +378,9 @@ var AttributeData = /** @class */ (function () {
             return c;
         }
         else if (this.name == "skills.laser") {
-            var c = 200;
-            if (i > 1)
-                c = 200 * ((i - 1) * (i - 1) + 20);
+            if (i < 1)
+                return 0;
+            var c = 200 * ((i - 1) * (i - 1) + 20);
             if (data.stats.laserMastery > 0) {
                 c *= (1.0 - data.stats.laserMasteryPct);
             }
@@ -671,7 +673,7 @@ var LAZY_MODULE_MAP = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\scott.clarke\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
+module.exports = __webpack_require__(/*! D:\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
 
 
 /***/ })

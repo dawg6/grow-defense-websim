@@ -399,6 +399,10 @@ export class AttributeData {
         if (this.name == "skills.finger") {
             return 100 * i;
         } else if (this.name == "skills.arrow") {
+
+            if (i < 1)
+                return 0;
+
             var c = 200;
 
             if (i > 1)
@@ -410,10 +414,11 @@ export class AttributeData {
 
             return c;
         } else if (this.name == "skills.laser") {
-            var c = 200;
 
-            if (i > 1)
-                c = 200 * ((i - 1) * (i - 1) + 20);
+            if (i < 1)
+                return 0;
+
+                var c = 200 * ((i - 1) * (i - 1) + 20);
 
             if (data.stats.laserMastery > 0) {
                 c *= (1.0 - data.stats.laserMasteryPct);
