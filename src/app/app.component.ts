@@ -320,6 +320,13 @@ export class AppComponent {
     this.data = Data.copy(d);
     this.getAttributeData();
 
+    var n = this.data.skills.numMissiles;
+
+    if (n > 1) {
+      this.data.skills.numMissiles = 1;
+      this.data.power.numRockets = n - 1;
+    }
+
     // console.log("Data = ", this.data);
 
     this.data.update();
