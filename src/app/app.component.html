@@ -586,7 +586,7 @@
             </ng-container>
       </tr>
       <tr>
-            <td colspan="5" class="heading">Talents <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+            <td colspan="5" class="heading">Talents/Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
                                     src="assets/talents.png" />Talent
                               (mushroom) upgrades (2nd tab in shop)</span></div>
             </td>
@@ -630,48 +630,6 @@
             <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 }}</td>
       </tr>
       <tr>
-            <td class="label">Arrow Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/arrow-mastery.png" />Arrow
-                              Mastery Tier (min = 0, max = 3)</span></div>
-            </td>
-
-            <td><input class="num-input" type="number" min="0" max="3" [(ngModel)]="data.talents.arrowMastery"
-                        (ngModelChange)="updateArrowMastery($event)"></td>
-            <td class="value"><span *ngIf="data.talents.arrowMastery > 0">{{ data.stats.arrowMasteryPct * 100 }} %
-                        <div *ngIf="data.talents.arrowMastery >= 1" class="mastery-img"></div>
-                        <div *ngIf="data.talents.arrowMastery >= 2" class="mastery-img"></div>
-                        <div *ngIf="data.talents.arrowMastery >= 3" class="mastery-img"></div>
-                  </span>
-            </td>
-            <ng-container *ngIf="data.talents.arrowMastery < 3">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['talents.arrowMastery']['inc']"
-                              (ngModelChange)="updateAttributes()">
-                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['talents.arrowMastery']['inc']
-                                    }} to
-                                    arrow mastery tier results in a total dps of {{
-                                    whatIf['talents.arrowMastery']['dps'] | number
-                                    }}
-                                    which is a {{whatIf['talents.arrowMastery']['dpsPct'] }}% dps increase.</span></div>
-                  </td>
-                  <td class="value"><span [class.best]="whatIf['talents.arrowMastery']['best']">+{{
-                              whatIf['talents.arrowMastery']['dpsPct'] }}%</span></td>
-            </ng-container>
-            <ng-container *ngIf="data.talents.arrowMastery >= 3">
-                  <td colspan="2"></td>
-            </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockArrowMastery" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current mastery tier (only add tiers when optimizing talents)</span></div>
-                  </label>
-
-            </td>
-            <td class="label">Super Crit Chance <div class="tooltip"><span class="tooltiptext">Chance of super crit
-                              (double
-                              critical hit damage, for arrows only)</span></div>
-            </td>
-            <td class="value">{{ data.stats.superCritChance * 100 }} %</td>
-      </tr>
-      <tr>
             <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-laser.png" />Laser
                               damage (3% per level)</span></div>
             </td>
@@ -698,55 +656,6 @@
             <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
       </tr>
       <tr>
-            <td class="label">Laser Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/laser-mastery.png" />Laser
-                              Mastery Tier (min = 0, max = 3)</span></div>
-            </td>
-
-            <td><input class="num-input" type="number" min="0" max="3" [(ngModel)]="data.talents.laserMastery"
-                        (ngModelChange)="updateLaserMastery($event)"></td>
-            <td class="value"><span *ngIf="data.talents.laserMastery > 0">{{ data.stats.laserMasteryPct * 100 }} %
-                        <div *ngIf="data.talents.laserMastery >= 1" class="mastery-img"></div>
-                        <div *ngIf="data.talents.laserMastery >= 2" class="mastery-img"></div>
-                        <div *ngIf="data.talents.laserMastery >= 3" class="mastery-img"></div>
-                  </span>
-            </td>
-            <ng-container *ngIf="data.talents.laserMastery < 3">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['talents.laserMastery']['inc']"
-                              (ngModelChange)="updateAttributes()">
-                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['talents.laserMastery']['inc']
-                                    }} to
-                                    laser mastery tier results in a total dps of {{
-                                    whatIf['talents.laserMastery']['dps'] | number
-                                    }}
-                                    which is a {{whatIf['talents.laserMastery']['dpsPct'] }}% dps increase.</span></div>
-                  </td>
-                  <td class="value"><span [class.best]="whatIf['talents.laserMastery']['best']">+{{
-                              whatIf['talents.laserMastery']['dpsPct'] }}%</span></td>
-            </ng-container>
-            <ng-container *ngIf="data.talents.laserMastery >= 3">
-                  <td colspan="2"></td>
-            </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockLaserMastery" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current mastery tier (only add tiers when optimizing talents)</span></div>
-                  </label>
-            </td>
-            <ng-container *ngIf="data.stats.laserArchers > 0">
-                  <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser
-                                    archers
-                                    from laser
-                                    mastery</span></div>
-                  </td>
-                  <td class="value">{{ data.stats.laserArchers }}
-                        <ng-container *ngIf="data.stats.laserArcherBounceFactor > 1">
-                              x {{ data.stats.laserArcherBounceFactor }} <div class="tooltip"><span class="tooltiptext">Laser
-                                          archer damage multiplier considering all laser archer bounces</span></div>
-                        </ng-container>
-                  </td>
-            </ng-container>
-      </tr>
-      <tr>
             <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-finger.png" />Finger
                               damage (3% per level).</span></div>
             </td>
@@ -766,11 +675,6 @@
                                     current points (only add points when optimizing talents)</span></div>
                   </label>
             </td>
-            <td class="label">Laser Archer RoF <div class="tooltip"><span class="tooltiptext">Total # of laser ticks
-                              per second
-                              from laser archers, for first enemy hit (no bounces)</span></div>
-            </td>
-            <td class="value">{{ data.stats.laserArcherTicksPerSec }} ticks/sec</td>
       </tr>
       <tr>
             <td class="label">Crit Chance <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-crit-chance.png" />Critical
@@ -822,11 +726,14 @@
                   </label>
 
             </td>
-            <td class="label">Arrow Super Crit Damage<div class="tooltip"><span class="tooltiptext">Single arrow super
-                              critical
-                              hit (double critical hit damage)</span></div>
-            </td>
-            <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
+            <ng-container *ngIf="data.talents.arrowMastery >= 1">
+                  <td class="label">Arrow Super Crit Damage<div class="tooltip"><span class="tooltiptext">Single arrow
+                                    super
+                                    critical
+                                    hit (double critical hit damage)</span></div>
+                  </td>
+                  <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
+            </ng-container>
       </tr>
       <tr>
             <td class="label">Defense <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-defense.png" />#
@@ -851,13 +758,121 @@
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.talents.unspent"
                         (ngModelChange)="updateData($event)"></td>
-            <td colspan="4"></td>
+      </tr>
+      <tr>
+            <td class="heading">Masteries <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/laser-mastery.png" />Arrow/Laser
+                              Mastery</span></div>
+            </td>
+      </tr>
+      <tr>
+            <td class="label">Arrow Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/arrow-mastery.png" />Arrow
+                              Mastery Tier (min = 0, max = 3)</span></div>
+            </td>
+
+            <td><input class="num-input" type="number" min="0" max="3" [(ngModel)]="data.talents.arrowMastery"
+                        (ngModelChange)="updateArrowMastery($event)"></td>
+            <td class="value"><span *ngIf="data.talents.arrowMastery > 0">{{ data.stats.arrowMasteryPct * 100 }} %
+                        <div *ngIf="data.talents.arrowMastery >= 1" class="mastery-img"></div>
+                        <div *ngIf="data.talents.arrowMastery >= 2" class="mastery-img"></div>
+                        <div *ngIf="data.talents.arrowMastery >= 3" class="mastery-img"></div>
+                  </span>
+            </td>
+            <ng-container *ngIf="data.talents.arrowMastery < 3">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['talents.arrowMastery']['inc']"
+                              (ngModelChange)="updateAttributes()">
+                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['talents.arrowMastery']['inc']
+                                    }} to
+                                    arrow mastery tier results in a total dps of {{
+                                    whatIf['talents.arrowMastery']['dps'] | number
+                                    }}
+                                    which is a {{whatIf['talents.arrowMastery']['dpsPct'] }}% dps increase.</span></div>
+                  </td>
+                  <td class="value"><span [class.best]="whatIf['talents.arrowMastery']['best']">+{{
+                              whatIf['talents.arrowMastery']['dpsPct'] }}%</span></td>
+            </ng-container>
+            <ng-container *ngIf="data.talents.arrowMastery >= 3">
+                  <td colspan="2"></td>
+            </ng-container>
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockArrowMastery" id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current mastery tier (only add tiers when optimizing talents)</span></div>
+                  </label>
+
+            </td>
+            <ng-container *ngIf="data.talents.arrowMastery >= 1">
+                  <td class="label">Arrow Super Crit Chance <div class="tooltip"><span class="tooltiptext">Chance of
+                                    arrow
+                                    super crit
+                                    (double
+                                    critical hit damage, for arrows only)</span></div>
+                  </td>
+                  <td class="value">{{ data.stats.superCritChance * 100 }} %</td>
+            </ng-container>
+      </tr>
+      <tr>
+            <td class="label">Laser Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/laser-mastery.png" />Laser
+                              Mastery Tier (min = 0, max = 3)</span></div>
+            </td>
+
+            <td><input class="num-input" type="number" min="0" max="3" [(ngModel)]="data.talents.laserMastery"
+                        (ngModelChange)="updateLaserMastery($event)"></td>
+            <td class="value"><span *ngIf="data.talents.laserMastery > 0">{{ data.stats.laserMasteryPct * 100 }} %
+                        <div *ngIf="data.talents.laserMastery >= 1" class="mastery-img"></div>
+                        <div *ngIf="data.talents.laserMastery >= 2" class="mastery-img"></div>
+                        <div *ngIf="data.talents.laserMastery >= 3" class="mastery-img"></div>
+                  </span>
+            </td>
+            <ng-container *ngIf="data.talents.laserMastery < 3">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="1" [(ngModel)]="whatIf['talents.laserMastery']['inc']"
+                              (ngModelChange)="updateAttributes()">
+                        <div class="tooltip"><span class="tooltiptext">Adding {{ whatIf['talents.laserMastery']['inc']
+                                    }} to
+                                    laser mastery tier results in a total dps of {{
+                                    whatIf['talents.laserMastery']['dps'] | number
+                                    }}
+                                    which is a {{whatIf['talents.laserMastery']['dpsPct'] }}% dps increase.</span></div>
+                  </td>
+                  <td class="value"><span [class.best]="whatIf['talents.laserMastery']['best']">+{{
+                              whatIf['talents.laserMastery']['dpsPct'] }}%</span></td>
+            </ng-container>
+            <ng-container *ngIf="data.talents.laserMastery >= 3">
+                  <td colspan="2"></td>
+            </ng-container>
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockLaserMastery" id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current mastery tier (only add tiers when optimizing talents)</span></div>
+                  </label>
+            </td>
+            <ng-container *ngIf="data.stats.laserArchers > 0">
+                  <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser
+                                    archers
+                                    from laser
+                                    mastery</span></div>
+                  </td>
+                  <td class="value">{{ data.stats.laserArchers }}
+                        <ng-container *ngIf="data.stats.laserArcherBounceFactor > 1">
+                              x {{ data.stats.laserArcherBounceFactor }} <div class="tooltip"><span class="tooltiptext">Laser
+                                          archer damage multiplier considering all laser archer bounces</span></div>
+                        </ng-container>
+                  </td>
+            </ng-container>
       </tr>
       <tr>
             <td class="heading">Damage Per Second <div class="tooltip"><span class="tooltiptext">Damage done per second
                               to
                               target</span></div>
             </td>
+            <td colspan="5"></td>
+            <ng-container *ngIf="data.stats.laserArchers > 0">
+                  <td class="label">Laser Archer RoF <div class="tooltip"><span class="tooltiptext">Total # of laser
+                                    ticks
+                                    per second
+                                    from laser archers, for first enemy hit (no bounces)</span></div>
+                  </td>
+                  <td class="value">{{ data.stats.laserArcherTicksPerSec }} ticks/sec</td>
+            </ng-container>
       </tr>
       <tr>
             <td class="label">Arrow DPS <div class="tooltip"><span class="tooltiptext">Damage per second from arrows</span></div>
