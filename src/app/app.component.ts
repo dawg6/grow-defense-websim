@@ -415,7 +415,7 @@ export class AppComponent {
     var n = this.data.stats.masteryPoints;
 
     if ((this.data.talents.laserMastery + this.data.talents.arrowMastery) > n) {
-      this.data.talents.arrowMastery = Math.min(3, n - this.data.talents.laserMastery);
+      this.data.talents.arrowMastery = Math.max(0, Math.min(3, n - this.data.talents.laserMastery));
     }
 
     this.updateData();
@@ -426,7 +426,7 @@ export class AppComponent {
     var n = this.data.stats.masteryPoints;
 
     if ((this.data.talents.laserMastery + this.data.talents.arrowMastery) > n) {
-      this.data.talents.laserMastery = Math.min(3, n - this.data.talents.arrowMastery);
+      this.data.talents.laserMastery = Math.max(0, Math.min(3, n - this.data.talents.arrowMastery));
     }
     
     this.updateData();
