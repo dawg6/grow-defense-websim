@@ -1,3 +1,6 @@
+v1.0.9 01/31/2019
+- Added arrow mastery and laser mastery as separate input fields from arrow/laser talent damage levels
+
 v1.0.8 01/29/2019
 - Added coin upgrade costs
 

@@ -631,11 +631,11 @@ var CPUIntensiveWorker = /** @class */ (function () {
                     (l.start.talents.arrowMastery + l.start.talents.laserMastery);
                 if ((laser + l.start.talents.laser) > (arrow + l.start.talents.arrow)) {
                     r.talents.laserMastery = Math.min(3, l.start.talents.laserMastery + mt);
-                    r.talents.arrowMastery = Math.min(3, l.start.talents.arrowMastery + (mt - r.talents.laserMastery));
+                    r.talents.arrowMastery = Math.min(3, l.start.talents.arrowMastery + (mt - (r.talents.laserMastery - l.start.talents.laserMastery)));
                 }
                 else {
                     r.talents.arrowMastery = Math.min(3, l.start.talents.arrowMastery + mt);
-                    r.talents.laserMastery = Math.min(3, l.start.talents.laserMastery + (mt - r.talents.arrowMastery));
+                    r.talents.laserMastery = Math.min(3, l.start.talents.laserMastery + (mt - (r.talents.arrowMastery - l.start.talents.laserMastery)));
                 }
                 for (var cc = 0; cc <= n; cc++) {
                     var o = (points >= 100) ? 0 : (points - (arrow + laser + cc));
