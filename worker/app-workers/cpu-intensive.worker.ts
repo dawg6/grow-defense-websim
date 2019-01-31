@@ -32,6 +32,17 @@ export class CPUIntensiveWorker {
 
                 var n = Math.min(points - (arrow + laser), 100 - l.start.talents.critChance);
 
+                var mt = Math.floor((laser + l.start.talents.laser) / 100) + Math.floor((arrow + l.start.talents.arrow) / 100) -
+                    (l.start.talents.arrowMastery + l.start.talents.laserMastery);
+                
+                if ((laser + l.start.talents.laser) > (arrow + l.start.talents.arrow)) {
+                    r.talents.laserMastery = Math.min(3, l.start.talents.laserMastery + mt);
+                    r.talents.arrowMastery = Math.min(3, l.start.talents.arrowMastery + (mt - r.talents.laserMastery));
+                } else {
+                    r.talents.arrowMastery = Math.min(3, l.start.talents.arrowMastery + mt);
+                    r.talents.laserMastery = Math.min(3, l.start.talents.laserMastery + (mt - r.talents.arrowMastery));
+                }
+
                 for (var cc: number = 0; cc <= n; cc++) {
 
                     var o = (points >= 100) ? 0 : (points - (arrow + laser + cc));
@@ -56,11 +67,15 @@ export class CPUIntensiveWorker {
                             max.talents.critDamage = r.talents.critDamage;
                             max.talents.finger = r.talents.finger;
                             max.stats.totalDps = r.stats.totalDps;
+                            max.talents.arrowMastery = r.talents.arrowMastery;
+                            max.talents.laserMastery = r.talents.laserMastery;
                         }
                     }
                 }
             }
         }
+
+        max.talents.defense = l.start.talents.defense;
 
         l.best = max;
 

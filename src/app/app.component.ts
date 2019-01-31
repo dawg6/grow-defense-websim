@@ -125,7 +125,9 @@ export class AppComponent {
       this.data.talents.critChance = message.data.best.talents.critChance;
       this.data.talents.critDamage = message.data.best.talents.critDamage;
       this.data.talents.finger = message.data.best.talents.finger;
-      // leave defense alone
+      this.data.talents.arrowMastery = message.data.best.talents.arrowMastery;
+      this.data.talents.laserMastery = message.data.best.talents.laserMastery;
+      this.data.talents.defense = message.data.best.talents.defense;
 
       this.data.talents.unspent = 0;
 
@@ -184,9 +186,22 @@ export class AppComponent {
     this.loadObject(PARAMS_PREFIX, this.data.params);
     this.loadObject(POWER_PREFIX, this.data.power);
 
+    if (this.data.params.version < "v1.0.9") {
+      var n = Math.floor(this.data.talents.laser / 100) + Math.floor(this.data.talents.arrow / 100);
+
+      if (n > 0) {
+        if (this.data.talents.laser > this.data.talents.arrow) {
+          this.data.talents.laserMastery = Math.min(3, n);
+          this.data.talents.arrowMastery = Math.min(3, n - this.data.talents.laserMastery);
+        } else {
+          this.data.talents.arrowMastery = Math.min(3, n);
+          this.data.talents.laserMastery = Math.min(3, n - this.data.talents.arrowMastery);
+        }
+      }
+
+    }
 
     this.setAttributeData();
-
     this.loadObject(ATTRIBUTE_PREFIX, this.data.attributes);
 
     var n = this.data.skills.numMissiles;
@@ -274,6 +289,9 @@ export class AppComponent {
     l.start.talents.critDamage = this.data.talents.lockCD ? this.data.talents.critDamage : 0;
     l.start.talents.defense = this.data.talents.lockDefense ? this.data.talents.defense : 0;
     l.start.talents.finger = this.data.talents.lockFinger ? this.data.talents.finger : 0;
+    l.start.talents.arrowMastery = this.data.talents.lockArrowMastery ? this.data.talents.arrowMastery : 0;
+    l.start.talents.laserMastery = this.data.talents.lockLaserMastery ? this.data.talents.laserMastery : 0;
+
     l.start.talents.unspent = 0;
 
     l.levels = this.data.talents.getLevel() - l.start.talents.getLevel();
@@ -319,6 +337,22 @@ export class AppComponent {
     // console.log("before Data = ", this.data);
 
     this.data = Data.copy(d);
+
+    if (this.data.params.version < "v1.0.9") {
+      var n = Math.floor(this.data.talents.laser / 100) + Math.floor(this.data.talents.arrow / 100);
+
+      if (n > 0) {
+        if (this.data.talents.laser > this.data.talents.arrow) {
+          this.data.talents.laserMastery = Math.min(3, n);
+          this.data.talents.arrowMastery = Math.min(3, n - this.data.talents.laserMastery);
+        } else {
+          this.data.talents.arrowMastery = Math.min(3, n);
+          this.data.talents.laserMastery = Math.min(3, n - this.data.talents.arrowMastery);
+        }
+      }
+
+    } 
+    
     this.getAttributeData();
 
     var n = this.data.skills.numMissiles;
@@ -367,6 +401,8 @@ export class AppComponent {
     this.whatIf["skills.bounceDmg"]["max"] = 6;
     this.whatIf["skills.arrowRoF"]["max"] = 5;
     this.whatIf["talents.critChance"]["max"] = 100;
+    this.whatIf["talents.arrowMastery"]["max"] = 3;
+    this.whatIf["talents.laserMastery"]["max"] = 3;
 
   }
 
@@ -374,4 +410,25 @@ export class AppComponent {
     return StaticData.BOUNCE_HIT_TABLE;
   }
 
+  updateLaserMastery(event: any) {
+
+    var n = this.data.stats.masteryPoints;
+
+    if ((this.data.talents.laserMastery + this.data.talents.arrowMastery) > n) {
+      this.data.talents.arrowMastery = Math.min(3, n - this.data.talents.laserMastery);
+    }
+
+    this.updateData();
+  }
+
+  updateArrowMastery(event: any) {
+
+    var n = this.data.stats.masteryPoints;
+
+    if ((this.data.talents.laserMastery + this.data.talents.arrowMastery) > n) {
+      this.data.talents.laserMastery = Math.min(3, n - this.data.talents.arrowMastery);
+    }
+    
+    this.updateData();
+  }
 }

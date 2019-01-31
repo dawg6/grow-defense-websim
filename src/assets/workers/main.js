@@ -109,8 +109,8 @@ var Parameters = /** @class */ (function () {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.0.8";
-        this.versionDate = "01/27/2019";
+        this.version = "v1.0.9";
+        this.versionDate = "01/31/2019";
     }
     return Parameters;
 }());
@@ -159,6 +159,10 @@ var Talents = /** @class */ (function () {
         this.lockDefense = false;
         this.lockFinger = false;
         this.lockLaser = false;
+        this.arrowMastery = 0;
+        this.laserMastery = 0;
+        this.lockLaserMastery = false;
+        this.lockArrowMastery = false;
     }
     Talents.prototype.getLevel = function () {
         return this.arrow + this.laser + this.critChance + this.critDamage + this.unspent + this.defense + this.finger + 1;
@@ -215,6 +219,8 @@ var StaticData = /** @class */ (function () {
         "skills.bounceDmg",
         "talents.arrow",
         "talents.laser",
+        "talents.arrowMastery",
+        "talents.laserMastery",
         "talents.critChance",
         "talents.critDamage",
         "talents.finger",
@@ -230,6 +236,8 @@ var Stats = /** @class */ (function () {
         StaticData.getInstance();
     }
     Stats.prototype.update = function (data) {
+        this.masteryPoints = Math.min(Math.floor(data.talents.laser / 100) + Math.floor(data.talents.arrow / 100), 6);
+        this.unspentMasteryPoints = this.masteryPoints - (data.talents.laserMastery + data.talents.arrowMastery);
         var arrowBase = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
         // next update: 
         // damage = (long)(((((LaserDamageLevel - 1) * LaserDamageIncrease) + laserDamage) * LaserDamageTalent) * laserMasteryDamage * 1.8f)
@@ -247,38 +255,28 @@ var Stats = /** @class */ (function () {
         this.missileDps = Math.round((data.skills.numMissiles + data.power.numRockets) * (1.0 / this.missileROF) * this.missileBase);
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
-        this.arrowMastery = Math.min(Math.floor(data.talents.arrow / 100), 3);
-        this.laserMastery = Math.min(Math.floor(data.talents.laser / 100), 3);
         var masteryPts = Math.min(Math.floor(data.talents.arrow / 100) + Math.floor(data.talents.laser / 100), 6);
-        if (data.talents.laser >= data.talents.arrow) {
-            this.laserMastery = Math.min(masteryPts, 3);
-            this.arrowMastery = Math.min(masteryPts - this.laserMastery, 3);
-        }
-        else {
-            this.arrowMastery = Math.min(masteryPts, 3);
-            this.laserMastery = Math.min(masteryPts - this.arrowMastery, 3);
-        }
-        this.superCritChance = Math.round(this.arrowMastery * 10) / 100.0;
+        this.superCritChance = Math.round(data.talents.arrowMastery * 10) / 100.0;
         this.arrowPct = Math.round(data.talents.arrow * 3) / 100.0;
         this.laserPct = Math.round(data.talents.laser * 3) / 100.0;
         this.fingerPct = Math.round(data.talents.finger * 3) / 100.0;
-        this.arrowMasteryPct = MASTERY_PCT[this.arrowMastery];
-        this.laserMasteryPct = MASTERY_PCT[this.laserMastery];
+        this.arrowMasteryPct = MASTERY_PCT[data.talents.arrowMastery];
+        this.laserMasteryPct = MASTERY_PCT[data.talents.laserMastery];
         this.arrow = Math.floor(arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
         this.laser = Math.floor(laserBase * (1.0 + this.laserPct) * (1.0 + this.laserMasteryPct)) - Math.floor(data.power.laser / 2); // don't know why? it's "almost" correct
         this.statsLaserDamage = Math.floor(oldLaserBase * (1.0 + this.laserPct) * (1.0 + this.laserMasteryPct));
         this.finger = Math.floor(fingerBase * (1 + this.fingerPct));
         this.arrowCrit = Math.floor(arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct) * (1 + this.critDamage));
         this.laserCrit = Math.floor(laserBase * (1 + this.laserPct) * (1 + this.laserMasteryPct) * (1 + this.critDamage));
-        this.superCrit = (this.arrowMastery >= 1) ? (2.0 * this.arrowCrit) : 0.0;
+        this.superCrit = (data.talents.arrowMastery >= 1) ? (2.0 * this.arrowCrit) : 0.0;
         this.avgArrow = (this.superCritChance * this.superCrit) +
             ((1.0 - this.superCritChance) * this.critChance * this.arrowCrit) +
             ((1.0 - this.superCritChance) * (1.0 - this.critChance) * this.arrow);
         this.avgLaser = (this.critChance * this.laserCrit) +
             ((1.0 - this.critChance) * this.laser);
-        this.laserArchers = LASER_ARCHERS[this.laserMastery];
+        this.laserArchers = LASER_ARCHERS[data.talents.laserMastery];
         this.baseArrowsSec = Math.round(300.0 / (12 - data.skills.arrowRoF)) / 10.0;
-        this.arrowRoF = ((this.arrowMastery >= 3) ? 1.1 : 1.0) * this.baseArrowsSec;
+        this.arrowRoF = ((data.talents.arrowMastery >= 3) ? 1.1 : 1.0) * this.baseArrowsSec;
         this.arrowsPerSec = data.skills.archers * this.arrowRoF;
         this.laserTicksPerSec = data.skills.lasers * data.params.laserRoFv2;
         this.laserArcherTicksPerSec = data.params.laserRoFv2 * this.laserArchers;
@@ -287,7 +285,7 @@ var Stats = /** @class */ (function () {
         var mult = StaticData.BOUNCE_TABLE[x][y];
         this.laserBounceMult = Math.round(mult * 100.0) / 100.0;
         this.arrowDps = data.skills.archers * this.avgArrow * this.arrowRoF;
-        this.laserArcherBounceFactor = (this.laserMastery >= 3) ? this.laserBounceMult : 1.0;
+        this.laserArcherBounceFactor = (data.talents.laserMastery >= 3) ? this.laserBounceMult : 1.0;
         this.laserDps = (this.avgLaser * this.laserTicksPerSec * this.laserBounceMult) + (this.avgLaser * this.laserArcherTicksPerSec * this.laserArcherBounceFactor);
         this.fingerDps = this.finger * data.params.fingerRoF;
         this.cannonBase = (data.skills.cannon > 0) ? (2000 + ((data.skills.cannon - 1) * 150 * Math.floor(data.skills.cannon / 2))) : 0;
@@ -390,7 +388,7 @@ var AttributeData = /** @class */ (function () {
             var c = 200;
             if (i > 1)
                 c = 200 * (i * i + 1);
-            if (data.stats.arrowMastery > 0) {
+            if (data.talents.arrowMastery > 0) {
                 c *= (1.0 - data.stats.arrowMasteryPct);
             }
             return c;
@@ -399,7 +397,7 @@ var AttributeData = /** @class */ (function () {
             if (i < 1)
                 return 0;
             var c = 200 * ((i - 1) * (i - 1) + 20);
-            if (data.stats.laserMastery > 0) {
+            if (data.talents.laserMastery > 0) {
                 c *= (1.0 - data.stats.laserMasteryPct);
             }
             return c;
@@ -629,6 +627,16 @@ var CPUIntensiveWorker = /** @class */ (function () {
             var m = points - arrow;
             for (var laser = 0; laser <= m; laser++) {
                 var n = Math.min(points - (arrow + laser), 100 - l.start.talents.critChance);
+                var mt = Math.floor((laser + l.start.talents.laser) / 100) + Math.floor((arrow + l.start.talents.arrow) / 100) -
+                    (l.start.talents.arrowMastery + l.start.talents.laserMastery);
+                if ((laser + l.start.talents.laser) > (arrow + l.start.talents.arrow)) {
+                    r.talents.laserMastery = Math.min(3, l.start.talents.laserMastery + mt);
+                    r.talents.arrowMastery = Math.min(3, l.start.talents.arrowMastery + (mt - r.talents.laserMastery));
+                }
+                else {
+                    r.talents.arrowMastery = Math.min(3, l.start.talents.arrowMastery + mt);
+                    r.talents.laserMastery = Math.min(3, l.start.talents.laserMastery + (mt - r.talents.arrowMastery));
+                }
                 for (var cc = 0; cc <= n; cc++) {
                     var o = (points >= 100) ? 0 : (points - (arrow + laser + cc));
                     for (var finger = 0; finger <= o; finger++) {
@@ -647,11 +655,14 @@ var CPUIntensiveWorker = /** @class */ (function () {
                             max.talents.critDamage = r.talents.critDamage;
                             max.talents.finger = r.talents.finger;
                             max.stats.totalDps = r.stats.totalDps;
+                            max.talents.arrowMastery = r.talents.arrowMastery;
+                            max.talents.laserMastery = r.talents.laserMastery;
                         }
                     }
                 }
             }
         }
+        max.talents.defense = l.start.talents.defense;
         l.best = max;
         l.finishTime = new Date().getTime();
         l.elapsedTime = l.finishTime - l.startTime;
