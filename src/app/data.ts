@@ -225,7 +225,8 @@ export class Stats {
         // laserDamage = 12
         // laserUpgradeBoostIncrement = 1/4
 
-        var laserBase : number = ((data.skills.laser * (3 + (data.power.laser / 4.0)) + 12.0)) * 1.7;
+        var laserBase : number = ((data.skills.laser * (3 + (data.power.laser / 4.0)) + 12.0)) * 1.7; // don't know why? it's "almost" correct
+        
         var oldLaserBase : number = (((data.skills.laser - 1.0) * (data.power.laser / 4.0)) + 12.0 + (data.skills.laser * 3)) * 1.3;
         this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
         var fingerBase : number = 14 + (6 * data.skills.finger);
@@ -258,7 +259,7 @@ export class Stats {
         this.laserMasteryPct = MASTERY_PCT[this.laserMastery];
 
         this.arrow = Math.floor(arrowBase * (1 + this.arrowPct) * (1 + this.arrowMasteryPct));
-        this.laser = Math.floor(laserBase * (1.0 + this.laserPct) * (1.0 + this.laserMasteryPct));
+        this.laser = Math.floor(laserBase * (1.0 + this.laserPct) * (1.0 + this.laserMasteryPct)) - Math.floor(data.power.laser / 2); // don't know why? it's "almost" correct
         this.statsLaserDamage = Math.floor(oldLaserBase * (1.0 + this.laserPct) * (1.0 + this.laserMasteryPct));
         this.finger = Math.floor(fingerBase * (1 + this.fingerPct));
 
