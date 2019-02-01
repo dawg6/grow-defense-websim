@@ -3,6 +3,10 @@
     white-space:nowrap;
 }
 
+.note-list {
+    color: lightgreen;
+}
+
 .cb-label {
     color: white;
     white-space:nowrap;
@@ -142,6 +146,10 @@
     height: 18px;
     content:"";
     vertical-align:top;
+}
+
+.notesTable {
+    width: 1200px;    
 }
 
 .mainTable {

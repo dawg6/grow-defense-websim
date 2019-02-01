@@ -1,14 +1,38 @@
 <div [ngBusy]="busy"></div>
-<h1 class="title">Grow Defense Damage Simulator</h1>
-<h2 class="heading">Notes</h2>
-<ul>
-      <li class="label">Only simulates damage against a single target (i.e. boss)</li>
-      <li class="label">Rate of fire is limited by browser framerate</li>
-      <li class="label">Assumes you've unlocked the appropriate masteries with gems (depending on # talent points in
-            arrow/laser)</li>
-      <li class="label">1/29/19: Developer confirmed a bug in in-game stats UI for laser damage, so values here are
-            accurate, but stats page is incorrect.</li>
-</ul>
+<table class="notesTable">
+      <tr>
+            <td class="heading">Notes</td>
+      </tr>
+      <tr>
+            <td class="note-list">
+                  <ul>
+                        <li class="note-list">
+                              Only simulates damage against a single target (i.e. boss)</li>
+                        <li class="note-list">Actual
+                              rate
+                              of fire (especially for lasers) may be limited by browser framerate
+                        </li>
+                        <li class="note-list">Assumes you've unlocked the appropriate masteries with gems</li>
+                        <li class="note-list">1/29/19: Developer confirmed a bug in in-game stats UI for laser damage, so
+                              values
+                              here are
+                              accurate, but stats page is incorrect.</li>
+                        <li class="note-list">Until the developer adds level #s back into the tooltips for coin upgrades,
+                              here is
+                              how you can deduce your level # from in game data:
+
+                              you can look at the coin upgrade cost for the next level and change the level # on this
+                              page
+                              until it matches. Or, for things like arrow and
+                              laser damage, after you've set your mastery and talent levels, you can use the #
+                              displayed in
+                              the "stats" page in game to match the damage # displayed to the right of the level #
+                              here (it might be slightly off for laser -- some rounding/truncating occurs in the math).
+                        </li>
+                  </ul>
+            </td>
+      </tr>
+</table>
 <table class="mainTable">
       <tr>
             <td colspan="9">
@@ -30,16 +54,18 @@
       </tr>
       <tr *ngIf="doPaste">
             <td colspan="9">
-                  <textarea cols="40" rows="10" [(ngModel)]="pasteText"></textarea>
+                  <textarea cols="80" rows="10" [(ngModel)]="pasteText"></textarea>
             </td>
       </tr>
       <tr *ngIf="doPaste">
             <td class="label" colspan="9">Paste the clipboard contents into the text area and press OK</td>
       </tr>
       <tr *ngIf="doPaste">
-            <button class="btn" (click)="getPaste()">OK</button>
-            <div class="divider"></div>
-            <button class="btn" (click)="cancelPaste()">Cancel</button>
+            <td colspan="9">
+                  <button class="btn" (click)="getPaste()">OK</button>
+                  <div class="divider"></div>
+                  <button class="btn" (click)="cancelPaste()">Cancel</button>
+            </td>
       </tr>
       <tr>
             <td class="label">Level <div class="tooltip"><span class="tooltiptext">Level calculated from talent points</span></div>
