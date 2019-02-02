@@ -52,9 +52,9 @@ export class AppComponent {
     this.versionDate = this.data.params.versionDate;
   }
 
-  private getLocalStorage(field: string, defaultValue: string) {
+  private getLocalStorage(field: string, defaultValue: string): string {
 
-    var value: string = this.storage.get(field);
+    var value: string = '' + this.storage.get(field);
 
     return ((value != null) && (value != undefined)) ? value : defaultValue;
   }
@@ -67,19 +67,20 @@ export class AppComponent {
 
   private loadObject(prefix: string, object: any): any {
     for (var field of Object.keys(object)) {
-      var value = this.getLocalStorage(prefix + field, '' + object[field]);
+      var value: string = this.getLocalStorage(prefix + field, '' + object[field]);
 
-      var n: any = Number(value);
-      var b: any = Boolean(value);
+      if (value != 'null') {
+        var n: any = Number(value);
+        var b: any = Boolean(value);
 
-      // console.log(prefix + field, value, object[field]);
-
-      if (value && isBoolean(object[field])) {
-        object[field] = value == 'true';
-      } else if (value && isNaN(n)) {
-        object[field] = value;
-      } else {
-        object[field] = n;
+        // console.log(prefix + field, value, object[field]);
+        if (value && isBoolean(object[field])) {
+          object[field] = (value == "true");
+        } else if (value && isNaN(n)) {
+          object[field] = value;
+        } else {
+          object[field] = n;
+        }
       }
     }
 
@@ -214,6 +215,8 @@ export class AppComponent {
 
     this.getAttributeData();
 
+    // console.log(this.data);
+
     this.updateData();
   }
 
@@ -248,10 +251,10 @@ export class AppComponent {
           bestCoin = attr.dpsPerCoin;
         }
       } else if (attr.name.startsWith("power.")) {
-          if (attr.dpsPerCoin && (attr.dpsPerCoin > bestGem)) {
-            bestGem = attr.dpsPerCoin;
-          }
+        if (attr.dpsPerCoin && (attr.dpsPerCoin > bestGem)) {
+          bestGem = attr.dpsPerCoin;
         }
+      }
     }
 
     for (var a of Object.keys(this.whatIf)) {
@@ -351,8 +354,8 @@ export class AppComponent {
         }
       }
 
-    } 
-    
+    }
+
     this.getAttributeData();
 
     var n = this.data.skills.numMissiles;
@@ -428,7 +431,7 @@ export class AppComponent {
     if ((this.data.talents.laserMastery + this.data.talents.arrowMastery) > n) {
       this.data.talents.laserMastery = Math.max(0, Math.min(3, n - this.data.talents.arrowMastery));
     }
-    
+
     this.updateData();
   }
 }
