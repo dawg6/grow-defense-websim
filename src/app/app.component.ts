@@ -285,6 +285,8 @@ export class AppComponent {
 
       var attr: AttributeData = this.whatIf[a];
 
+      attr.inc = Math.max(1, attr.inc);
+      
       attr.calculate(this.data);
 
       if (!b || (attr.dps > b)) {
@@ -317,12 +319,6 @@ export class AppComponent {
         attr.bestCoin = (attr.dpsPerCoin >= bestGem);
       }
     }
-  }
-
-  getTooltip(a: string, b: string) {
-    return "Adding " + this.whatIf[a]['inc'] + " to " + b +
-      " results in a total dps of " + this.whatIf[a]['dps'] +
-      ". a " + this.whatIf[a]['dpsPct'] + "% dps increase.";
   }
 
   optimize() {
