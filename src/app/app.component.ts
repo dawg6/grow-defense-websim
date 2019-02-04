@@ -3,6 +3,7 @@ import { Data, Talents, Skills, Log, Parameters, AttributeData, StaticData } fro
 import { FormsModule, SelectMultipleControlValueAccessor } from '@angular/forms';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Subscription } from 'rxjs';
+import { DecimalPipe } from '@angular/common';
 
 import { WorkerService } from './worker.service';
 import { WorkerMessage } from '../../worker/app-workers/shared/worker-message.model';
@@ -39,12 +40,13 @@ export class AppComponent {
   whatIf = {};
   log: Log = null;
 
-  constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private workerService: WorkerService) {
+  constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService, private workerService: WorkerService, private dp: DecimalPipe) {
     this.data = new Data();
 
     this.pasteText = "";
 
     this.initWhatIf();
+    this.validateInputs();
     this.data.update();
     this.updateAttributes();
 
@@ -132,6 +134,7 @@ export class AppComponent {
 
       this.data.talents.unspent = 0;
 
+      this.validateInputs();
       this.data.update();
       this.updateAttributes();
 
@@ -221,9 +224,52 @@ export class AppComponent {
   }
 
   updateData(event?: any) {
-    this.data.update();
 
+    this.validateInputs();
+    this.data.update();
     this.updateAttributes();
+
+  }
+
+  validateInputs() {
+    this.data.params.laserRoFv2 = Math.max(1, this.data.params.laserRoFv2);
+    this.data.params.fingerRoF  = Math.max(0, this.data.params.fingerRoF);
+    this.data.params.cannonRoF = Math.max(0.1, this.data.params.cannonRoF);
+
+    this.data.skills.arrowRoF = Math.max(1, Math.min(5, this.data.skills.arrowRoF));
+    this.data.skills.arrow = Math.max(1, this.data.skills.arrow);
+    this.data.skills.laser = Math.max(1, this.data.skills.laser);
+    this.data.skills.lasers = Math.max(1, Math.min(2, this.data.skills.lasers));
+    this.data.skills.bounces = Math.max(0, Math.min(5, this.data.skills.bounces));
+    this.data.skills.bounceDmg = Math.max(1, Math.min(6, this.data.skills.bounceDmg));
+    this.data.skills.cannon = Math.max(0, this.data.skills.cannon);
+    this.data.skills.bomb = Math.max(0, this.data.skills.bomb);
+    this.data.skills.finger = Math.max(1, this.data.skills.finger);
+    this.data.skills.missileDamage = Math.max(1, this.data.skills.missileDamage);
+    this.data.skills.missileFiringRate = Math.max(0, Math.min(20, this.data.skills.missileFiringRate));
+    this.data.skills.numMissiles = Math.max(0, Math.min(1, this.data.skills.numMissiles));
+
+    this.data.power.arrow = Math.max(0, this.data.power.arrow);
+    this.data.power.laser = Math.max(0, this.data.power.laser);
+    this.data.power.missile = Math.max(0, this.data.power.missile);
+    this.data.power.numRockets = Math.max(0, Math.min(9, this.data.power.numRockets));
+
+    this.data.talents.arrow = Math.max(0, this.data.talents.arrow);
+    this.data.talents.laser = Math.max(0, this.data.talents.laser);
+    this.data.talents.critChance = Math.max(0, Math.min(100, this.data.talents.critChance));
+    this.data.talents.critDamage = Math.max(0, this.data.talents.critDamage);
+    this.data.talents.defense = Math.max(0, this.data.talents.defense);
+    this.data.talents.unspent = Math.max(0, this.data.talents.unspent);
+
+    var p = Math.floor(this.data.talents.arrow / 100) + Math.floor(this.data.talents.laser / 100);
+
+    if (this.data.talents.laser > this.data.talents.arrow) {
+      this.data.talents.laserMastery = Math.max(0, Math.min(Math.min(3, p), this.data.talents.laserMastery));
+      this.data.talents.arrowMastery = Math.max(0, Math.min(Math.min(3, p - this.data.talents.laserMastery), this.data.talents.arrowMastery));
+    } else {
+      this.data.talents.arrowMastery = Math.max(0, Math.min(Math.min(3, p), this.data.talents.arrowMastery));
+      this.data.talents.laserMastery = Math.max(0, Math.min(Math.min(3, p - this.data.talents.arrowMastery), this.data.talents.laserMastery));
+    }
   }
 
   updateAttributes() {
@@ -312,6 +358,7 @@ export class AppComponent {
       attr.inc = this.data.attributes[a];
     }
 
+    this.validateInputs();
     this.data.update();
     this.updateAttributes();
   }
@@ -368,6 +415,7 @@ export class AppComponent {
 
     // console.log("Data = ", this.data);
 
+    this.validateInputs();
     this.data.update();
     this.updateAttributes();
 
@@ -433,5 +481,13 @@ export class AppComponent {
     }
 
     this.updateData();
+  }
+
+  getIncTooltip(which: AttributeData, label:string ): string {
+    var inc = which.dps - this.data.stats.totalDps;
+    var damage = this.dp.transform(inc, '1.0-1');
+    var dps = this.dp.transform(which.dps, '1.0-1');
+    
+    return `Adding ${which.inc} to ${label} results in an increase of ${damage} dps for a total dps of ${dps}, which is a ${which.dpsPct}% dps increase.`;
   }
 }

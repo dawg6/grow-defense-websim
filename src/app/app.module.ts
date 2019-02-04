@@ -7,6 +7,7 @@ import { WorkerService } from './worker.service';
 import {NgBusyModule} from './ng-busy/src/lib/ng-busy.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng2DynamicDialogModule } from './ng2-dynamic-dialog';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { Ng2DynamicDialogModule } from './ng2-dynamic-dialog';
     NgBusyModule,
     StorageServiceModule
   ],
-  providers: [WorkerService],
+  providers: [WorkerService, DecimalPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

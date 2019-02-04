@@ -109,8 +109,8 @@ var Parameters = /** @class */ (function () {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.0.9";
-        this.versionDate = "01/31/2019";
+        this.version = "v1.1.0";
+        this.versionDate = "02/04/2019";
     }
     return Parameters;
 }());
@@ -748,7 +748,7 @@ var LAZY_MODULE_MAP = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
+module.exports = __webpack_require__(/*! C:\Users\scott.clarke\git\grow-defense-websim\worker\main.worker.ts */"./worker/main.worker.ts");
 
 
 /***/ })
