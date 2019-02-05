@@ -392,11 +392,12 @@ var AttributeData = /** @class */ (function () {
         }
         var i = 0;
         var max = this.max ? (this.max - this.value) : 1000;
-        while ((c > 0) && (i < max)) {
-            c -= this.getCost(this.value + i, data);
-            if (c >= 0) {
-                i++;
+        while ((c >= 0) && (i < max)) {
+            i++;
+            if (this.name == "skills.laser") {
+                console.log(c, i);
             }
+            c -= this.getCost(this.value + i, data);
         }
         this.inc = i;
     };
