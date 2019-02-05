@@ -18,26 +18,41 @@
                               values
                               here are
                               accurate, but stats page is incorrect.</li>
-                        <li class="note-list">Until the developer adds level #s back into the tooltips for coin
-                              upgrades,
-                              here is
-                              how you can deduce your level # from in game data:
+                        <li class="note-list">
+                              How do I find the level numbers for the coin upgrades
+                              <div class="big-tooltip"><span class="big-tooltiptext">
+                                          Until the developer adds level #s back into the tooltips for coin
+                                          upgrades,
+                                          here is
+                                          how you can deduce your level # from in game data:
 
-                              you can look at the coin upgrade cost for the next level and change the level # on this
-                              page
-                              until it matches. Or, for things like arrow and
-                              laser damage, after you've set your mastery and talent levels, you can use the #
-                              displayed in
-                              the "stats" page in game to match the damage # displayed to the right of the level #
-                              here (it might be slightly off for laser -- some rounding/truncating occurs in the math).
+                                          you can look at the coin upgrade cost for the next level and change the level
+                                          # on this
+                                          page
+                                          until it matches. Or, for things like arrow and
+                                          laser damage, after you've set your mastery and talent levels, you can use
+                                          the #
+                                          displayed in
+                                          the "stats" page in game to match the damage # displayed to the right of the
+                                          level #
+                                          here (it might be slightly off for laser -- some rounding/truncating occurs
+                                          in the math).
+                                    </span></div>
                         </li>
                         <li class="note-list">
-                              Here's how to compare whether you should spend blue gems to buy coins or red gems. First, find out in
-                              game how many coins you get for 100 blue gems (note: you get 20% more coins when you spend 100 gems at a time).
-                              Then fill in the value below for how many coins that is. Click "What can I buy?" to see how many upgrade levels
-                              you could get for that amount of coins (e.g. laser damage). Hover over the "?" next to the "+" level to see the 
-                              actaul dps increase (as opposed to percentage). Compare this with the "dps/gem" value under "power gems" to
-                              see which gives more dps for 100 blue gems (100 blue gems = 1 red gem).
+                              How do I decide whether to spend blue gems on coins or red gems
+                              <div class="big-tooltip"><span class="big-tooltiptext">
+                                          First, find out in
+                                          game how many coins you get for 100 blue gems (note: you get 20% more coins
+                                          when you spend 100 gems at a time).
+                                          Then fill in the value below for how many coins that is. Click "What can I
+                                          buy?" to see how many upgrade levels
+                                          you could get for that amount of coins (e.g. laser damage). Hover over the
+                                          "?" next to the "+" level to see the
+                                          actaul dps increase (as opposed to percentage). Compare this with the
+                                          "dps/gem" value under "power gems" to
+                                          see which gives more dps for 100 blue gems (100 blue gems = 1 red gem).
+                                    </span></div>
                         </li>
                   </ul>
             </td>
@@ -139,7 +154,7 @@
                   <div class="divider"></div>
                   <button class="btn" (click)="resetAttr()">Reset</button>
                   <div class="tooltip"><span class="tooltiptext">Reset all to "+1"</span></div>
-      </td>
+            </td>
       </tr>
       <tr>
             <td class="label">Arrow Firing Rate <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
@@ -178,11 +193,9 @@
                   <td colspan="4" rowspan="7" class="tick-table-holder">
                         <table class="tick-table">
                               <tr class="tick-table-header">
-                                    <td class="tick-table-header" colspan="2"><span class="tick-table-header">Laser
-                                                Tick
-                                                Damage</span></td>
-                                    <td class="tick-table-header"><span class="tick-table-header">Normal</span></td>
-                                    <td class="tick-table-header"><span class="tick-table-header">Critical</span></td>
+                                    <td class="tick-table-header" colspan="2"><span class="tick-table-header">Laser Tick Damage</span></td>
+                                    <td class="tick-table-header right"><span class="tick-table-header">Normal</span></td>
+                                    <td class="tick-table-header right"><span class="tick-table-header">Critical</span></td>
                               </tr>
                               <tr *ngFor="let b of getBounceData(); let i = index" class="tick-table-row">
                                     <ng-container *ngIf="i <= data.skills.bounces">
@@ -192,9 +205,9 @@
                                           <td class="right"><span class="tick-table-value">{{
                                                       Math.round(b[data.skills.bounceDmg] * 100) }}%</span></td>
                                           <td class="right"><span class="tick-table-value">{{
-                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laser) }}</span></td>
+                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laser) | number }}</span></td>
                                           <td class="right"><span class="tick-table-value">{{
-                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) }}</span></td>
+                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) | number }}</span></td>
                                     </ng-container>
                               </tr>
                               <tr *ngIf="data.skills.bounces > 0">
@@ -204,10 +217,10 @@
                                                 * 100) }}%</span></td>
                                     <td class="right"><span class="tick-table-value">{{
                                                 Math.floor(data.stats.laserBounceMult
-                                                * data.stats.laser) }}</span></td>
+                                                * data.stats.laser) | number }}</span></td>
                                     <td class="right"><span class="tick-table-value">{{
                                                 Math.floor(data.stats.laserBounceMult
-                                                * data.stats.laserCrit) }}</span></td>
+                                                * data.stats.laserCrit) | number }}</span></td>
                               </tr>
                         </table>
                   </td>
@@ -219,7 +232,7 @@
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="1" [(ngModel)]="data.skills.arrow"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.arrow }} <div class="tooltip"><span class="tooltiptext">Single arrow
+            <td class="value">{{ data.stats.arrow | number }} <div class="tooltip"><span class="tooltiptext">Single arrow
                               damage</span></div>
             </td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.arrow']['inc']"
@@ -243,8 +256,8 @@
                               damage coin upgrade level</span></div>
             </td>
             <td><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.laser" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.laser }} <div class="tooltip"><span class="tooltiptext">Single laser
-                              damage tick (first enemy hit)</span></div> / {{ data.stats.statsLaserDamage }} <div class="tooltip"><span
+            <td class="value">{{ data.stats.laser | number }} <div class="tooltip"><span class="tooltiptext">Single laser
+                              damage tick (first enemy hit)</span></div> / {{ data.stats.statsLaserDamage | number }} <div class="tooltip"><span
                               class="tooltiptext">Value shown
                               in-game on stats page for laser damage</span></div>
             </td>
@@ -351,7 +364,7 @@
                               ball damage level (0 = none)</span></div>
             </td>
             <td><input class="num-input" type="number" min="0" [(ngModel)]="data.skills.cannon" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.cannonBase }} <div class="tooltip"><span class="tooltiptext">Cannon ball
+            <td class="value">{{ data.stats.cannonBase | number }} <div class="tooltip"><span class="tooltiptext">Cannon ball
                               damage</span></div>
             </td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.cannon']['inc']"
@@ -376,7 +389,7 @@
                               bomb damage level (0 = none)</span></div>
             </td>
             <td><input class="num-input" type="number" min="0" [(ngModel)]="data.skills.bomb" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.bombBase }} <div class="tooltip"><span class="tooltiptext">Cannon bomb
+            <td class="value">{{ data.stats.bombBase | number }} <div class="tooltip"><span class="tooltiptext">Cannon bomb
                               damage</span></div>
             </td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.bomb']['inc']"
@@ -401,7 +414,7 @@
             </td>
             <td><input class="num-input" type="number" min="1" max="2000" [(ngModel)]="data.skills.finger"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.finger }} <div class="tooltip"><span class="tooltiptext">Single finger
+            <td class="value">{{ data.stats.finger | number }} <div class="tooltip"><span class="tooltiptext">Single finger
                               click damage </span></div>
             </td>
             <ng-container *ngIf="data.skills.finger < 2000">
@@ -427,7 +440,7 @@
                               damage coin upgrade level (1 = min)</span></div>
             </td>
             <td><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.missileDamage" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.missileBase }} <div class="tooltip"><span class="tooltiptext">Single
+            <td class="value">{{ data.stats.missileBase | number }} <div class="tooltip"><span class="tooltiptext">Single
                               Missile/Rocket
                               damage per
                               hit</span></div>
@@ -646,7 +659,7 @@
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.talents.arrow"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ Math.round(data.stats.arrowPct * 100.0) }} %</td>
+            <td class="value">{{ Math.round(data.stats.arrowPct * 100.0) | number }} %</td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.arrow']['inc']"
                         (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.arrow'], 'Arrow
@@ -671,14 +684,14 @@
                               damage
                               (considering crtis, super crits)</span></div>
             </td>
-            <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 }}</td>
+            <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 | number }}</td>
       </tr>
       <tr>
             <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-laser.png" />Laser
                               damage (3% per level)</span></div>
             </td>
             <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.laser" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ Math.round(data.stats.laserPct * 100) }} %</td>
+            <td class="value">{{ Math.round(data.stats.laserPct * 100) | number }} %</td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.laser']['inc']"
                         (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.laser'], 'Laser
@@ -701,14 +714,14 @@
             <td class="label">Average Laser Damage <div class="tooltip"><span class="tooltiptext">Average laser tick
                               damage on initial hit, considering crits</span></div>
             </td>
-            <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 }}</td>
+            <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 | number }}</td>
       </tr>
       <tr>
             <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-finger.png" />Finger
                               damage (3% per level).</span></div>
             </td>
             <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.finger" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ Math.round(data.stats.fingerPct * 100) }} %</td>
+            <td class="value">{{ Math.round(data.stats.fingerPct * 100) | number }} %</td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.finger']['inc']"
                         (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.finger'], 'Finger
@@ -755,14 +768,14 @@
             <td class="label">Arrow Crit Damage <div class="tooltip"><span class="tooltiptext">Single arrow critical
                               hit</span></div>
             </td>
-            <td class="value">{{ Math.round(data.stats.arrowCrit) }}</td>
+            <td class="value">{{ Math.round(data.stats.arrowCrit) | number }}</td>
       </tr>
       <tr>
             <td class="label">Crit Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-crit-damage.png" />Critical
                               Damage (5% per level)</span></div>
             </td>
             <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.critDamage" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ 150 + (data.talents.critDamage * 5) }} %</td>
+            <td class="value">{{ 150 + (data.talents.critDamage * 5) | number }} %</td>
             <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.critDamage']['inc']"
                         (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.critDamage'], 'Crit
@@ -788,7 +801,7 @@
                                     critical
                                     hit (double critical hit damage)</span></div>
                   </td>
-                  <td class="value">{{ Math.round(data.stats.superCrit) }}</td>
+                  <td class="value">{{ Math.round(data.stats.superCrit) | number }}</td>
             </ng-container>
       </tr>
       <tr>
@@ -844,9 +857,9 @@
                                     whatIf['talents.arrowMastery']['dpsPct'] }}%</span></td>
                   </ng-container>
                   <ng-container *ngIf="whatIf['talents.arrowMastery']['inc'] <= 0">
-                              <td></td>
-                        </ng-container>
+                        <td></td>
                   </ng-container>
+            </ng-container>
             <ng-container *ngIf="data.talents.arrowMastery >= 3">
                   <td colspan="2"></td>
             </ng-container>
