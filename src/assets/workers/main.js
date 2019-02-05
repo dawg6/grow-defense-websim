@@ -109,8 +109,8 @@ var Parameters = /** @class */ (function () {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.1.0";
-        this.versionDate = "02/04/2019";
+        this.version = "v1.1.1";
+        this.versionDate = "02/05/2019";
     }
     return Parameters;
 }());
@@ -130,6 +130,7 @@ var Skills = /** @class */ (function () {
         this.bounceDmg = 1;
         this.missileFiringRate = 0;
         this.arrowRoF = 1;
+        this.coins = 0;
     }
     return Skills;
 }());
@@ -377,6 +378,27 @@ var AttributeData = /** @class */ (function () {
         else {
             return Math.floor(i / 3) + 1;
         }
+    };
+    AttributeData.prototype.buy = function (data) {
+        var coins = data.skills.coins;
+        if (this.max && (this.value >= this.max)) {
+            this.inc = 0;
+            return;
+        }
+        var c = coins - this.getCost(this.value, data);
+        if (c < 0) {
+            this.inc = 0;
+            return;
+        }
+        var i = 0;
+        var max = this.max ? (this.max - this.value) : 1000;
+        while ((c > 0) && (i < max)) {
+            c -= this.getCost(this.value + i, data);
+            if (c >= 0) {
+                i++;
+            }
+        }
+        this.inc = i;
     };
     AttributeData.prototype.getCost = function (i, data) {
         if (this.name == "skills.finger") {

@@ -39,6 +39,10 @@
     width: 100px;
 }
 
+.big-num-input {
+    width: 150px;
+}
+
 .attr-input {
     width: 40px;
 }

@@ -11,8 +11,8 @@ export class Parameters {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.1.0";
-        this.versionDate = "02/04/2019";
+        this.version = "v1.1.1";
+        this.versionDate = "02/05/2019";
     }
 }
 
@@ -30,6 +30,7 @@ export class Skills {
     bounces: number;
     bounceDmg: number;
     arrowRoF: number;
+    coins: number;
 
     constructor() {
         this.arrow = 1;
@@ -45,6 +46,7 @@ export class Skills {
         this.bounceDmg = 1;
         this.missileFiringRate = 0;
         this.arrowRoF = 1;
+        this.coins = 0;
     }
 }
 
@@ -422,6 +424,35 @@ export class AttributeData {
         }
     }
 
+    public buy(data: Data) {
+        var coins = data.skills.coins;
+        
+        if (this.max && (this.value >= this.max)) {
+            this.inc = 0;
+            return;
+        }
+
+        var c = coins - this.getCost(this.value, data);
+
+        if (c < 0) {
+            this.inc = 0;
+            return;
+        }
+
+        var i = 0;
+        var max = this.max ? (this.max - this.value) : 1000;
+
+        while ((c > 0) && (i < max)) {
+            c -= this.getCost(this.value + i, data);
+
+            if (c >= 0) {
+                i++;
+            }
+        }
+
+        this.inc = i;
+    }
+
     public getCost(i: number, data: Data): number {
         if (this.name == "skills.finger") {
             return 100 * i;
@@ -486,7 +517,6 @@ export class AttributeData {
             else
                 return ARCHER_COST[i - 1];
         } else if (this.name == "skills.lasers") {
-
             if (i == 0)
                 return 12500;
             else if (i == 1)

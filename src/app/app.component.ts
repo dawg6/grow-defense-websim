@@ -239,7 +239,7 @@ export class AppComponent {
     this.data.skills.arrowRoF = Math.max(1, Math.min(5, this.data.skills.arrowRoF));
     this.data.skills.arrow = Math.max(1, this.data.skills.arrow);
     this.data.skills.laser = Math.max(1, this.data.skills.laser);
-    this.data.skills.lasers = Math.max(1, Math.min(2, this.data.skills.lasers));
+    this.data.skills.lasers = Math.max(0, Math.min(2, this.data.skills.lasers));
     this.data.skills.bounces = Math.max(0, Math.min(5, this.data.skills.bounces));
     this.data.skills.bounceDmg = Math.max(1, Math.min(6, this.data.skills.bounceDmg));
     this.data.skills.cannon = Math.max(0, this.data.skills.cannon);
@@ -248,6 +248,7 @@ export class AppComponent {
     this.data.skills.missileDamage = Math.max(1, this.data.skills.missileDamage);
     this.data.skills.missileFiringRate = Math.max(0, Math.min(20, this.data.skills.missileFiringRate));
     this.data.skills.numMissiles = Math.max(0, Math.min(1, this.data.skills.numMissiles));
+    this.data.skills.coins = Math.max(0, this.data.skills.coins);
 
     this.data.power.arrow = Math.max(0, this.data.power.arrow);
     this.data.power.laser = Math.max(0, this.data.power.laser);
@@ -285,23 +286,30 @@ export class AppComponent {
 
       var attr: AttributeData = this.whatIf[a];
 
-      attr.inc = Math.max(1, attr.inc);
+      attr.inc = Math.max(0, attr.inc);
       
-      attr.calculate(this.data);
+      if (attr.inc > 0) {
+        attr.calculate(this.data);
 
-      if (!b || (attr.dps > b)) {
-        b = attr.dps;
-        best[s[0]] = b;
-      }
+        if (!b || (attr.dps > b)) {
+          b = attr.dps;
+          best[s[0]] = b;
+        }
 
-      if (attr.name.startsWith("skills.")) {
-        if (attr.dpsPerCoin && (attr.dpsPerCoin > bestCoin)) {
-          bestCoin = attr.dpsPerCoin;
+        if (attr.name.startsWith("skills.")) {
+          if (attr.dpsPerCoin && (attr.dpsPerCoin > bestCoin)) {
+            bestCoin = attr.dpsPerCoin;
+          }
+        } else if (attr.name.startsWith("power.")) {
+          if (attr.dpsPerCoin && (attr.dpsPerCoin > bestGem)) {
+            bestGem = attr.dpsPerCoin;
+          }
         }
-      } else if (attr.name.startsWith("power.")) {
-        if (attr.dpsPerCoin && (attr.dpsPerCoin > bestGem)) {
-          bestGem = attr.dpsPerCoin;
-        }
+      } else {
+        attr.dps = this.data.stats.totalDps;
+        attr.dpsPct = 0.0;
+        attr.dpsPerCoin = 0;
+        attr.coins = 0;
       }
     }
 
@@ -485,5 +493,19 @@ export class AppComponent {
     var dps = this.dp.transform(which.dps, '1.0-1');
     
     return `Adding ${which.inc} to ${label} results in an increase of ${damage} dps for a total dps of ${dps}, which is a ${which.dpsPct}% dps increase.`;
+  }
+
+  buy() {
+    
+    for (var a of Object.keys(this.whatIf)) {
+
+      if (a.startsWith("skills.")) {
+        var attr : AttributeData = this.whatIf[a];
+
+        attr.buy(this.data);
+      }
+    }
+
+    this.updateAttributes();
   }
 }
