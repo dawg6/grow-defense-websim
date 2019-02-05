@@ -508,4 +508,14 @@ export class AppComponent {
 
     this.updateAttributes();
   }
+
+  resetAttr() {
+    for (var a of Object.keys(this.whatIf)) {
+      var attr : AttributeData = this.whatIf[a];
+
+      attr.inc = 1;
+    }
+
+    this.updateAttributes();
+  }
 }

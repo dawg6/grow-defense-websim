@@ -128,7 +128,10 @@
                   <button class="btn" (click)="buy()">What can I Buy?</button>
                   <div class="tooltip"><span class="tooltiptext">See what I could buy with {{ data.skills.coins |
                               number }} coins</span></div>
-            </td>
+                  <div class="divider"></div>
+                  <button class="btn" (click)="resetAttr()">Reset</button>
+                  <div class="tooltip"><span class="tooltiptext">Reset all to "+1"</span></div>
+      </td>
       </tr>
       <tr>
             <td class="label">Arrow Firing Rate <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
