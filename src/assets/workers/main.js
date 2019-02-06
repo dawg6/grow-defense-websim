@@ -391,7 +391,7 @@ var AttributeData = /** @class */ (function () {
             return;
         }
         var i = 0;
-        var max = this.max ? (this.max - this.value) : 1000;
+        var max = this.max ? (this.max - this.value) : 10000;
         while ((c >= 0) && (i < max)) {
             i++;
             if (this.name == "skills.laser") {

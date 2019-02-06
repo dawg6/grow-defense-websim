@@ -440,7 +440,7 @@ export class AttributeData {
         }
 
         var i = 0;
-        var max = this.max ? (this.max - this.value) : 1000;
+        var max = this.max ? (this.max - this.value) : 10000;
 
         while ((c >= 0) && (i < max)) {
             i++;
