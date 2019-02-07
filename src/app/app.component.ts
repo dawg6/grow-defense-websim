@@ -122,23 +122,35 @@ export class AppComponent {
 
     if (message.topic === this.workerTopic) {
       this.currentWorkerMessage = message;
+      this.log = message.data;
 
-      this.data.talents.arrow = message.data.best.talents.arrow;
-      this.data.talents.laser = message.data.best.talents.laser;
-      this.data.talents.critChance = message.data.best.talents.critChance;
-      this.data.talents.critDamage = message.data.best.talents.critDamage;
-      this.data.talents.finger = message.data.best.talents.finger;
-      this.data.talents.arrowMastery = message.data.best.talents.arrowMastery;
-      this.data.talents.laserMastery = message.data.best.talents.laserMastery;
-      this.data.talents.defense = message.data.best.talents.defense;
+      if (this.log.gems > 0) {
 
-      this.data.talents.unspent = 0;
+        this.data.power.arrow = this.log.best.power.arrow;
+        this.data.power.laser = this.log.best.power.laser;
+        this.data.power.missile = this.log.best.power.missile;
+        this.data.power.numRockets = this.log.best.power.numRockets;
+        this.data.power.unspent = 0;
+
+        this.data.power.unspent = (this.log.gems + this.log.start.gems) - this.data.getGems();
+
+      } else if (message.data.levels > 0) {
+
+        this.data.talents.arrow = this.log.best.talents.arrow;
+        this.data.talents.laser = this.log.best.talents.laser;
+        this.data.talents.critChance = this.log.best.talents.critChance;
+        this.data.talents.critDamage = this.log.best.talents.critDamage;
+        this.data.talents.finger = this.log.best.talents.finger;
+        this.data.talents.arrowMastery = this.log.best.talents.arrowMastery;
+        this.data.talents.laserMastery = this.log.best.talents.laserMastery;
+        this.data.talents.defense = this.log.best.talents.defense;
+
+        this.data.talents.unspent = 0;
+      }
 
       this.validateInputs();
       this.data.update();
       this.updateAttributes();
-
-      this.log = message.data;
 
       this.resolver();
       // console.log("data", this.data);
@@ -233,7 +245,7 @@ export class AppComponent {
 
   validateInputs() {
     this.data.params.laserRoFv2 = Math.max(1, this.data.params.laserRoFv2);
-    this.data.params.fingerRoF  = Math.max(0, this.data.params.fingerRoF);
+    this.data.params.fingerRoF = Math.max(0, this.data.params.fingerRoF);
     this.data.params.cannonRoF = Math.max(0.1, this.data.params.cannonRoF);
 
     this.data.skills.arrowRoF = Math.max(1, Math.min(5, this.data.skills.arrowRoF));
@@ -287,7 +299,7 @@ export class AppComponent {
       var attr: AttributeData = this.whatIf[a];
 
       attr.inc = Math.max(0, attr.inc);
-      
+
       if (attr.inc > 0) {
         attr.calculate(this.data);
 
@@ -328,6 +340,28 @@ export class AppComponent {
       }
     }
   }
+  optimizeGems() {
+    var l: Log = new Log();
+    l.start = new Data();
+    l.start.skills = this.data.skills;
+    l.start.params = this.data.params;
+    l.start.talents = this.data.talents;
+
+    l.start.power.arrow = this.data.power.lockArrow ? this.data.power.arrow : 0;
+    l.start.power.laser = this.data.power.lockLaser ? this.data.power.laser : 0;
+    l.start.power.missile = this.data.power.lockMissile ? this.data.power.missile : 0;
+    l.start.power.numRockets = this.data.power.lockRockets ? this.data.power.numRockets : 0;
+    l.start.power.unspent = 0;
+    l.start.gems = l.start.getGems();
+
+    l.gems = this.data.gems - l.start.gems;
+    l.levels = 0;
+    l.skills = 0;
+
+    if (l.gems > 0) {
+      this.sendWorkerRequest(l);
+    }
+  }
 
   optimize() {
     var l: Log = new Log();
@@ -344,14 +378,15 @@ export class AppComponent {
     l.start.talents.finger = this.data.talents.lockFinger ? this.data.talents.finger : 0;
     l.start.talents.arrowMastery = this.data.talents.lockArrowMastery ? this.data.talents.arrowMastery : 0;
     l.start.talents.laserMastery = this.data.talents.lockLaserMastery ? this.data.talents.laserMastery : 0;
-
     l.start.talents.unspent = 0;
 
     l.levels = this.data.talents.getLevel() - l.start.talents.getLevel();
-
+    l.gems = 0;
     l.skills = 0;
 
-    this.sendWorkerRequest(l);
+    if (l.levels > 0) {
+      this.sendWorkerRequest(l);
+    }
   }
 
   reset() {
@@ -405,6 +440,10 @@ export class AppComponent {
         }
       }
 
+    }
+
+    if (!this.data.power.unspent) {
+        this.data.power.unspent = 0;
     }
 
     this.getAttributeData();
@@ -487,20 +526,20 @@ export class AppComponent {
     this.updateData();
   }
 
-  getIncTooltip(which: AttributeData, label:string ): string {
+  getIncTooltip(which: AttributeData, label: string): string {
     var inc = which.dps - this.data.stats.totalDps;
     var damage = this.dp.transform(inc, '1.0-1');
     var dps = this.dp.transform(which.dps, '1.0-1');
-    
+
     return `Adding ${which.inc} to ${label} results in an increase of ${damage} dps for a total dps of ${dps}, which is a ${which.dpsPct}% dps increase.`;
   }
 
   buy() {
-    
+
     for (var a of Object.keys(this.whatIf)) {
 
       if (a.startsWith("skills.")) {
-        var attr : AttributeData = this.whatIf[a];
+        var attr: AttributeData = this.whatIf[a];
 
         attr.buy(this.data);
       }
@@ -511,7 +550,7 @@ export class AppComponent {
 
   resetAttr() {
     for (var a of Object.keys(this.whatIf)) {
-      var attr : AttributeData = this.whatIf[a];
+      var attr: AttributeData = this.whatIf[a];
 
       attr.inc = 1;
     }

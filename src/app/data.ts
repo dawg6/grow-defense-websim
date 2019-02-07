@@ -11,8 +11,8 @@ export class Parameters {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.1.1";
-        this.versionDate = "02/05/2019";
+        this.version = "v1.1.2";
+        this.versionDate = "02/07/2019";
     }
 }
 
@@ -55,13 +55,24 @@ export class PowerGems {
     laser: number;
     missile: number;
     numRockets: number;
+    unspent: number;
+    lockArrow: boolean;
+    lockLaser: boolean;
+    lockMissile: boolean;
+    lockRockets: boolean;
 
     constructor() {
         this.arrow = 0;
         this.laser = 0;
         this.missile = 0;
         this.numRockets = 0;
+        this.unspent = 0;
+        this.lockArrow = false;
+        this.lockLaser = false;
+        this.lockMissile = false;
+        this.lockRockets = false;
     }
+
 }
 
 export class Talents {
@@ -232,7 +243,7 @@ export class Stats {
         this.masteryPoints = Math.min(Math.floor(data.talents.laser / 100) + Math.floor(data.talents.arrow / 100), 6);
         this.unspentMasteryPoints = this.masteryPoints - (data.talents.laserMastery + data.talents.arrowMastery);
 
-        var arrowBase : number = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
+        var arrowBase: number = 16 + (14 + data.power.arrow) * data.skills.arrow - data.power.arrow;
         // next update: 
         // damage = (long)(((((LaserDamageLevel - 1) * LaserDamageIncrease) + laserDamage) * LaserDamageTalent) * laserMasteryDamage * 1.8f)
         // LaserDamageIncrease = 3 + (LaserUpgradeBoostLevel * laserUpgradeBoostIncrement);
@@ -240,15 +251,15 @@ export class Stats {
         // laserDamage = 12
         // laserUpgradeBoostIncrement = 1/4
 
-        var laserBase : number = ((data.skills.laser * (3 + (data.power.laser / 4.0)) + 12.0)) * 1.7; // don't know why? it's "almost" correct
+        var laserBase: number = ((data.skills.laser * (3 + (data.power.laser / 4.0)) + 12.0)) * 1.7; // don't know why? it's "almost" correct
 
-        var oldLaserBase : number = (((data.skills.laser - 1.0) * (data.power.laser / 4.0)) + 12.0 + (data.skills.laser * 3)) * 1.3;
+        var oldLaserBase: number = (((data.skills.laser - 1.0) * (data.power.laser / 4.0)) + 12.0 + (data.skills.laser * 3)) * 1.3;
         this.missileBase = 500 + ((data.skills.missileDamage - 1) * Math.floor(data.skills.missileDamage / 2) * (75 + (data.power.missile * 10)));
-        var fingerBase : number = 14 + (6 * data.skills.finger);
+        var fingerBase: number = 14 + (6 * data.skills.finger);
         this.missileROF = 3.0 - Math.round(10.0 * (data.skills.missileFiringRate * 0.1)) / 10.0;
         this.missilesPerSec = Math.round(data.skills.numMissiles * (10.0 / this.missileROF)) / 10.0;
         this.rocketsPerSec = Math.round(data.power.numRockets * (10.0 / this.missileROF)) / 10.0;
-        this.missileDps = Math.round((data.skills.numMissiles + data.power.numRockets) *  (1.0 / this.missileROF) * this.missileBase);
+        this.missileDps = Math.round((data.skills.numMissiles + data.power.numRockets) * (1.0 / this.missileROF) * this.missileBase);
 
         this.critChance = 0.01 * data.talents.critChance;
         this.critDamage = 0.50 + (data.talents.critDamage * 5) / 100.0;
@@ -321,6 +332,7 @@ const MASTERY_PCT = [0.0, 0.08, 0.16, 0.25];
 
 export class Data {
     level: number;
+    gems: number;
     skills: Skills;
     talents: Talents;
     stats: Stats;
@@ -347,6 +359,15 @@ export class Data {
         this.talents.update();
         this.level = this.talents.getLevel();
         this.stats.update(this);
+        this.gems = this.getGems();
+    }
+
+    public getGems(): number {
+        return AttributeData.getGems("power.arrow", this.power.arrow) +
+            AttributeData.getGems("power.laser", this.power.laser) +
+            AttributeData.getGems("power.missile", this.power.missile) +
+            AttributeData.getGems("power.numRockets", this.power.numRockets) +
+            this.power.unspent;
     }
 
     public static fromJSON(json: any): Data {
@@ -386,6 +407,7 @@ export class Log {
     start: Data;
     levels: number;
     skills: number;
+    gems: number;
     best: Data;
     startTime: number;
     finishTime: number;
@@ -408,13 +430,22 @@ export class AttributeData {
     coins: number;
     dpsPerCoin: number;
 
-    public getGemCost(i: number, data: Data): number {
+    public static getGems(name: string, level: number) {
+        var value: number = 0;
 
+        for (var i = 0; i < level; i++) {
+            value += AttributeData.getGemLevelCost(name, i);
+        }
+
+        return value;
+    }
+
+    public static getGemLevelCost(name: string, i: number): number {
         if (i < 0)
             return 0;
 
-        if (this.name == "power.numRockets") {
-            
+        if (name == "power.numRockets") {
+
             if (i < 9)
                 return 1;
             else
@@ -424,9 +455,13 @@ export class AttributeData {
         }
     }
 
+    public getGemCost(i: number): number {
+        return AttributeData.getGemLevelCost(this.name, i);
+    }
+
     public buy(data: Data) {
         var coins = data.skills.coins;
-        
+
         if (this.max && (this.value >= this.max)) {
             this.inc = 0;
             return;
@@ -578,7 +613,7 @@ export class AttributeData {
         }
 
         for (var i = 0; i < n; i++) {
-            value += this.getGemCost(this.value + i, data);
+            value += this.getGemCost(this.value + i);
         }
 
         return value;

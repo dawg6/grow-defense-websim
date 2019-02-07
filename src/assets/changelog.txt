@@ -1,3 +1,6 @@
+v1.1.2 02/07/2019
+- Added power gem optimizer
+
 v1.1.1 02/05/2019
 - Added "what can i buy?"
 

@@ -109,8 +109,8 @@ var Parameters = /** @class */ (function () {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.1.1";
-        this.versionDate = "02/05/2019";
+        this.version = "v1.1.2";
+        this.versionDate = "02/07/2019";
     }
     return Parameters;
 }());
@@ -141,6 +141,11 @@ var PowerGems = /** @class */ (function () {
         this.laser = 0;
         this.missile = 0;
         this.numRockets = 0;
+        this.unspent = 0;
+        this.lockArrow = false;
+        this.lockLaser = false;
+        this.lockMissile = false;
+        this.lockRockets = false;
     }
     return PowerGems;
 }());
@@ -322,6 +327,14 @@ var Data = /** @class */ (function () {
         this.talents.update();
         this.level = this.talents.getLevel();
         this.stats.update(this);
+        this.gems = this.getGems();
+    };
+    Data.prototype.getGems = function () {
+        return AttributeData.getGems("power.arrow", this.power.arrow) +
+            AttributeData.getGems("power.laser", this.power.laser) +
+            AttributeData.getGems("power.missile", this.power.missile) +
+            AttributeData.getGems("power.numRockets", this.power.numRockets) +
+            this.power.unspent;
     };
     Data.fromJSON = function (json) {
         if (typeof json === 'string') {
@@ -366,10 +379,17 @@ var ARCHER_COST = [300, 2000, 4000, 35000, 65000, 120000];
 var AttributeData = /** @class */ (function () {
     function AttributeData() {
     }
-    AttributeData.prototype.getGemCost = function (i, data) {
+    AttributeData.getGems = function (name, level) {
+        var value = 0;
+        for (var i = 0; i < level; i++) {
+            value += AttributeData.getGemLevelCost(name, i);
+        }
+        return value;
+    };
+    AttributeData.getGemLevelCost = function (name, i) {
         if (i < 0)
             return 0;
-        if (this.name == "power.numRockets") {
+        if (name == "power.numRockets") {
             if (i < 9)
                 return 1;
             else
@@ -378,6 +398,9 @@ var AttributeData = /** @class */ (function () {
         else {
             return Math.floor(i / 3) + 1;
         }
+    };
+    AttributeData.prototype.getGemCost = function (i) {
+        return AttributeData.getGemLevelCost(this.name, i);
     };
     AttributeData.prototype.buy = function (data) {
         var coins = data.skills.coins;
@@ -508,7 +531,7 @@ var AttributeData = /** @class */ (function () {
             var n = Math.min(n, this.max - this.value);
         }
         for (var i = 0; i < n; i++) {
-            value += this.getGemCost(this.value + i, data);
+            value += this.getGemCost(this.value + i);
         }
         return value;
     };
@@ -635,6 +658,91 @@ var CPUIntensiveWorker = /** @class */ (function () {
         return new _shared_worker_message_model__WEBPACK_IMPORTED_MODULE_0__["WorkerMessage"](value.topic, value.data);
     };
     CPUIntensiveWorker.simulate = function (l) {
+        if (l.levels > 0)
+            CPUIntensiveWorker.simulateLevels(l);
+        else if (l.gems > 0)
+            CPUIntensiveWorker.simulateGems(l);
+    };
+    CPUIntensiveWorker.simulateGems = function (l) {
+        // console.log("log", l);
+        l.startTime = new Date().getTime();
+        var count = 0;
+        var max = new _src_app_data__WEBPACK_IMPORTED_MODULE_1__["Data"]();
+        max.skills = l.start.skills;
+        max.params = l.start.params;
+        for (var _i = 0, _a = Object.keys(l.start.talents); _i < _a.length; _i++) {
+            var a = _a[_i];
+            max.talents[a] = l.start.talents[a];
+        }
+        for (var _b = 0, _c = Object.keys(l.start.power); _b < _c.length; _b++) {
+            var a = _c[_b];
+            max.power[a] = l.start.power[a];
+        }
+        max.update();
+        var r = new _src_app_data__WEBPACK_IMPORTED_MODULE_1__["Data"]();
+        r.skills = l.start.skills;
+        r.params = l.start.params;
+        for (var _d = 0, _e = Object.keys(l.start.talents); _d < _e.length; _d++) {
+            var a = _e[_d];
+            r.talents[a] = l.start.talents[a];
+        }
+        var levels = [l.start.power.arrow, l.start.power.laser, l.start.power.missile, l.start.power.numRockets];
+        var names = ["power.arrow", "power.laser", "power.missle", "power.numRockets"];
+        var nextCost = [0, 0, 0, 0];
+        var totalCost = [0, 0, 0, 0];
+        var done = false;
+        do {
+            var g1 = l.gems - totalCost[0];
+            r.power.arrow = levels[0];
+            levels[1] = l.start.power.laser;
+            totalCost[1] = 0;
+            do {
+                var g2 = g1 - totalCost[1];
+                r.power.laser = levels[1];
+                levels[2] = l.start.power.missile;
+                totalCost[2] = 0;
+                do {
+                    var g3 = g2 - totalCost[2];
+                    r.power.missile = levels[2];
+                    levels[3] = l.start.power.numRockets;
+                    totalCost[3] = 0;
+                    nextCost[3] = _src_app_data__WEBPACK_IMPORTED_MODULE_1__["AttributeData"].getGemLevelCost(names[3], levels[3]);
+                    while ((levels[3] < 9) && ((totalCost[3] + nextCost[3]) <= g3)) {
+                        nextCost[3] = _src_app_data__WEBPACK_IMPORTED_MODULE_1__["AttributeData"].getGemLevelCost(names[3], levels[3]);
+                        levels[3]++;
+                        totalCost[3] += nextCost[3];
+                    }
+                    while ((levels[3] < 9) && ((totalCost[3] + nextCost[3]) <= g3))
+                        ;
+                    r.power.numRockets = levels[3];
+                    r.update();
+                    count++;
+                    // console.log("r", totalCost, levels, r.stats.totalDps);
+                    if (r.stats.totalDps > max.stats.totalDps) {
+                        max.power.arrow = r.power.arrow;
+                        max.power.laser = r.power.laser;
+                        max.power.missile = r.power.missile;
+                        max.power.numRockets = r.power.numRockets;
+                        max.stats.totalDps = r.stats.totalDps;
+                    }
+                    nextCost[2] = _src_app_data__WEBPACK_IMPORTED_MODULE_1__["AttributeData"].getGemLevelCost(names[2], levels[2]);
+                    levels[2]++;
+                    totalCost[2] += nextCost[2];
+                } while (totalCost[2] <= g2);
+                nextCost[1] = _src_app_data__WEBPACK_IMPORTED_MODULE_1__["AttributeData"].getGemLevelCost(names[1], levels[1]);
+                levels[1]++;
+                totalCost[1] += nextCost[1];
+            } while (totalCost[1] <= g1);
+            nextCost[0] = _src_app_data__WEBPACK_IMPORTED_MODULE_1__["AttributeData"].getGemLevelCost(names[0], levels[0]);
+            levels[0]++;
+            totalCost[0] += nextCost[0];
+        } while (totalCost[0] <= l.gems);
+        l.best = max;
+        l.finishTime = new Date().getTime();
+        l.elapsedTime = l.finishTime - l.startTime;
+        l.count = count;
+    };
+    CPUIntensiveWorker.simulateLevels = function (l) {
         l.startTime = new Date().getTime();
         var points = l.levels;
         var count = 0;
@@ -642,6 +750,7 @@ var CPUIntensiveWorker = /** @class */ (function () {
         var r = new _src_app_data__WEBPACK_IMPORTED_MODULE_1__["Data"]();
         max.skills = l.start.skills;
         max.params = l.start.params;
+        max.power = l.start.power;
         max.update();
         r.skills = l.start.skills;
         r.params = l.start.params;
