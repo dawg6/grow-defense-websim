@@ -93,9 +93,10 @@
             </td>
       </tr>
       <tr>
-            <td class="label">Level <div class="tooltip"><span class="tooltiptext">Level calculated from talent points</span></div>
+            <td class="label">Level</td>
+            <td class="value">{{ data.level }} <div class="tooltip"><span class="tooltiptext">Level calculated from
+                              talent points</span></div>
             </td>
-            <td class="value">{{ data.level }}</td>
       </tr>
       <tr>
             <td class="heading">Static Parameters <div class="tooltip"><span class="tooltiptext">Parameters that vary
@@ -108,8 +109,8 @@
                               laser.
                               Depends on browser framerate. Don't change if you don't know it.</span></div>
             </td>
-            <td colspan="6"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.params.laserRoFv2"
-                        (ngModelChange)="updateData($event)">
+            <td colspan="7"><input class="num-input" type="number" maxlength="4" min="0"
+                        [(ngModel)]="data.params.laserRoFv2" (ngModelChange)="updateData($event)">
                   <span class="no-wrap"> ticks per second per laser</span>
                   <span class="value">
                         How do I determine rate of fire for laser?<div class="tooltip"><span class="tooltiptext">Record
@@ -124,8 +125,8 @@
                               be a
                               hard limit in game (unconfirmed). Don't change if you don't know it.</span></div>
             </td>
-            <td colspan="3"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.params.fingerRoF"
-                        (ngModelChange)="updateData($event)">
+            <td colspan="4"><input class="num-input" type="number" maxlength="4" min="0"
+                        [(ngModel)]="data.params.fingerRoF" (ngModelChange)="updateData($event)">
                   <span class="no-wrap"> clicks per second</span></td>
       </tr>
       <tr>
@@ -133,13 +134,13 @@
                               per shot).
                               Don't change if you don't know it.</span></div>
             </td>
-            <td colspan="3"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.params.cannonRoF"
-                        (ngModelChange)="updateData($event)">
+            <td colspan="4"><input class="num-input" type="number" maxlength="4" min="0"
+                        [(ngModel)]="data.params.cannonRoF" (ngModelChange)="updateData($event)">
                   <span class="no-wrap"> seconds</span></td>
       </tr>
       <tr>
-            <td colspan="3" class="heading">Coin Upgrades <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
-                                    src="assets/coins-shop.png" />Coin
+            <td colspan="4" class="heading">Coin Upgrades <div class="tooltip"><span class="tooltiptext"><img
+                                    class="tooltip-img" src="assets/coins-shop.png" />Coin
                               upgrades (1st tab in shop)</span></div>
             </td>
             <td class="label right">I have</td>
@@ -163,13 +164,14 @@
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="1" max="5" [(ngModel)]="data.skills.arrowRoF"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.baseArrowsSec }} arrows/sec <div class="tooltip"><span class="tooltiptext">Base
+            <td colspan="2" class="value">{{ data.stats.baseArrowsSec }} arrows/sec <div class="tooltip"><span
+                              class="tooltiptext">Base
                               # of arrows per per
                               archer</span></div>
             </td>
             <ng-container *ngIf="data.skills.arrowRoF < 5">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.arrowRoF']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.arrowRoF']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.arrowRoF'],
                                     'Arrow Firing Rate') }}</span></div>
                   </td>
@@ -193,21 +195,29 @@
                   <td colspan="4" rowspan="7" class="tick-table-holder">
                         <table class="tick-table">
                               <tr class="tick-table-header">
-                                    <td class="tick-table-header" colspan="2"><span class="tick-table-header">Laser Tick Damage</span></td>
-                                    <td class="tick-table-header right"><span class="tick-table-header">Normal</span></td>
-                                    <td class="tick-table-header right"><span class="tick-table-header">Critical</span></td>
+                                    <td class="tick-table-header" colspan="2"><span class="tick-table-header">Laser Tick
+                                                Damage</span></td>
+                                    <td class="tick-table-header right"><span class="tick-table-header">Normal</span>
+                                    </td>
+                                    <td class="tick-table-header right"><span class="tick-table-header">Critical</span>
+                                    </td>
                               </tr>
                               <tr *ngFor="let b of getBounceData(); let i = index" class="tick-table-row">
                                     <ng-container *ngIf="i <= data.skills.bounces">
-                                          <td class="left" *ngIf="i == 0"><span class="tick-table-label">Initial Hit</span></td>
+                                          <td class="left" *ngIf="i == 0"><span class="tick-table-label">Initial
+                                                      Hit</span></td>
                                           <td class="left" *ngIf="i > 0"><span class="tick-table-label">Bounce # {{ i
                                                       }}</span></td>
                                           <td class="right"><span class="tick-table-value">{{
                                                       Math.round(b[data.skills.bounceDmg] * 100) }}%</span></td>
-                                          <td class="right"><span class="tick-table-value">{{
-                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laser) | number }}</span></td>
-                                          <td class="right"><span class="tick-table-value">{{
-                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) | number }}</span></td>
+                                          <td class="right"><span
+                                                      class="tick-table-value">{{
+                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laser) | number }}</span>
+                                          </td>
+                                          <td class="right"><span
+                                                      class="tick-table-value">{{
+                                                      Math.floor(b[data.skills.bounceDmg] * data.stats.laserCrit) | number }}</span>
+                                          </td>
                                     </ng-container>
                               </tr>
                               <tr *ngIf="data.skills.bounces > 0">
@@ -227,16 +237,18 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-arrow.png" />Arrow
+            <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-shop-arrow.png" />Arrow
                               damage coin upgrade level</span></div>
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="1" [(ngModel)]="data.skills.arrow"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.arrow | number }} <div class="tooltip"><span class="tooltiptext">Single arrow
+            <td colspan="2" class="value">{{ data.stats.arrow | number }} <div class="tooltip"><span
+                              class="tooltiptext">Single arrow
                               damage</span></div>
             </td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.arrow']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['skills.arrow']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.arrow'], 'Arrow
                               Damage') }}</span></div>
             </td>
@@ -252,17 +264,20 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-laser.png" />Laser
+            <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-shop-laser.png" />Laser
                               damage coin upgrade level</span></div>
             </td>
-            <td><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.laser" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.laser | number }} <div class="tooltip"><span class="tooltiptext">Single laser
-                              damage tick (first enemy hit)</span></div> / {{ data.stats.statsLaserDamage | number }} <div class="tooltip"><span
-                              class="tooltiptext">Value shown
+            <td><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.laser"
+                        (ngModelChange)="updateData($event)"></td>
+            <td colspan="2" class="value">{{ data.stats.laser | number }} <div class="tooltip"><span
+                              class="tooltiptext">Single laser
+                              damage tick (first enemy hit)</span></div> / {{ data.stats.statsLaserDamage | number }}
+                  <div class="tooltip"><span class="tooltiptext">Value shown
                               in-game on stats page for laser damage</span></div>
             </td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.laser']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['skills.laser']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.laser'], 'Laser
                               Damage') }}</span></div>
             </td>
@@ -278,18 +293,20 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label"># Mage Tower Lasers <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
-                                    src="assets/coins-shop-num-lasers.png" />#
+            <td class="label"># Mage Tower Lasers <div class="tooltip"><span class="tooltiptext"><img
+                                    class="tooltip-img" src="assets/coins-shop-num-lasers.png" />#
                               of mage tower lasers (0 = none, 1 = single, 2 = dual)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" max="2" [(ngModel)]="data.skills.lasers" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.laserTicksPerSec }} ticks/sec <div class="tooltip"><span class="tooltiptext">Total
+            <td><input class="num-input" type="number" min="0" max="2" [(ngModel)]="data.skills.lasers"
+                        (ngModelChange)="updateData($event)"></td>
+            <td colspan="2" class="value">{{ data.stats.laserTicksPerSec }} ticks/sec <div class="tooltip"><span
+                              class="tooltiptext">Total
                               # of laser
                               ticks per second from mage tower lasers, for first enemy hit (no bounces)</span></div>
             </td>
             <ng-container *ngIf="data.skills.lasers < 2">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.lasers']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.lasers']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.lasers'], '#
                                     Lasers') }}</span></div>
                   </td>
@@ -306,14 +323,15 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Laser Bounces <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-laser-bounces.png" />#
+            <td class="label">Laser Bounces <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-bomb-laser-bounces.png" />#
                               of bounces per laser (0 = none, 5 = max)</span></div>
             </td>
-            <td colspan="2"><input class="num-input" type="number" min="0" max="5" [(ngModel)]="data.skills.bounces"
+            <td colspan="3"><input class="num-input" type="number" min="0" max="5" [(ngModel)]="data.skills.bounces"
                         (ngModelChange)="updateData($event)"></td>
             <ng-container *ngIf="data.skills.bounces < 5">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.bounces']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.bounces']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.bounces'], '#
                                     Bounces') }}</span></div>
                   </td>
@@ -330,18 +348,20 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Laser Bounce Multiplier<div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
-                                    src="assets/coins-bomb-laser-bounce-mult.png" />Laser bounce damage multiplir level
+            <td class="label">Laser Bounce Multiplier<div class="tooltip"><span class="tooltiptext"><img
+                                    class="tooltip-img" src="assets/coins-bomb-laser-bounce-mult.png" />Laser bounce
+                              damage multiplir level
                               (1 = min, 6 = max)</span></div>
             </td>
             <td><input class="num-input" type="number" min="1" max="6" [(ngModel)]="data.skills.bounceDmg"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.laserBounceMult }} <div class="tooltip"><span class="tooltiptext">Laser
+            <td colspan="2" class="value">{{ data.stats.laserBounceMult }} <div class="tooltip"><span
+                              class="tooltiptext">Laser
                               damage multiplier considering all bounces</span></div>
             </td>
             <ng-container *ngIf="data.skills.bounceDmg < 6">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.bounceDmg']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.bounceDmg']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.bounceDmg'],
                                     'Laser Bounce Multiplier') }}</span></div>
                   </td>
@@ -363,12 +383,14 @@
                                     src="assets/coins-bomb-cannon-ball.png" />Cannon
                               ball damage level (0 = none)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.skills.cannon" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.cannonBase | number }} <div class="tooltip"><span class="tooltiptext">Cannon ball
+            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.skills.cannon"
+                        (ngModelChange)="updateData($event)"></td>
+            <td colspan="2" class="value">{{ data.stats.cannonBase | number }} <div class="tooltip"><span
+                              class="tooltiptext">Cannon ball
                               damage</span></div>
             </td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.cannon']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['skills.cannon']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.cannon'], 'Cannon Ball
                               Damage') }}</span></div>
             </td>
@@ -388,12 +410,14 @@
                                     src="assets/coins-bomb-cannon-bomb.png" />Cannon
                               bomb damage level (0 = none)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.skills.bomb" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.bombBase | number }} <div class="tooltip"><span class="tooltiptext">Cannon bomb
+            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.skills.bomb"
+                        (ngModelChange)="updateData($event)"></td>
+            <td colspan="2" class="value">{{ data.stats.bombBase | number }} <div class="tooltip"><span
+                              class="tooltiptext">Cannon bomb
                               damage</span></div>
             </td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.bomb']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['skills.bomb']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.bomb'], 'Cannon Bomb
                               Damage') }}</span></div>
             </td>
@@ -409,17 +433,19 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-finger.png" />Finger
+            <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-shop-finger.png" />Finger
                               damage coin upgrade level (max = 2000)</span></div>
             </td>
             <td><input class="num-input" type="number" min="1" max="2000" [(ngModel)]="data.skills.finger"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.finger | number }} <div class="tooltip"><span class="tooltiptext">Single finger
+            <td colspan="2" class="value">{{ data.stats.finger | number }} <div class="tooltip"><span
+                              class="tooltiptext">Single finger
                               click damage </span></div>
             </td>
             <ng-container *ngIf="data.skills.finger < 2000">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.finger']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.finger']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.finger'],
                                     'Finger Damage') }}</span></div>
                   </td>
@@ -439,14 +465,16 @@
                                     src="assets/coins-bomb-missile-damage.png" />Missile
                               damage coin upgrade level (1 = min)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.missileDamage" (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.missileBase | number }} <div class="tooltip"><span class="tooltiptext">Single
+            <td><input class="num-input" type="number" min="1" [(ngModel)]="data.skills.missileDamage"
+                        (ngModelChange)="updateData($event)"></td>
+            <td colspan="2" class="value">{{ data.stats.missileBase | number }} <div class="tooltip"><span
+                              class="tooltiptext">Single
                               Missile/Rocket
                               damage per
                               hit</span></div>
             </td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.missileDamage']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['skills.missileDamage']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.missileDamage'],
                               'Missile Damage') }}</span></div>
             </td>
@@ -461,18 +489,20 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label"># of Archers <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-shop-num-archers.png" />#
+            <td class="label"># of Archers <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-shop-num-archers.png" />#
                               of archers coin upgrade. (1 = min, 7 = max).</span></div>
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="1" max="7" [(ngModel)]="data.skills.archers"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ Math.round(100.0 * data.stats.arrowsPerSec) / 100.0 }} arrows/sec <div class="tooltip"><span
-                              class="tooltiptext">Total # of arrows per second, from all archers, considering arrow
+            <td colspan="2" class="value">{{ Math.round(100.0 * data.stats.arrowsPerSec) / 100.0 }} arrows/sec <div
+                        class="tooltip"><span class="tooltiptext">Total # of arrows per second, from all archers,
+                              considering arrow
                               mastery</span></div>
             </td>
             <ng-container *ngIf="data.skills.archers < 7">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.archers']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.archers']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.archers'], '#
                                     Archers') }}</span></div>
                   </td>
@@ -489,18 +519,20 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Missile Firing Rate <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
-                                    src="assets/coins-bomb-missile-rate.png" />Missile
+            <td class="label">Missile Firing Rate <div class="tooltip"><span class="tooltiptext"><img
+                                    class="tooltip-img" src="assets/coins-bomb-missile-rate.png" />Missile
                               Firing Rate coin upgrade level. (0 = min, 20 = max)</span></div>
             </td>
-            <td><input class="num-input" type="number" maxlength="4" min="0" max="20" [(ngModel)]="data.skills.missileFiringRate"
-                        (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.missileROF }} sec/missile</td>
+            <td><input class="num-input" type="number" maxlength="4" min="0" max="20"
+                        [(ngModel)]="data.skills.missileFiringRate" (ngModelChange)="updateData($event)"></td>
+            <td colspan="2" class="value">{{ data.stats.missileROF }} sec/missile</td>
             <ng-container *ngIf="data.skills.missileFiringRate < 20">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.missileFiringRate']['inc']"
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.missileFiringRate']['inc']"
                               (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{
-                                    getIncTooltip(whatIf['skills.missileFiringRate'], 'Missile Firing Rate') }}</span></div>
+                                    getIncTooltip(whatIf['skills.missileFiringRate'], 'Missile Firing Rate') }}</span>
+                        </div>
                   </td>
                   <ng-container *ngIf="whatIf['skills.missileFiringRate']['inc'] > 0">
                         <td class="value"><span [class.best]="whatIf['skills.missileFiringRate']['best']">+{{
@@ -514,17 +546,19 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label"># of Missiles<div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-num-missilesv2.png" />Total
+            <td class="label"># of Missiles<div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-bomb-num-missilesv2.png" />Total
                               # of missiles (do not count rockets)/ (0 = none, 1 = max)</span></div>
             </td>
-            <td><input class="num-input" type="number" maxlength="4" min="0" max="1" [(ngModel)]="data.skills.numMissiles"
-                        (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.missilesPerSec }} missiles/sec <div class="tooltip"><span class="tooltiptext">Total
+            <td><input class="num-input" type="number" maxlength="4" min="0" max="1"
+                        [(ngModel)]="data.skills.numMissiles" (ngModelChange)="updateData($event)"></td>
+            <td colspan="2" class="value">{{ data.stats.missilesPerSec }} missiles/sec <div class="tooltip"><span
+                              class="tooltiptext">Total
                               # of missiles per second</span></div>
             </td>
             <ng-container *ngIf="data.skills.numMissiles < 1">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['skills.numMissiles']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['skills.numMissiles']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['skills.numMissiles'],
                                     '# Missiles') }}</span></div>
                   </td>
@@ -541,18 +575,20 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="heading">Power Gems <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/power.png" />Upgrades
+            <td class="heading">Power Gems <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/power.png" />Upgrades
                               from red power gems (bottom tab)</span></div>
             </td>
       </tr>
       <tr>
-            <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/power-arrow.png" />Arrow
+            <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/power-arrow.png" />Arrow
                               damage power level</span></div>
             </td>
-            <td colspan="2"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.power.arrow"
+            <td colspan="3"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.power.arrow"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['power.arrow']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['power.arrow']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['power.arrow'], 'Arrow
                               Damage') }}</span></div>
             </td>
@@ -568,13 +604,14 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/power-laser.png" />Laser
+            <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/power-laser.png" />Laser
                               damage power level</span></div>
             </td>
-            <td colspan="2"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.power.laser"
+            <td colspan="3"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.power.laser"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['power.laser']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['power.laser']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['power.laser'], 'Laser
                               Damage') }}</span></div>
             </td>
@@ -594,10 +631,10 @@
                                     src="assets/power-missile.png" />Missile
                               damage power level</span></div>
             </td>
-            <td colspan="2"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.power.missile"
-                        (ngModelChange)="updateData($event)"></td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['power.missile']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td colspan="3"><input class="num-input" type="number" maxlength="4" min="0"
+                        [(ngModel)]="data.power.missile" (ngModelChange)="updateData($event)"></td>
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['power.missile']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['power.missile'], 'Missile
                               Damage') }}</span></div>
             </td>
@@ -612,17 +649,19 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label"># Rockets <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/coins-bomb-num-rockets.png" />#
+            <td class="label"># Rockets <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-bomb-num-rockets.png" />#
                               of Rockets (0 = none, 9 = max)</span></div>
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="0" max="9" [(ngModel)]="data.power.numRockets"
                         (ngModelChange)="updateData($event)"></td>
-            <td class="value">{{ data.stats.rocketsPerSec }} rockets/sec <div class="tooltip"><span class="tooltiptext">Total
+            <td colspan="2" class="value">{{ data.stats.rocketsPerSec }} rockets/sec <div class="tooltip"><span
+                              class="tooltiptext">Total
                               # of rockets per second</span></div>
             </td>
             <ng-container *ngIf="data.power.numRockets < 9">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['power.numRockets']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['power.numRockets']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['power.numRockets'], '#
                                     Rockets') }}</span></div>
                   </td>
@@ -638,8 +677,8 @@
             </ng-container>
       </tr>
       <tr>
-            <td colspan="5" class="heading">Talents <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
-                                    src="assets/talents.png" />Talent
+            <td colspan="3" class="heading">Talents <div class="tooltip"><span class="tooltiptext"><img
+                                    class="tooltip-img" src="assets/talents.png" />Talent
                               (mushroom) upgrades (2nd tab in shop)</span></div>
             </td>
             <td class="no-wrap">
@@ -654,14 +693,22 @@
             </td>
       </tr>
       <tr>
-            <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-arrow.png" />Arrow
+            <td class="label">Arrow Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/talents-arrow.png" />Arrow
                               Damage (3% per level)</span></div>
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.talents.arrow"
                         (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ Math.round(data.stats.arrowPct * 100.0) | number }} %</td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.arrow']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockArrow" id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current points (only add points when optimizing talents)</span></div>
+                  </label>
+
+            </td>
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['talents.arrow']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.arrow'], 'Arrow
                               Damage') }}</span></div>
             </td>
@@ -672,13 +719,6 @@
             <ng-container *ngIf="whatIf['talents.arrow']['inc'] <= 0">
                   <td></td>
             </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockArrow" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current points (only add points when optimizing talents)</span></div>
-                  </label>
-
-            </td>
             <td class="label">Average Arrow Damage <div class="tooltip"><span class="tooltiptext">Average single
                               arrow
                               damage
@@ -687,13 +727,22 @@
             <td class="value">{{ Math.round(data.stats.avgArrow * 10.0) / 10.0 | number }}</td>
       </tr>
       <tr>
-            <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-laser.png" />Laser
+            <td class="label">Laser Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/talents-laser.png" />Laser
                               damage (3% per level)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.laser" (ngModelChange)="updateData($event)"></td>
+            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.laser"
+                        (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ Math.round(data.stats.laserPct * 100) | number }} %</td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.laser']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockLaser" id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current points (only add points when optimizing talents)</span></div>
+                  </label>
+
+            </td>
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['talents.laser']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.laser'], 'Laser
                               Damage') }}</span></div>
             </td>
@@ -704,26 +753,28 @@
             <ng-container *ngIf="whatIf['talents.laser']['inc'] <= 0">
                   <td></td>
             </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockLaser" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current points (only add points when optimizing talents)</span></div>
-                  </label>
-
-            </td>
             <td class="label">Average Laser Damage <div class="tooltip"><span class="tooltiptext">Average laser tick
                               damage on initial hit, considering crits</span></div>
             </td>
             <td class="value">{{ Math.round(data.stats.avgLaser * 10.0) / 10.0 | number }}</td>
       </tr>
       <tr>
-            <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-finger.png" />Finger
+            <td class="label">Finger Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/talents-finger.png" />Finger
                               damage (3% per level).</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.finger" (ngModelChange)="updateData($event)"></td>
+            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.finger"
+                        (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ Math.round(data.stats.fingerPct * 100) | number }} %</td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.finger']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockFinger"
+                        id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current points (only add points when optimizing talents)</span></div>
+                  </label>
+            </td>
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['talents.finger']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.finger'], 'Finger
                               Damage') }}</span></div>
             </td>
@@ -734,30 +785,16 @@
             <ng-container *ngIf="whatIf['talents.finger']['inc'] <= 0">
                   <td></td>
             </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockFinger" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current points (only add points when optimizing talents)</span></div>
-                  </label>
-            </td>
       </tr>
       <tr>
-            <td class="label">Crit Chance <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-crit-chance.png" />Critical
+            <td class="label">Crit Chance <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/talents-crit-chance.png" />Critical
                               Hit Chance (1% per level, max
                               100%)</span></div>
             </td>
             <td><input class="num-input" type="number" min="0" max="100" [(ngModel)]="data.talents.critChance"
                         (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ data.talents.critChance }} %</td>
-            <td class="value" *ngIf="data.talents.critChance < 100">+ <input class="attr-input" type="number" maxlength="2"
-                        min="0" [(ngModel)]="whatIf['talents.critChance']['inc']" (ngModelChange)="updateAttributes()">
-                  <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.critChance'], 'Crit
-                              Chance') }}</span></div>
-            </td>
-            <td class="value" *ngIf="(data.talents.critChance < 100) && (whatIf['talents.critChance']['inc'] > 0)"><span
-                        [class.best]="whatIf['talents.critChance']['best']">+{{
-                        whatIf['talents.critChance']['dpsPct'] }}%</span></td>
-            <td *ngIf="(data.talents.critChance >= 100) || (whatIf['talents.critChance']['inc'] <= 0)" colspan="2"></td>
             <td>
                   <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockCC" id="lock-cb">
                   <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
@@ -765,19 +802,38 @@
                   </label>
 
             </td>
+            <td class="value" *ngIf="data.talents.critChance < 100">+ <input class="attr-input" type="number"
+                        maxlength="2" min="0" [(ngModel)]="whatIf['talents.critChance']['inc']"
+                        (ngModelChange)="updateAttributes()">
+                  <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.critChance'], 'Crit
+                              Chance') }}</span></div>
+            </td>
+            <td class="value" *ngIf="(data.talents.critChance < 100) && (whatIf['talents.critChance']['inc'] > 0)"><span
+                        [class.best]="whatIf['talents.critChance']['best']">+{{
+                        whatIf['talents.critChance']['dpsPct'] }}%</span></td>
+            <td *ngIf="(data.talents.critChance >= 100) || (whatIf['talents.critChance']['inc'] <= 0)" colspan="2"></td>
             <td class="label">Arrow Crit Damage <div class="tooltip"><span class="tooltiptext">Single arrow critical
                               hit</span></div>
             </td>
             <td class="value">{{ Math.round(data.stats.arrowCrit) | number }}</td>
       </tr>
       <tr>
-            <td class="label">Crit Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-crit-damage.png" />Critical
+            <td class="label">Crit Damage <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/talents-crit-damage.png" />Critical
                               Damage (5% per level)</span></div>
             </td>
-            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.critDamage" (ngModelChange)="updateData($event)"></td>
+            <td><input class="num-input" type="number" min="0" [(ngModel)]="data.talents.critDamage"
+                        (ngModelChange)="updateData($event)"></td>
             <td class="value">{{ 150 + (data.talents.critDamage * 5) | number }} %</td>
-            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.critDamage']['inc']"
-                        (ngModelChange)="updateAttributes()">
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockCD" id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current points (only add points when optimizing talents)</span></div>
+                  </label>
+
+            </td>
+            <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                        [(ngModel)]="whatIf['talents.critDamage']['inc']" (ngModelChange)="updateAttributes()">
                   <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.critDamage'], 'Crit
                               Damage') }}</span></div>
             </td>
@@ -788,13 +844,6 @@
             <ng-container *ngIf="whatIf['talents.critDamage']['inc'] <= 0">
                   <td></td>
             </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockCD" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current points (only add points when optimizing talents)</span></div>
-                  </label>
-
-            </td>
             <ng-container *ngIf="data.talents.arrowMastery >= 1">
                   <td class="label">Arrow Super Crit Damage<div class="tooltip"><span class="tooltiptext">Single arrow
                                     super
@@ -805,16 +854,17 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Defense <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-defense.png" />#
+            <td class="label">Defense <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/talents-defense.png" />#
                               of defense talent points. These will be "locked" and will not be redistributed when you
                               click Optimize
                               button.</span></div>
             </td>
-            <td><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.talents.defense"
+            <td colspan="2"><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.talents.defense"
                         (ngModelChange)="updateData($event)"></td>
-            <td colspan="3"></td>
             <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockDefense" id="lock-cb">
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockDefense"
+                        id="lock-cb">
                   <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
                                     current points (only add points when optimizing talents)</span></div>
                   </label>
@@ -822,19 +872,22 @@
             </td>
       </tr>
       <tr>
-            <td class="label">Unspent <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/talents-unspent.png" />#
+            <td class="label">Unspent <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/talents-unspent.png" />#
                               of unspent talent points</span></div>
             </td>
             <td><input class="num-input" type="number" maxlength="4" min="0" [(ngModel)]="data.talents.unspent"
                         (ngModelChange)="updateData($event)"></td>
       </tr>
       <tr>
-            <td class="heading">Masteries <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/laser-mastery.png" />Arrow/Laser
+            <td class="heading">Masteries <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/laser-mastery.png" />Arrow/Laser
                               Mastery</span></div>
             </td>
       </tr>
       <tr>
-            <td class="label">Arrow Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/arrow-mastery.png" />Arrow
+            <td class="label">Arrow Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/arrow-mastery.png" />Arrow
                               Mastery Tier (min = 0, max = 3)</span></div>
             </td>
 
@@ -846,9 +899,17 @@
                         <div *ngIf="data.talents.arrowMastery >= 3" class="mastery-img"></div>
                   </span>
             </td>
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockArrowMastery"
+                        id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current mastery tier (only add tiers when optimizing talents)</span></div>
+                  </label>
+
+            </td>
             <ng-container *ngIf="data.talents.arrowMastery < 3">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.arrowMastery']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['talents.arrowMastery']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.arrowMastery'],
                                     'Arrow Mastery Tier') }}</span></div>
                   </td>
@@ -863,13 +924,6 @@
             <ng-container *ngIf="data.talents.arrowMastery >= 3">
                   <td colspan="2"></td>
             </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockArrowMastery" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current mastery tier (only add tiers when optimizing talents)</span></div>
-                  </label>
-
-            </td>
             <ng-container *ngIf="data.talents.arrowMastery >= 1">
                   <td class="label">Arrow Super Crit Chance <div class="tooltip"><span class="tooltiptext">Chance of
                                     arrow
@@ -881,7 +935,8 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Laser Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img" src="assets/laser-mastery.png" />Laser
+            <td class="label">Laser Mastery <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/laser-mastery.png" />Laser
                               Mastery Tier (min = 0, max = 3)</span></div>
             </td>
 
@@ -893,9 +948,16 @@
                         <div *ngIf="data.talents.laserMastery >= 3" class="mastery-img"></div>
                   </span>
             </td>
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockLaserMastery"
+                        id="lock-cb">
+                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
+                                    current mastery tier (only add tiers when optimizing talents)</span></div>
+                  </label>
+            </td>
             <ng-container *ngIf="data.talents.laserMastery < 3">
-                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0" [(ngModel)]="whatIf['talents.laserMastery']['inc']"
-                              (ngModelChange)="updateAttributes()">
+                  <td class="value">+ <input class="attr-input" type="number" maxlength="2" min="0"
+                              [(ngModel)]="whatIf['talents.laserMastery']['inc']" (ngModelChange)="updateAttributes()">
                         <div class="tooltip"><span class="tooltiptext">{{ getIncTooltip(whatIf['talents.laserMastery'],
                                     'Laser Mastery Tier') }}</span></div>
                   </td>
@@ -910,12 +972,6 @@
             <ng-container *ngIf="data.talents.laserMastery >= 3">
                   <td colspan="2"></td>
             </ng-container>
-            <td>
-                  <input class="num-input" class="cb" type="checkbox" [(ngModel)]="data.talents.lockLaserMastery" id="lock-cb">
-                  <label class="cb-label" for="lock-cb">Lock <div class="tooltip"><span class="tooltiptext">Lock
-                                    current mastery tier (only add tiers when optimizing talents)</span></div>
-                  </label>
-            </td>
             <ng-container *ngIf="data.stats.laserArchers > 0">
                   <td class="label"># Laser Archers <div class="tooltip"><span class="tooltiptext">Number of laser
                                     archers
@@ -924,7 +980,8 @@
                   </td>
                   <td class="value">{{ data.stats.laserArchers }}
                         <ng-container *ngIf="data.stats.laserArcherBounceFactor > 1">
-                              x {{ data.stats.laserArcherBounceFactor }} <div class="tooltip"><span class="tooltiptext">Laser
+                              x {{ data.stats.laserArcherBounceFactor }} <div class="tooltip"><span
+                                          class="tooltiptext">Laser
                                           archer damage multiplier considering all laser archer bounces</span></div>
                         </ng-container>
                   </td>
@@ -946,13 +1003,15 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="label">Arrow DPS <div class="tooltip"><span class="tooltiptext">Damage per second from arrows</span></div>
+            <td class="label">Arrow DPS <div class="tooltip"><span class="tooltiptext">Damage per second from
+                              arrows</span></div>
             </td>
             <td colspan="2" class="value">{{ Math.round(data.stats.arrowDps * 10.0) / 10.0 | number }}/sec ({{
                   Math.round(data.stats.arrowDpsPct * 10000.0) / 100.0 | number }} %)</td>
       </tr>
       <tr>
-            <td class="label">Laser DPS <div class="tooltip"><span class="tooltiptext">Damage per second from lasers</span></div>
+            <td class="label">Laser DPS <div class="tooltip"><span class="tooltiptext">Damage per second from
+                              lasers</span></div>
             </td>
             <td colspan="2" class="value">{{ Math.round(data.stats.laserDps * 10.0) / 10.0 | number }}/sec ({{
                   Math.round(data.stats.laserDpsPct * 10000.0) / 100.0 | number }} %)</td>
@@ -980,7 +1039,8 @@
                   Math.round(data.stats.missileDpsPct * 10000.0) / 100.0 | number }} %)</td>
       </tr>
       <tr>
-            <td class="label">Total DPS<div class="tooltip"><span class="tooltiptext">Total damage per second</span></div>
+            <td class="label">Total DPS<div class="tooltip"><span class="tooltiptext">Total damage per second</span>
+                  </div>
             </td>
             <td colspan="2" class="value">{{ Math.round(data.stats.totalDps * 10.0) / 10.0 | number }}/sec</td>
       </tr>
@@ -988,17 +1048,19 @@
             <td>&nbsp;</td>
       </tr>
       <tr>
-            <td colspan="3"><a class="link" target="_blank" href="https://www.kongregate.com/forums/1013821-grow-defense/topics/1792735-damage-simulator-talent-optimizer">Forum
+            <td colspan="3"><a class="link" target="_blank"
+                        href="https://www.kongregate.com/forums/1013821-grow-defense/topics/1792735-damage-simulator-talent-optimizer">Forum
                         Post</a></td>
       </tr>
       <tr>
-            <td colspan="3"><a class="link" target="_blank" href="https://www.kongregate.com/games/endomlic/grow-defense">Play
+            <td colspan="3"><a class="link" target="_blank"
+                        href="https://www.kongregate.com/games/endomlic/grow-defense">Play
                         Grow Defense
                         on Kongregate</a></td>
       </tr>
       <tr>
-            <td colspan="3" class="note">Version {{ version }} ( {{ versionDate }} ) <a class="link" href="assets/changelog.txt"
-                        target="_blank">change
+            <td colspan="3" class="note">Version {{ version }} ( {{ versionDate }} ) <a class="link"
+                        href="assets/changelog.txt" target="_blank">change
                         log</a></td>
       </tr>
 </table>
