@@ -575,11 +575,13 @@
             </ng-container>
       </tr>
       <tr>
-            <td class="heading">Power Gems <div class="tooltip"><span class="tooltiptext"><img
-                                    class="tooltip-img" src="assets/power.png" />Upgrades
+            <td class="heading">Power Gems <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/power.png" />Upgrades
                               from red power gems (bottom tab)</span></div>
             </td>
-            <td colspan="2" class="value">{{ data.gems }} <div class="tooltip"><span class="tooltiptext">Total # of power gems required (does not include 5 for rocket launcher seek)</span></div></td>
+            <td colspan="2" class="value">{{ data.gems }} <div class="tooltip"><span class="tooltiptext">Total # of
+                              power gems required</span></div>
+            </td>
             <td class="no-wrap">
                   <button class="btn" (click)="optimizeGems()">Optimize</button>
                   <div class="tooltip"><span class="tooltiptext">Optimize power gems to maximize total DPS</span></div>
@@ -714,6 +716,15 @@
                               dps/gem</td>
                   </ng-container>
             </ng-container>
+      </tr>
+      <tr>
+            <td class="label">Smart Missile <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"
+                                    src="assets/coins-bomb-smart-missile.png" />Smart Missiles</span></div>
+            </td>
+            <td>
+                  <input class="num-input" class="cb" type="checkbox" (ngModelChange)="updateSmartMissile($event)" [(ngModel)]="data.power.smartMissile"
+                        id="smart-cb">
+            </td>
       </tr>
       <tr>
             <td class="label">Unspent <div class="tooltip"><span class="tooltiptext"><img class="tooltip-img"

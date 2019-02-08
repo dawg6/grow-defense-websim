@@ -217,6 +217,11 @@ export class AppComponent {
 
     }
 
+    if (this.data.params.version < "v1.1.3") {
+      if (this.data.power.missile && (this.data.power.missile > 1))
+        this.data.power.smartMissile = true;
+    }
+
     this.setAttributeData();
     this.loadObject(ATTRIBUTE_PREFIX, this.data.attributes);
 
@@ -235,6 +240,11 @@ export class AppComponent {
     this.updateData();
   }
 
+  updateSmartMissile(value: boolean) {
+    this.data.power.smartMissile = value;
+    this.updateData();
+  }
+  
   updateData(event?: any) {
 
     this.validateInputs();
@@ -301,7 +311,8 @@ export class AppComponent {
       attr.inc = Math.max(0, attr.inc);
 
       if (attr.inc > 0) {
-        attr.calculate(this.data);
+        var data:Data = Data.copy(this.data);
+        attr.calculate(data);
 
         if (!b || (attr.dps > b)) {
           b = attr.dps;
@@ -352,6 +363,7 @@ export class AppComponent {
     l.start.power.missile = this.data.power.lockMissile ? this.data.power.missile : 0;
     l.start.power.numRockets = this.data.power.lockRockets ? this.data.power.numRockets : 0;
     l.start.power.unspent = 0;
+    l.start.power.smartMissile = this.data.power.smartMissile;
     l.start.gems = l.start.getGems();
 
     l.gems = this.data.gems - l.start.gems;
@@ -444,6 +456,10 @@ export class AppComponent {
 
     if (!this.data.power.unspent) {
         this.data.power.unspent = 0;
+    }
+
+    if (!this.data.power.smartMissile && this.data.power.missile && (this.data.power.missile > 0)) {
+      this.data.power.smartMissile = true;
     }
 
     this.getAttributeData();

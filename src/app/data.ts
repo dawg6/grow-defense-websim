@@ -11,8 +11,8 @@ export class Parameters {
         this.laserRoFv2 = 25;
         this.fingerRoF = 10;
         this.cannonRoF = 2.5;
-        this.version = "v1.1.2";
-        this.versionDate = "02/07/2019";
+        this.version = "v1.1.3";
+        this.versionDate = "02/08/2019";
     }
 }
 
@@ -60,6 +60,7 @@ export class PowerGems {
     lockLaser: boolean;
     lockMissile: boolean;
     lockRockets: boolean;
+    smartMissile: boolean;
 
     constructor() {
         this.arrow = 0;
@@ -71,6 +72,7 @@ export class PowerGems {
         this.lockLaser = false;
         this.lockMissile = false;
         this.lockRockets = false;
+        this.smartMissile = false;
     }
 
 }
@@ -358,8 +360,8 @@ export class Data {
     update() {
         this.talents.update();
         this.level = this.talents.getLevel();
-        this.stats.update(this);
         this.gems = this.getGems();
+        this.stats.update(this);
     }
 
     public getGems(): number {
@@ -367,7 +369,8 @@ export class Data {
             AttributeData.getGems("power.laser", this.power.laser) +
             AttributeData.getGems("power.missile", this.power.missile) +
             AttributeData.getGems("power.numRockets", this.power.numRockets) +
-            this.power.unspent;
+            this.power.unspent +
+            (this.power.smartMissile ? 5 : 0);
     }
 
     public static fromJSON(json: any): Data {
@@ -398,7 +401,7 @@ export class Data {
                 x[b] = y[b];
             }
         }
-
+        
         return data;
     }
 }
